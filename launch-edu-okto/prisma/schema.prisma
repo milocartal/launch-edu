@@ -47,8 +47,9 @@ model Lecon {
     idf         String
     description String
     updatedAt   DateTime  @updatedAt
+    finish      Boolean
     etapes      Etape[]
-    formation   Formation @relation(fields: [idf], references: [id], onDelete: Cascade)
+    formation   Formation @relation(fields: [idf], references: [id])
 }
 
 model Formation {
@@ -61,6 +62,17 @@ model Formation {
     updatedAt   DateTime      @updatedAt
     tech        Technologie[]
     lecons      Lecon[]
+    Progression Progression[]
+}
+
+model Progression {
+    idU         String
+    user        User      @relation(fields: [idU], references: [id], onDelete: Cascade)
+    idF         String
+    formation   Formation @relation(fields: [idF], references: [id], onDelete: Cascade)
+    pourcentage Decimal
+
+    @@unique([idU, idF])
 }
 
 // Necessary for Next auth
@@ -91,14 +103,15 @@ model Session {
 }
 
 model User {
-    id            String    @id @default(cuid())
+    id            String        @id @default(cuid())
     name          String?
-    email         String?   @unique
+    email         String?       @unique
     emailVerified DateTime?
     image         String?
-    admin         Boolean   @default(false)
+    admin         Boolean       @default(false)
     accounts      Account[]
     sessions      Session[]
+    Progression   Progression[]
 }
 
 model VerificationToken {

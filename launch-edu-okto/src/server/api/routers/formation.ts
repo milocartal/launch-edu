@@ -6,20 +6,17 @@ import {
   protectedProcedure,
 } from "~/server/api/trpc";
 
-export const exampleRouter = createTRPCRouter({
+export const formationRouter = createTRPCRouter({
+    
   hello: publicProcedure
     .input(z.object({ text: z.string() }))
     .query(({ input }) => {
       return {
-        greeting: `Hello ${input.text}`,
+        greeting: `Wesh ${input.text}`,
       };
     }),
 
   getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.user.findMany();
-  }),
-
-  getSecretMessage: protectedProcedure.query(() => {
-    return "you can now see this secret message!";
+    return ctx.prisma.formation.findMany();
   }),
 });
