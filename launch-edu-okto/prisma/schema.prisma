@@ -14,26 +14,12 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Etape {
-    id          String    @id @default(cuid())
-    type        EtapeType @relation(fields: [idl], references: [id], onDelete: Cascade)
-    name        String
-    description String
-    createdAt   DateTime  @default(now())
-    updatedAt   DateTime  @updatedAt
-    video       String?
-    code        String
-    duree       String
-    idl         String
-    lecon       Lecon     @relation(fields: [idl], references: [id], onDelete: Cascade)
-}
-
 model Technologie {
-    id       String  @id @default(cuid())
-    name     String
-    logo     String?
-    lien_doc String?
-    lecon    Lecon[]
+    id         String      @id @default(cuid())
+    name       String
+    logo       String?
+    lien_doc   String?
+    formations Formation[]
 }
 
 model EtapeType {
@@ -42,15 +28,39 @@ model EtapeType {
     etapes Etape[]
 }
 
+model Etape {
+    id          String    @id @default(cuid())
+    idt         String
+    type        EtapeType @relation(fields: [idt], references: [id], onDelete: Cascade)
+    name        String
+    description String
+    transcript  String?
+    updatedAt   DateTime  @updatedAt
+    video       String?
+    code        String
+    idl         String
+    lecon       Lecon     @relation(fields: [idl], references: [id], onDelete: Cascade)
+}
+
 model Lecon {
+    id          String    @id @default(cuid())
+    idf         String
+    description String
+    updatedAt   DateTime  @updatedAt
+    etapes      Etape[]
+    formation   Formation @relation(fields: [idf], references: [id], onDelete: Cascade)
+}
+
+model Formation {
     id          String        @id @default(cuid())
     title       String
     description String
     prof        String?
-    dureetotale String
     difficulte  Int
+    createdAt   DateTime      @default(now())
+    updatedAt   DateTime      @updatedAt
     tech        Technologie[]
-    etapes      Etape[]
+    lecons      Lecon[]
 }
 
 // Necessary for Next auth
@@ -86,7 +96,7 @@ model User {
     email         String?   @unique
     emailVerified DateTime?
     image         String?
-    admin         Boolean @default(false)
+    admin         Boolean   @default(false)
     accounts      Account[]
     sessions      Session[]
 }

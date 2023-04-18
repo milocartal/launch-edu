@@ -51,7 +51,7 @@ const Home: NextPage = () => {
             <AuthShowcase />
           </div>
         </div>
-        <iframe src="https://stackblitz.com/github/milocartal/launch-edu?file=launch-edu-okto/src/pages/index.tsx&embed=1&view=editor&hideExplorer=1&ctl=0&terminal=e-10">hey</iframe>
+        <iframe src="https://stackblitz.com/github/total-typescript/beginners-typescript-tutorial?file=src/10-set.problem.ts&embed=1&view=editor&hideExplorer=1&ctl=0" />
       </main>
     </>
   );
