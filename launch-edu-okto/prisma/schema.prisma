@@ -15,25 +15,31 @@ datasource db {
 }
 
 model Etape {
-    id          String   @id @default(cuid())
-    type        String
+    id          String    @id @default(cuid())
+    type        EtapeType @relation(fields: [idl], references: [id], onDelete: Cascade)
     name        String
     description String
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
     video       String?
     code        String
     duree       String
     idl         String
-    lecon       Lecon    @relation(fields: [idl], references: [id], onDelete: Cascade)
+    lecon       Lecon     @relation(fields: [idl], references: [id], onDelete: Cascade)
 }
 
 model Technologie {
     id       String  @id @default(cuid())
     name     String
-    logo     String
-    lien_doc String
+    logo     String?
+    lien_doc String?
     lecon    Lecon[]
+}
+
+model EtapeType {
+    id     String  @id @default(cuid())
+    name   String
+    etapes Etape[]
 }
 
 model Lecon {
@@ -80,7 +86,7 @@ model User {
     email         String?   @unique
     emailVerified DateTime?
     image         String?
-    admin         Boolean
+    admin         Boolean @default(false)
     accounts      Account[]
     sessions      Session[]
 }
