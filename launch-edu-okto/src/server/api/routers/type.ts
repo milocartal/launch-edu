@@ -7,19 +7,19 @@ import {
 } from "~/server/api/trpc";
 import { prisma } from "~/server/db";
 
-export const technologieRouter = createTRPCRouter({
+export const typeRouter = createTRPCRouter({
 
     create: protectedProcedure.input(z.object({ name: z.string() })).mutation(({ input }) => {
-        return prisma.technologie.create({
+        return prisma.etapeType.create({
             data: { name: input.name }
         })
     }),
 
     delete: protectedProcedure.input(z.object({ id: z.string() })).mutation(({ input }) => {
-        return prisma.technologie.delete({ where: { id: input.id }, })
+        return prisma.etapeType.delete({ where: { id: input.id }, })
     }),
 
     getAll: publicProcedure.query(({ ctx }) => {
-        return ctx.prisma.technologie.findMany();
+        return ctx.prisma.etapeType.findMany();
     }),
 });

@@ -4,34 +4,12 @@ import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 import { api } from "~/utils/api";
-import { FormEventHandler } from 'react';
-import { test } from "node:test";
 
 const Home: NextPage = () => {
   const { data: sessionData } = useSession();
   const addtech = api.technologie.create.useMutation()
   const deltech = api.technologie.delete.useMutation()
 
-  async function handlerAddTech(event:React.SyntheticEvent){
-    event.preventDefault()
-    const target = event.target as typeof event.target & {
-      techName: { value: string };
-    };
-    const nameT = target.techName.value; // typechecks!
-    console.log(nameT)
-    const techno = await addtech.mutateAsync({name:nameT})
-  }
-
-  async function handlerDelTech(event:React.SyntheticEvent){
-    event.preventDefault()
-    const target = event.target as typeof event.target & {
-      techName: { value: string };
-    };
-    const nameT = target.techName.value; // typechecks!
-    console.log(nameT)
-    const techno = await deltech.mutateAsync({name:nameT})
-  }
-  
 
   return (
     <>
@@ -45,6 +23,7 @@ const Home: NextPage = () => {
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
             Oktopod <span className="text-[hsl(280,100%,70%)]">Student</span> Plateform
           </h1>
+
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
             <Link
               className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
@@ -69,26 +48,12 @@ const Home: NextPage = () => {
               </div>
             </Link>
           </div>
+
           <div className="flex flex-col items-center gap-2">
-            
             <AuthShowcase />
           </div>
         </div>
 
-        <form onSubmit={handlerAddTech}>
-          <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[3rem]">Add Tech</h1>
-          <label htmlFor="techName" className="text-white">Tech Name</label>
-          <input name="techName" id="techName" type="text" placeholder="name of the tech"></input>
-          <button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20" type="submit">Tech+</button>
-        </form>
-
-        <form onSubmit={handlerDelTech}>
-          <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[3rem]">Del Tech</h1>
-          <label htmlFor="techName2" className="text-white">Tech Name</label>
-          <input name="techName" id="techName2" type="text" placeholder="name of the tech"></input>
-          <button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20" type="submit">Tech+</button>
-        </form>
-       
         <iframe src="https://stackblitz.com/github/total-typescript/beginners-typescript-tutorial?file=src/10-set.problem.ts&embed=1&view=editor&hideExplorer=1&ctl=0" />
       </main>
     </>
@@ -110,6 +75,7 @@ const AuthShowcase: React.FC = () => {
       <p className="text-center text-2xl text-white">
         {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
         {secretMessage && <span> - {secretMessage}</span>}
+        {sessionData?.user.admin && <Link href="/components/admin"><button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">Admin</button></Link>}
       </p>
       <button
         className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"

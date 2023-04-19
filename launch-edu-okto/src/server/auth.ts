@@ -19,9 +19,8 @@ import { prisma } from "~/server/db";
 declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
-      id: string;
-      // ...other properties
-      // role: UserRole;
+      id: string,
+      admin:boolean
     } & DefaultSession["user"];
   }
 
@@ -38,13 +37,15 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: ({ session, user }) => ({
+    session: ({ session, user }) => {
+      return({
       ...session,
       user: {
         ...session.user,
         id: user.id,
+        admin: user.admin
       },
-    }),
+    })},
   },
   adapter: PrismaAdapter(prisma),
   providers: [
