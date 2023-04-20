@@ -155,9 +155,10 @@ const Tech: NextPage = () => {
                         <label htmlFor="prof" className="text-white">Choisir une technologie:</label>
                         <select id="prof" name="prof" required>
                             {users as User[] && users && users.length > 0 && users.map((user) => {
-                                return (
-                                    <option value={user.id} key={user.id}>{user.name}</option>
-                                )
+                                if(user.admin)
+                                    return (
+                                        <option value={user.id} key={user.id}>{user.name}</option>
+                                    )
                             })}
                         </select>
 
