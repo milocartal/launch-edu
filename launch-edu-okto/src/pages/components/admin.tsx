@@ -4,10 +4,11 @@ import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 import { api } from "../../utils/api";
-import { EtapeType, Technologie } from "@prisma/client";
+import { EtapeType, Technologie, User } from "@prisma/client";
 
 const Tech: NextPage = () => {
     const { data: sessionData } = useSession();
+    const { data: users } = api.user.getAll.useQuery()
 
     const user = sessionData?.user.admin
 
@@ -21,7 +22,7 @@ const Tech: NextPage = () => {
 
     const addFormation = api.formation.create.useMutation()
     const delFormation = api.formation.delete.useMutation()
-    const {data: formations} = api.formation.getAll.useQuery()
+    const { data: formations } = api.formation.getAll.useQuery()
 
 
     async function handlerAddTech(event: React.SyntheticEvent) {
@@ -44,20 +45,22 @@ const Tech: NextPage = () => {
         const type = await addtype.mutateAsync({ name: nameT })
     }
 
-    async function handleFormation(event: React.SyntheticEvent){
-        //event.preventDefault()
+    async function handleFormation(event: React.SyntheticEvent) {
+        event.preventDefault()
         const target = event.target as typeof event.target & {
             formTitle: { value: string };
-            description:{value: string};
-            difficulte:{value: string};
-            techno:{value: string}
+            description: { value: string };
+            difficulte: { value: string };
+            techno: { value: string }
+            prof: { value: string }
         };
-        const title= target.formTitle.value;
-        const desc= target.description.value;
-        const diff : number = +target.difficulte.value;
-        const techno= target.techno.value
+        const title = target.formTitle.value;
+        const desc = target.description.value;
+        const diff: number = +target.difficulte.value;
+        const techno = target.techno.value;
+        const prof = target.prof.value;
         //console.log("Info Ta mere ",title," ", desc," ", diff," ", techno)
-        await addFormation.mutateAsync({title: title, description:desc, difficulte:diff, techno:techno})
+        await addFormation.mutateAsync({ title: title, description: desc, difficulte: diff, techno: techno })
     }
 
     return (
@@ -75,7 +78,7 @@ const Tech: NextPage = () => {
                     <AuthShowcase />
                     <Link href="/"><button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">Home</button></Link>
                     <Link href="/components/formation"><button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">Liste Formations</button></Link>
-                
+
                 </div>
 
                 <div className="flex gap-10">
@@ -135,25 +138,34 @@ const Tech: NextPage = () => {
 
                     <form onSubmit={handleFormation} className="flex flex-col gap-5 item-center justify-center" method="POST">
                         <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[3rem]">Formation</h1>
-                        
+
                         <label htmlFor="formTitle" className="text-white">Titre</label>
                         <input name="formTitle" id="formTitle" type="text" placeholder="Title of the formation" required></input>
-                        
+
                         <label htmlFor="description" className="text-white">Description</label>
                         <textarea name="description" id="description" placeholder="Description de la formation" required></textarea>
-                        
+
                         <label htmlFor="difficulte" className="text-white">Choisir la difficulté:</label>
                         <select id="difficulte" name="difficulte" required defaultValue="1">
                             <option value="1">Simple</option>
                             <option value="2">Moyen</option>
                             <option value="3">Difficile</option>
                         </select>
-                        
+
+                        <label htmlFor="prof" className="text-white">Choisir une technologie:</label>
+                        <select id="prof" name="prof" required>
+                            {users as User[] && users && users.length > 0 && users.map((user) => {
+                                return (
+                                    <option value={user.id} key={user.id}>{user.name}</option>
+                                )
+                            })}
+                        </select>
+
                         <label htmlFor="techno" className="text-white">Choisir une technologie:</label>
                         <select id="techno" name="techno" required>
                             {techList as Technologie[] && techList && techList.length > 0 && techList.map((techno) => {
-                                return (                      
-                                    <option value={techno.id} key={techno.id}>{techno.name}</option>
+                                return (
+                                    <option value={techno.name} key={techno.id}>{techno.name}</option>
                                 )
                             })}
                         </select>
@@ -162,13 +174,13 @@ const Tech: NextPage = () => {
                 </div>
 
             </main> :
-            
-            <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-                <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
+
+                <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
+                    <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
                         Pas <span className="text-[hsl(280,100%,70%)]">Admin</span>
                     </h1>
-                <Link href="/"><button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">Home</button></Link>
-            </div>}
+                    <Link href="/"><button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">Home</button></Link>
+                </div>}
         </>
     );
 };
@@ -189,7 +201,7 @@ const AuthShowcase: React.FC = () => {
             >
                 {sessionData ? "Sign out" : "Sign in"}
             </button>
-            
+
         </div>
     );
 };
