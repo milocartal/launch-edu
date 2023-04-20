@@ -3,6 +3,7 @@ import { userRouter } from "~/server/api/routers/user";
 import { formationRouter } from "./routers/formation";
 import { technologieRouter } from "./routers/tech";
 import { typeRouter } from "./routers/type";
+import { leconRouter } from "./routers/lecon";
 
 /**
  * This is the primary router for your server.
@@ -13,7 +14,8 @@ export const appRouter = createTRPCRouter({
   user: userRouter,
   formation: formationRouter,
   technologie: technologieRouter,
-  type: typeRouter
+  type: typeRouter,
+  lecon: leconRouter
 });
 
 // export type definition of API

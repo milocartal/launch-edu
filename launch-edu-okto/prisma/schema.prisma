@@ -44,10 +44,12 @@ model Etape {
 
 model Lecon {
     id          String    @id @default(cuid())
+    title       String
     idf         String
     description String
     updatedAt   DateTime  @updatedAt
-    finish      Boolean
+    finish      Boolean   @default(false)
+    hidden      Boolean   @default(false)
     etapes      Etape[]
     formation   Formation @relation(fields: [idf], references: [id])
 }
@@ -60,7 +62,8 @@ model Formation {
     difficulte  Int
     createdAt   DateTime      @default(now())
     updatedAt   DateTime      @updatedAt
-    tech        Technologie[]
+    hidden      Boolean       @default(false)
+    techs       Technologie[]
     lecons      Lecon[]
     Progression Progression[]
 }

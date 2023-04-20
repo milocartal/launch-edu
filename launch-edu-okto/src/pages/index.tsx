@@ -4,11 +4,14 @@ import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 import { api } from "~/utils/api";
-import { Formation } from "@prisma/client";
+import { Formation, Technologie } from "@prisma/client";
 
 const Home: NextPage = () => {
   const { data: sessionData } = useSession();
   const { data: formations } = api.formation.getAll.useQuery()
+  const admin = sessionData?.user.admin
+
+  const { data: techList } = api.technologie.getAll.useQuery()
 
   return (
     <>
@@ -24,26 +27,42 @@ const Home: NextPage = () => {
           </h1>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-          {formations as Formation[] && formations && formations.length > 0 && formations.map((forma) => {
-            return (
-              <Link
-                className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-                href="https://www.oktopod.io/"
-                target="_blank"
-              >
-                <h3 className="text-2xl font-bold">{forma.title}</h3>
-                <div className="text-lg">
-                  {forma.description}
-                </div>
-                <div className="text-lg">
-                  {forma.difficulte}
-                </div>
-                
-                <div className="text-lg">
-                  {forma.createdAt !== undefined}
-                </div>
-              </Link>)
-          })}
+            {formations as Formation[] && formations && formations.length > 0 && formations.map((forma) => {
+              if (!forma.hidden || forma.hidden && admin)
+                return (
+                  <Link
+                    className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
+                    href={`/components/formations/${encodeURIComponent(forma.id)}`}
+                    key={forma.id}
+                  >
+                    <h3 className="text-2xl font-bold">{forma.title}</h3>
+                    <div className="text-lg">
+                      {forma.description}
+                    </div>
+                    <div className="text-lg">
+                      {forma.difficulte}
+                    </div>
+
+                    <div className="text-lg">
+                      {forma.createdAt !== undefined}
+                    </div>
+                  </Link>
+                )
+            })}
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
+            {techList as Technologie[] && techList && techList.length > 0 && techList.map((tech) => {
+              return (
+                <Link
+                  className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
+                  href={`/components/technologies/${encodeURIComponent(tech.id)}`}
+                  key={tech.id}
+                >
+                  <h3 className="text-2xl font-bold">{tech.name}</h3>
+                </Link>
+              )
+            })}
           </div>
 
           <div className="flex flex-col items-center gap-2">

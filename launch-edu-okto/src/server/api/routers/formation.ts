@@ -21,13 +21,25 @@ export const formationRouter = createTRPCRouter({
         return ctx.prisma.formation.findMany();
     }),
 
+    getAllTech: protectedProcedure.input(z.object({ id: z.string() })).query(({ input }) => {
+        return prisma.formation.findMany({
+            where: {
+                techs: {
+                    some: {
+                        id: input.id
+                    }
+                }
+            }
+        });
+    }),
+
     create: protectedProcedure.input(z.object({ title: z.string(), description: z.string(), difficulte: z.number(), techno: z.string() })).mutation(({ input }) => {
         return prisma.formation.create({
             data: {
                 title: input.title,
                 description: input.description,
                 difficulte: input.difficulte,
-                tech: {
+                techs: {
                     connect: { id: input.techno }
                 }
             }
