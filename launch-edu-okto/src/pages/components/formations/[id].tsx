@@ -36,10 +36,10 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
     async function handleLecon(event: React.SyntheticEvent) {
         //event.preventDefault()
         const target = event.target as typeof event.target & {
-            formTitle: { value: string };
+            leconTitle: { value: string };
             description: { value: string };
         };
-        const title = target.formTitle.value;
+        const title = target.leconTitle.value;
         const desc = target.description.value;
         await addLecon.mutateAsync({ title: title, idf: idf, description: desc })
     }
@@ -59,42 +59,47 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                             <span className="text-[hsl(280,100%,70%)]">{formation.title}</span> Formation
                         </h1>
 
-                        <div className="flex flex-col items-center gap-2">
+                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 md:gap-8">
+                            {lecons as Lecon[] && lecons && lecons.length > 0 && lecons.map((lec) => {
+                                if (!lec.hidden || lec.hidden && admin)
+                                    return (
+                                        <Link
+                                            className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
+                                            href="/"
+                                            key={lec.id}
+                                        >
+                                            <h3 className="text-2xl font-bold">{lec.title}</h3>
+                                            <div className="text-lg">
+                                                {lec.description}
+                                            </div>
+
+                                            <div className="text-lg">
+                                                <p>{lec.updatedAt.getDate()}/{lec.updatedAt.getMonth()}/{lec.updatedAt.getFullYear()} at {lec.updatedAt.getHours()}:{lec.updatedAt.getMinutes()}</p>
+                                            </div>
+                                        </Link>
+                                    )
+                            })}
+                        </div>
+
+                        <div className="flex items-center gap-2">
                             <AuthShowcase />
                             <Link href="/"><button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">Home</button></Link>
+                            <Link href="/components/formation"><button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">Liste Formations</button></Link>
                         </div>
 
                         <form onSubmit={handleLecon} className="flex flex-col gap-5 item-center justify-center" method="POST">
                             <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[3rem]">Lecon</h1>
 
-                            <label htmlFor="formTitle" className="text-white">Titre</label>
-                            <input name="formTitle" id="formTitle" type="text" placeholder="Title of the lecon" required></input>
+                            <label htmlFor="leconTitle" className="text-white">Titre</label>
+                            <input name="leconTitle" id="leconTitle" type="text" placeholder="Title of the lecon" required></input>
 
                             <label htmlFor="description" className="text-white">Description</label>
                             <textarea name="description" id="description" placeholder="Description de la lecon" required></textarea>
 
                             <button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20" type="submit" value="submit">Ajouter</button>
                         </form>
+                        
 
-                        {lecons as Lecon[] && lecons && lecons.length > 0 && lecons.map((lec) => {
-                            if (!lec.hidden || lec.hidden && admin)
-                                return (
-                                    <Link
-                                        className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-                                        href="/"
-                                        key={lec.id}
-                                    >
-                                        <h3 className="text-2xl font-bold">{lec.title}</h3>
-                                        <div className="text-lg">
-                                            {lec.description}
-                                        </div>
-
-                                        <div className="text-lg">
-                                            <p>{lec.updatedAt.getDate()}/{lec.updatedAt.getMonth()}/{lec.updatedAt.getFullYear()} at {lec.updatedAt.getHours()}:{lec.updatedAt.getMinutes()}</p>
-                                        </div>
-                                    </Link>
-                                )
-                        })}
                     </div>
                 }
             </main>
@@ -107,16 +112,10 @@ export default Formations;
 const AuthShowcase: React.FC = () => {
     const { data: sessionData } = useSession();
 
-    const { data: secretMessage } = api.user.getSecretMessage.useQuery(
-        undefined, // no input
-        { enabled: sessionData?.user !== undefined },
-    );
-
     return (
         <div className="flex flex-col items-center justify-center gap-4">
             <p className="text-center text-2xl text-white">
                 {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
-                {secretMessage && <span> - {secretMessage}</span>}
             </p>
             {sessionData?.user.admin && <Link href="/components/admin"><button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">Admin</button></Link>}
             <button

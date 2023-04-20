@@ -64,25 +64,27 @@ const Technologies: NextPage<InferGetServerSidePropsType<typeof getServerSidePro
                             <Link href="/"><button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">Home</button></Link>
                         </div>
 
+                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 md:gap-8">
+                            {formations as Formation[] && formations && formations.length > 0 && formations.map((forma) => {
+                                return (
+                                    <Link
+                                        className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
+                                        href={`/components/formations/${encodeURIComponent(forma.id)}`}
+                                        key={forma.id}
+                                    >
+                                        <h3 className="text-2xl font-bold">{forma.title}</h3>
+                                        <div className="text-lg">
+                                            {forma.description}
+                                        </div>
 
-                        {formations as Formation[] && formations && formations.length > 0 && formations.map((lec) => {
-                            return (
-                                <Link
-                                    className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-                                    href="/"
-                                    key={lec.id}
-                                >
-                                    <h3 className="text-2xl font-bold">{lec.title}</h3>
-                                    <div className="text-lg">
-                                        {lec.description}
-                                    </div>
+                                        <div className="text-lg">
+                                            <p>{forma.updatedAt.getDate()}/{forma.updatedAt.getMonth()}/{forma.updatedAt.getFullYear()} at {forma.updatedAt.getHours()}:{forma.updatedAt.getMinutes()}</p>
+                                        </div>
+                                    </Link>
+                                )
+                            })}
+                        </div>
 
-                                    <div className="text-lg">
-                                        <p>{lec.updatedAt.getDate()}/{lec.updatedAt.getMonth()}/{lec.updatedAt.getFullYear()} at {lec.updatedAt.getHours()}:{lec.updatedAt.getMinutes()}</p>
-                                    </div>
-                                </Link>
-                            )
-                        })}
                     </div>
                 }
             </main>
@@ -95,16 +97,10 @@ export default Technologies;
 const AuthShowcase: React.FC = () => {
     const { data: sessionData } = useSession();
 
-    const { data: secretMessage } = api.user.getSecretMessage.useQuery(
-        undefined, // no input
-        { enabled: sessionData?.user !== undefined },
-    );
-
     return (
         <div className="flex flex-col items-center justify-center gap-4">
             <p className="text-center text-2xl text-white">
                 {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
-                {secretMessage && <span> - {secretMessage}</span>}
             </p>
             {sessionData?.user.admin && <Link href="/components/admin"><button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">Admin</button></Link>}
             <button

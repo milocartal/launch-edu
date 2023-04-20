@@ -11,8 +11,6 @@ const Home: NextPage = () => {
   const { data: formations } = api.formation.getAll.useQuery()
   const admin = sessionData?.user.admin
 
-  const { data: techList } = api.technologie.getAll.useQuery()
-
   return (
     <>
       <Head>
@@ -23,31 +21,40 @@ const Home: NextPage = () => {
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-            Oktopod <span className="text-[hsl(280,100%,70%)]">Student</span> Plateform
+            Oktopod <span className="text-[hsl(280,100%,70%)]">Formations</span> List
           </h1>
+          <div className="flex flex-col items-center gap-2">
+            <AuthShowcase />
+            <Link href="/"><button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">Home</button></Link>
+          </div>
 
-          <Link href="/components/formation"><button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">Liste Formations</button></Link>
-          
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-            {techList as Technologie[] && techList && techList.length > 0 && techList.map((tech) => {
-              return (
-                <Link
-                  className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-                  href={`/components/technologies/${encodeURIComponent(tech.id)}`}
-                  key={tech.id}
-                >
-                  <h3 className="text-2xl font-bold">{tech.name}</h3>
-                </Link>
-              )
+            {formations as Formation[] && formations && formations.length > 0 && formations.map((forma) => {
+              if (!forma.hidden || forma.hidden && admin)
+                return (
+                  <Link
+                    className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
+                    href={`/components/formations/${encodeURIComponent(forma.id)}`}
+                    key={forma.id}
+                  >
+                    <h3 className="text-2xl font-bold">{forma.title}</h3>
+                    <div className="text-lg">
+                      {forma.description}
+                    </div>
+                    <div className="text-lg">
+                      {forma.difficulte}
+                    </div>
+
+                    <div className="text-lg">
+                      {forma.createdAt !== undefined}
+                    </div>
+                  </Link>
+                )
             })}
           </div>
 
-          <div className="flex flex-col items-center gap-2">
-            <AuthShowcase />
-          </div>
+          
         </div>
-
-        <iframe src="https://stackblitz.com/github/total-typescript/beginners-typescript-tutorial?file=src/10-set.problem.ts&embed=1&view=editor&hideExplorer=1&ctl=0" />
       </main>
     </>
   );
