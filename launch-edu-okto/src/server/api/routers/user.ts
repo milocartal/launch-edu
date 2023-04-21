@@ -5,6 +5,7 @@ import {
   publicProcedure,
   protectedProcedure,
 } from "~/server/api/trpc";
+import { prisma } from "~/server/db";
 
 export const userRouter = createTRPCRouter({
 
@@ -15,4 +16,8 @@ export const userRouter = createTRPCRouter({
   getSecretMessage: protectedProcedure.query(() => {
     return "Enjoy the class!";
   }),
+
+  getAdmin: protectedProcedure.query(() => {
+    return prisma.user.findMany({ where: { admin: true } })
+  })
 });

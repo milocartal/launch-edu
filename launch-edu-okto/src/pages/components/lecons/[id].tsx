@@ -71,7 +71,7 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                                 return (
                                     <Link
                                         className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-                                        href="/"
+                                        href={`/components/etapes/${etape.id}`}
                                         key={etape.id}
                                     >
                                         <h3 className="text-2xl font-bold">{etape.name}</h3>
@@ -90,7 +90,7 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                         <div className="flex items-center gap-2">
                             <AuthShowcase />
                             <Link href="/"><button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">Home</button></Link>
-                            <Link href="/components/lecon"><button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">Liste etapes</button></Link>
+                            <Link href="/components/formation"><button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">Liste etapes</button></Link>
                         </div>
 
                         <form onSubmit={handleEtape} className="flex flex-col gap-5 item-center justify-center" method="POST">

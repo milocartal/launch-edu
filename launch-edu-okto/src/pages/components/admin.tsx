@@ -8,7 +8,7 @@ import { EtapeType, Technologie, User } from "@prisma/client";
 
 const Tech: NextPage = () => {
     const { data: sessionData } = useSession();
-    const { data: users } = api.user.getAll.useQuery()
+    const { data: users } = api.user.getAdmin.useQuery()
 
     const user = sessionData?.user.admin
 

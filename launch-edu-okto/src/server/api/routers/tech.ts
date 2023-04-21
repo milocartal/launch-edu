@@ -20,6 +20,6 @@ export const technologieRouter = createTRPCRouter({
     }),
 
     getAll: publicProcedure.query(({ ctx }) => {
-        return ctx.prisma.technologie.findMany();
+        return prisma.technologie.findMany();
     }),
 });
