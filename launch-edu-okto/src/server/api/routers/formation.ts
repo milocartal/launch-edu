@@ -21,7 +21,7 @@ export const formationRouter = createTRPCRouter({
         return ctx.prisma.formation.findMany();
     }),
 
-    getAllTech: protectedProcedure.input(z.object({ id: z.string() })).query(({ input }) => {
+    getAllTech: publicProcedure.input(z.object({ id: z.string() })).query(({ input }) => {
         return prisma.formation.findMany({
             where: {
                 techs: {

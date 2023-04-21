@@ -32,6 +32,7 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
     const { data: typeList } = api.type.getAll.useQuery()
 
     const idL = lecon.id
+    const idf = lecon.idf
     const addEtape = api.etape.create.useMutation()
     const { data: etapes } = api.etape.getAll.useQuery({ id: idL })
 
@@ -90,33 +91,38 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                         <div className="flex items-center gap-2">
                             <AuthShowcase />
                             <Link href="/"><button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">Home</button></Link>
-                            <Link href="/components/formation"><button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">Liste etapes</button></Link>
+                            <Link href={`/components/formations/${idf}`}><button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">Liste Lecon</button></Link>
                         </div>
 
-                        <form onSubmit={handleEtape} className="flex flex-col gap-5 item-center justify-center" method="POST">
-                            <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[3rem]">Etape</h1>
 
-                            <label htmlFor="etapeName" className="text-white">Titre</label>
-                            <input name="etapeName" id="etapeName" type="text" placeholder="Title of the etape" required></input>
+                        {admin ?
+                            <form onSubmit={handleEtape} className="flex flex-col gap-5 item-center justify-center" method="POST">
+                                <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[3rem]">Etape</h1>
 
-                            <label htmlFor='idt' className='text-white'>Type</label>
-                            <select id="idt" name="idt" required>
-                                {typeList as EtapeType[] && typeList && typeList.length > 0 && typeList.map((type) => {
+                                <label htmlFor="etapeName" className="text-white">Titre</label>
+                                <input name="etapeName" id="etapeName" type="text" placeholder="Title of the etape" required></input>
 
-                                    return (
-                                        <option value={type.id} key={type.id}>{type.name}</option>
-                                    )
-                                })}
-                            </select>
+                                <label htmlFor='idt' className='text-white'>Type</label>
+                                <select id="idt" name="idt" required>
+                                    {typeList as EtapeType[] && typeList && typeList.length > 0 && typeList.map((type) => {
 
-                            <label htmlFor="description" className="text-white">Description</label>
-                            <textarea name="description" id="description" placeholder="Description de l'etape" required></textarea>
+                                        return (
+                                            <option value={type.id} key={type.id}>{type.name}</option>
+                                        )
+                                    })}
+                                </select>
 
-                            <label htmlFor="code" className="text-white">Titre</label>
-                            <input name="code" id="code" type="url" placeholder="url du code" required></input>
+                                <label htmlFor="description" className="text-white">Description</label>
+                                <textarea name="description" id="description" placeholder="Description de l'etape" required></textarea>
 
-                            <button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20" type="submit" value="submit">Ajouter</button>
-                        </form>
+                                <label htmlFor="code" className="text-white">Titre</label>
+                                <input name="code" id="code" type="url" placeholder="url du code" required></input>
+
+                                <button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20" type="submit" value="submit">Ajouter</button>
+                            </form> :
+                            <p></p>
+                        }
+
 
 
                     </div>

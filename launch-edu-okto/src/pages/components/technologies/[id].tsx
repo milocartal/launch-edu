@@ -28,7 +28,6 @@ export const getServerSideProps: GetServerSideProps<{
 const Technologies: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ tech }) => {
     const { data: sessionData } = useSession();
     const admin = sessionData?.user.admin
-    console.log(tech)
 
     const idf = tech.id
     const { data: formations } = api.formation.getAllTech.useQuery({ id: idf })
