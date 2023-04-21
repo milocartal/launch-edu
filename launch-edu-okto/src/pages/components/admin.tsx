@@ -6,7 +6,17 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { api } from "../../utils/api";
 import { EtapeType, Technologie, User } from "@prisma/client";
 
+import dynamic from "next/dynamic";
+import { useState } from "react";
+
+const QuillNoSSRWrapper = dynamic(import('react-quill'), {	
+  ssr: false,
+  loading: () => <p>Loading ...</p>,
+  })
+
 const Tech: NextPage = () => {
+    const [content, setContent] = useState('');
+
     const { data: sessionData } = useSession();
     const { data: users } = api.user.getAdmin.useQuery()
 
@@ -46,21 +56,19 @@ const Tech: NextPage = () => {
     }
 
     async function handleFormation(event: React.SyntheticEvent) {
-        event.preventDefault()
+        //event.preventDefault()
         const target = event.target as typeof event.target & {
             formTitle: { value: string };
             description: { value: string };
             difficulte: { value: string };
             techno: { value: string }
-            prof: { value: string }
         };
         const title = target.formTitle.value;
-        const desc = target.description.value;
+        //const desc = target.description.value;
         const diff: number = +target.difficulte.value;
         const techno = target.techno.value;
-        const prof = target.prof.value;
-        //console.log("Info Ta mere ",title," ", desc," ", diff," ", techno)
-        await addFormation.mutateAsync({ title: title, description: desc, difficulte: diff, techno: techno })
+        //console.log("Info Ta mere ",title," ", content," ", diff," ", techno)
+        await addFormation.mutateAsync({ title: title, description: content, difficulte: diff, techno: techno })
     }
 
     return (
@@ -142,8 +150,10 @@ const Tech: NextPage = () => {
                         <label htmlFor="formTitle" className="text-white">Titre</label>
                         <input name="formTitle" id="formTitle" type="text" placeholder="Title of the formation" required></input>
 
-                        <label htmlFor="description" className="text-white">Description</label>
-                        <textarea name="description" id="description" placeholder="Description de la formation" required></textarea>
+                        <p className="text-white">Description</p>
+                        
+
+                        <QuillNoSSRWrapper  theme="snow" onChange={setContent} className="text-white"/>
 
                         <label htmlFor="difficulte" className="text-white">Choisir la difficulté:</label>
                         <select id="difficulte" name="difficulte" required defaultValue="1">
@@ -166,7 +176,7 @@ const Tech: NextPage = () => {
                         <select id="techno" name="techno" required>
                             {techList as Technologie[] && techList && techList.length > 0 && techList.map((techno) => {
                                 return (
-                                    <option value={techno.name} key={techno.id}>{techno.name}</option>
+                                    <option value={techno.id} key={techno.id}>{techno.name}</option>
                                 )
                             })}
                         </select>

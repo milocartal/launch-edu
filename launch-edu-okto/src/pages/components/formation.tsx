@@ -46,7 +46,7 @@ const Home: NextPage = () => {
                     </div>
 
                     <div className="text-lg">
-                      {forma.createdAt !== undefined}
+                      {forma.createdAt.getDate()}
                     </div>
                   </Link>
                 )

@@ -9,14 +9,6 @@ import { prisma } from "~/server/db";
 
 export const formationRouter = createTRPCRouter({
 
-    hello: publicProcedure
-        .input(z.object({ text: z.string() }))
-        .query(({ input }) => {
-            return {
-                greeting: `Wesh ${input.text}`,
-            };
-        }),
-
     getAll: publicProcedure.query(({ ctx }) => {
         return ctx.prisma.formation.findMany();
     }),
@@ -33,8 +25,7 @@ export const formationRouter = createTRPCRouter({
         });
     }),
 
-    create: protectedProcedure.input(z.object({ title: z.string(), description: z.string(), difficulte: z.number(), techno: z.string(), prof: z.string().optional() })).mutation(({ input }) => {
-        console.log("LOL PROF, ",input.prof)
+    create: protectedProcedure.input(z.object({ title: z.string(), description: z.string(), difficulte: z.number(), techno: z.string() })).mutation(({ input }) => {
         return prisma.formation.create({
             data: {
                 title: input.title,
@@ -45,7 +36,6 @@ export const formationRouter = createTRPCRouter({
                 }
             }
         })
-
     }),
 
     delete: protectedProcedure.input(z.object({ id: z.string() })).mutation(({ input }) => {

@@ -43,32 +43,34 @@ model Etape {
 }
 
 model Lecon {
-    id          String    @id @default(cuid())
+    id          String             @id @default(cuid())
     title       String
     idf         String
     description String
-    updatedAt   DateTime  @updatedAt
-    finish      Boolean   @default(false)
-    hidden      Boolean   @default(false)
+    updatedAt   DateTime           @updatedAt
+    hidden      Boolean            @default(false)
     etapes      Etape[]
-    formation   Formation @relation(fields: [idf], references: [id])
+    formation   Formation          @relation(fields: [idf], references: [id])
+    Progression ProgressionLecon[]
 }
 
 model Formation {
-    id          String        @id @default(cuid())
+    id          String                 @id @default(cuid())
     title       String
     description String
     prof        String?
     difficulte  Int
-    createdAt   DateTime      @default(now())
-    updatedAt   DateTime      @updatedAt
-    hidden      Boolean       @default(false)
+    createdAt   DateTime               @default(now())
+    updatedAt   DateTime               @updatedAt
+    hidden      Boolean                @default(false)
     techs       Technologie[]
     lecons      Lecon[]
-    Progression Progression[]
+    Progression ProgressionFormation[]
+    //Prerequis   Formation[]            @relation("Prerequis")
+    //PrerequisBy Formation[]            @relation("Prerequis")
 }
 
-model Progression {
+model ProgressionFormation {
     idU         String
     user        User      @relation(fields: [idU], references: [id], onDelete: Cascade)
     idF         String
@@ -76,6 +78,16 @@ model Progression {
     pourcentage Decimal
 
     @@unique([idU, idF])
+}
+
+model ProgressionLecon {
+    idU         String
+    user        User    @relation(fields: [idU], references: [id], onDelete: Cascade)
+    idL         String
+    lecon       Lecon   @relation(fields: [idL], references: [id], onDelete: Cascade)
+    pourcentage Decimal
+
+    @@unique([idU, idL])
 }
 
 // Necessary for Next auth
@@ -106,15 +118,16 @@ model Session {
 }
 
 model User {
-    id            String        @id @default(cuid())
-    name          String?
-    email         String?       @unique
-    emailVerified DateTime?
-    image         String?
-    admin         Boolean       @default(false)
-    accounts      Account[]
-    sessions      Session[]
-    Progression   Progression[]
+    id                   String                 @id @default(cuid())
+    name                 String?
+    email                String?                @unique
+    emailVerified        DateTime?
+    image                String?
+    admin                Boolean                @default(false)
+    accounts             Account[]
+    sessions             Session[]
+    ProgressionFormation ProgressionFormation[]
+    ProgressionLecon     ProgressionLecon[]
 }
 
 model VerificationToken {
