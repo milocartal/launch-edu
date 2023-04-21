@@ -10,6 +10,7 @@ const Home: NextPage = () => {
   const { data: sessionData } = useSession();
   const { data: formations } = api.formation.getAll.useQuery()
   const admin = sessionData?.user.admin
+  let parser = new DOMParser();
 
   return (
     <>
