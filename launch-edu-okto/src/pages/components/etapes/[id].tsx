@@ -60,7 +60,7 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                         </div>
                         
 
-                        <iframe src="https://stackblitz.com/github/milocartal/launch-edu?file=launch-edu-okto/src/server/api/routers/etape.ts&embed=1&view=editor&hideExplorer=1" />
+                        <iframe src="https://stackblitz.com/github/milocartal/launch-edu?file=launch-edu-okto/src/pages/index.tsx.ts&embed=1&view=editor&hideExplorer=1" />
 
                         <div className="flex items-center gap-2">
                             <AuthShowcase />
