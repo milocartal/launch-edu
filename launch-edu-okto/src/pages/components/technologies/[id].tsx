@@ -9,6 +9,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { api } from "~/utils/api";
 import { prisma } from '~/server/db';
 import { Formation, Technologie } from '@prisma/client';
+import { useState } from 'react';
 
 export const getServerSideProps: GetServerSideProps<{
     tech: Technologie;
@@ -28,20 +29,20 @@ export const getServerSideProps: GetServerSideProps<{
 const Technologies: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ tech }) => {
     const { data: sessionData } = useSession();
     const admin = sessionData?.user.admin
+    const [tab, setTab] = useState("tech")
 
     const idf = tech.id
     const { data: formations } = api.formation.getAllTech.useQuery({ id: idf })
 
-    /*async function handleTechnologie(event: React.SyntheticEvent) {
-        //event.preventDefault()
-        const target = event.target as typeof event.target & {
-            formTitle: { value: string };
-            description: { value: string };
-        };
-        const title = target.formTitle.value;
-        const desc = target.description.value;
-        await addTechnologie.mutateAsync({ title: title, idf: idf, description: desc })
-    }*/
+    async function visuAll(event: React.SyntheticEvent) {
+        setTab('tech')
+    }
+    async function etapeTab(event: React.SyntheticEvent) {
+        setTab('etape')
+    }
+    async function formationTab(event: React.SyntheticEvent) {
+        setTab('formation')
+    }
 
     return (
         <>
@@ -51,41 +52,42 @@ const Technologies: NextPage<InferGetServerSidePropsType<typeof getServerSidePro
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-                {tech &&
-                    <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-                        <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-                            <span className="text-[hsl(280,100%,70%)]">{tech.name}</span> Formation
-                        </h1>
+            <main className="flex min-h-screen bg-white justify-between">
+                <div className="flex item-center justify-end gap-36 fixed ml-36 w-full pr-48 border-b-4 border-[#0E6073]">
+                    <button onClick={visuAll} className="px-10 py-3 font-semibold border-[#0E6073] transition hover:border-b-2  focus:border-b-2" autoFocus>Technologies</button>
+                    <button onClick={etapeTab} className="px-10 py-3 font-semibold  border-[#0E6073] transition hover:border-b-2  focus:border-b-2">Étapes</button>
+                    <button onClick={formationTab} className="px-10 py-3 font-semibold  border-[#0E6073] transition hover:border-b-2  focus:border-b-2">Formations</button>
+                    {sessionData && sessionData.user?.image && <img src={sessionData.user?.image} className="max-w-[4rem] max-h-[4rem]"></img>}
+                </div>
+                <div className="flex flex-col items-center justify-between gap-2 min-h-screen top-0 left-0 bg-[#0E6073] fixed m-w-xs p-2">
+                    <Link href="/"><img src="/okto.png" className="max-w-[3rem]"></img></Link>
 
-                        <div className="flex flex-col items-center gap-2">
-                            <AuthShowcase />
-                            <Link href="/"><button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">Home</button></Link>
-                        </div>
+                    <AuthShowcase />
+                </div>
+                <div className="flex w-full max-h-screen flex-col items-center ml-[6rem] ">
 
-                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 md:gap-8">
-                            {formations as Formation[] && formations && formations.length > 0 && formations.map((forma) => {
-                                return (
-                                    <Link
-                                        className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-                                        href={`/components/formations/${encodeURIComponent(forma.id)}`}
-                                        key={forma.id}
-                                    >
-                                        <h3 className="text-2xl font-bold">{forma.title}</h3>
-                                        <div className="text-lg">
-                                            {forma.description}
-                                        </div>
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 md:gap-8">
+                        {formations as Formation[] && formations && formations.length > 0 && formations.map((forma) => {
+                            return (
+                                <Link
+                                    className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 transition hover:bg-[#0e6073]/20"
+                                    href={`/components/formations/${encodeURIComponent(forma.id)}`}
+                                    key={forma.id}
+                                >
+                                    <h3 className="text-2xl font-bold">{forma.title}</h3>
+                                    <div className="text-lg" dangerouslySetInnerHTML={{ __html: forma.description }} />
 
-                                        <div className="text-lg">
-                                            <p>{forma.updatedAt.getDate()}/{forma.updatedAt.getMonth()}/{forma.updatedAt.getFullYear()} at {forma.updatedAt.getHours()}:{forma.updatedAt.getMinutes()}</p>
-                                        </div>
-                                    </Link>
-                                )
-                            })}
-                        </div>
-
+                                    <div className="text-lg">
+                                        <p>{forma.updatedAt.getDate()}/{forma.updatedAt.getMonth()}/{forma.updatedAt.getFullYear()} at {forma.updatedAt.getHours()}:{forma.updatedAt.getMinutes()}</p>
+                                    </div>
+                                </Link>
+                            )
+                        })}
                     </div>
-                }
+                </div>
+
+
+
             </main>
         </>
     );
@@ -95,19 +97,17 @@ export default Technologies;
 
 const AuthShowcase: React.FC = () => {
     const { data: sessionData } = useSession();
-
+  
     return (
-        <div className="flex flex-col items-center justify-center gap-4">
-            <p className="text-center text-2xl text-white">
-                {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
-            </p>
-            {sessionData?.user.admin && <Link href="/components/admin"><button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">Admin</button></Link>}
-            <button
-                className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-                onClick={sessionData ? () => void signOut() : () => void signIn()}
-            >
-                {sessionData ? "Sign out" : "Sign in"}
-            </button>
-        </div>
+      <div>
+        {sessionData?.user.admin && <Link href="/components/admin"><img src="https://icones.pro/wp-content/uploads/2022/02/services-parametres-et-icone-d-engrenage-gris.png" className="max-w-[3rem]"></img></Link>}
+        <button
+          className="rounded-full px-3 py-3 font-semibold  no-underline transition hover:bg-white/10"
+          onClick={sessionData ? () => void signOut() : () => void signIn()}
+        >
+          {sessionData ? <img src="/arrow.png" className="max-w-[1.5rem]"></img> : "Sign in"}
+        </button>
+      </div>
+  
     );
-};
+  };

@@ -68,18 +68,16 @@ const AuthShowcase: React.FC = () => {
   const { data: sessionData } = useSession();
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4">
-      <p className="text-center text-2xl">
-        {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
-      </p>
-      {sessionData?.user.admin && <Link href="/components/admin"><button className="rounded-full bg-[#0E6070]/10 px-10 py-3 font-semibold no-underline transition hover:bg-[#0E6070]/20">Admin</button></Link>}
+    <div>
+      {sessionData?.user.admin && <Link href="/components/admin"><img src="https://icones.pro/wp-content/uploads/2022/02/services-parametres-et-icone-d-engrenage-gris.png" className="max-w-[3rem]"></img></Link>}
       <button
-        className="rounded-full bg-[#0E6070]/10 px-10 py-3 font-semibold no-underline transition hover:bg-[#0E6070]/20"
+        className="rounded-full px-3 py-3 font-semibold  no-underline transition hover:bg-white/10"
         onClick={sessionData ? () => void signOut() : () => void signIn()}
       >
-        {sessionData ? "Sign out" : "Sign in"}
+        {sessionData ? <img src="/arrow.png" className="max-w-[1.5rem]"></img> : "Sign in"}
       </button>
     </div>
+
   );
 };
 

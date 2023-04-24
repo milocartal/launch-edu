@@ -11,3 +11,17 @@ iframe{
     width: 200px;
     height: 100px;
 }
+
+input{
+    background: none;
+    padding: 5px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 5px #0e637042;
+}
+
+select{
+    max-width: 10rem;
+    height: 2rem;
+    border: solid 1px #0E6370;
+    border-radius: 10px;
+}
