@@ -50,7 +50,7 @@ model Lecon {
     updatedAt   DateTime           @updatedAt
     hidden      Boolean            @default(false)
     etapes      Etape[]
-    formation   Formation          @relation(fields: [idf], references: [id])
+    formation   Formation          @relation(fields: [idf], references: [id], onDelete: Cascade)
     Progression ProgressionLecon[]
 }
 
@@ -66,8 +66,8 @@ model Formation {
     techs       Technologie[]
     lecons      Lecon[]
     Progression ProgressionFormation[]
-    //Prerequis   Formation[]            @relation("Prerequis")
-    //PrerequisBy Formation[]            @relation("Prerequis")
+    Prerequis   Formation[]            @relation("Prerequis")
+    PrerequisBy Formation[]            @relation("Prerequis")
 }
 
 model ProgressionFormation {
