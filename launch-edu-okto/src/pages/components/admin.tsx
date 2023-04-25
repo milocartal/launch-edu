@@ -91,7 +91,7 @@ const Tech: NextPage = () => {
                 <link rel="icon" href="/okto.png" />
             </Head>
             {user ? <main className="flex min-h-screen bg-white justify-between">
-                <div className="flex item-center justify-end gap-36 fixed pl-16 w-full pr-10 border-b-2 border-[#0E6073]">
+                <div className="flex item-center justify-end gap-36 fixed ml-28 w-full pr-40 border-b-4 border-[#0E6073]">
                     <button onClick={techTab} className="px-10 py-3 font-semibold border-[#0E6073] transition hover:border-b-2  focus:border-b-2" autoFocus>Technologies</button>
                     <button onClick={etapeTab} className="px-10 py-3 font-semibold  border-[#0E6073] transition hover:border-b-2  focus:border-b-2">Étapes</button>
                     <button onClick={formationTab} className="px-10 py-3 font-semibold  border-[#0E6073] transition hover:border-b-2  focus:border-b-2">Formations</button>
@@ -102,7 +102,7 @@ const Tech: NextPage = () => {
                     <AuthShowcase />
                 </div>
 
-                <div className="flex w-full max-h-screen flex-col items-center ml-[6rem] mt-28">
+                <div className="flex w-full max-h-screen flex-col items-center ml-[6rem]">
                     <div className="flex gap-10 mt-28">
                         {tab === "tech" &&
                             <div id="technologie-form" >

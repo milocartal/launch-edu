@@ -53,7 +53,7 @@ const Technologies: NextPage<InferGetServerSidePropsType<typeof getServerSidePro
             </Head>
 
             <main className="flex min-h-screen bg-white justify-between">
-                <div className="flex item-center justify-end gap-36 fixed ml-36 w-full pr-48 border-b-4 border-[#0E6073]">
+                <div className="flex item-center justify-between gap-36 fixed ml-28 w-full pr-40 border-b-4 border-[#0E6073]">
                     <button onClick={visuAll} className="px-10 py-3 font-semibold border-[#0E6073] transition hover:border-b-2  focus:border-b-2" autoFocus>Technologies</button>
                     <button onClick={etapeTab} className="px-10 py-3 font-semibold  border-[#0E6073] transition hover:border-b-2  focus:border-b-2">Étapes</button>
                     <button onClick={formationTab} className="px-10 py-3 font-semibold  border-[#0E6073] transition hover:border-b-2  focus:border-b-2">Formations</button>
@@ -64,8 +64,8 @@ const Technologies: NextPage<InferGetServerSidePropsType<typeof getServerSidePro
 
                     <AuthShowcase />
                 </div>
-                <div className="flex w-full max-h-screen flex-col items-center ml-[6rem] ">
-
+                <div className="flex w-full max-h-screen flex-col  ml-[6rem] mt-[5rem]">
+                    <h1 className="text-5xl font-extrabold text-[#0E6073] tracking-tight">Tous nos cours de {tech.name}</h1>
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 md:gap-8">
                         {formations as Formation[] && formations && formations.length > 0 && formations.map((forma) => {
                             return (
@@ -105,7 +105,7 @@ const AuthShowcase: React.FC = () => {
           className="rounded-full px-3 py-3 font-semibold  no-underline transition hover:bg-white/10"
           onClick={sessionData ? () => void signOut() : () => void signIn()}
         >
-          {sessionData ? <img src="/arrow.png" className="max-w-[1.5rem]"></img> : "Sign in"}
+          {sessionData ? <img src="/arrow.png" className="max-w-[1.5rem]"></img> : <img src='https://cdn-icons-png.flaticon.com/512/1250/1250689.png' className="max-w-[1.5rem]"></img>}
         </button>
       </div>
   

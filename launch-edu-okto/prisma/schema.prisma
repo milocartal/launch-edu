@@ -62,7 +62,7 @@ model Formation {
     difficulte  Int
     createdAt   DateTime               @default(now())
     updatedAt   DateTime               @updatedAt
-    hidden      Boolean                @default(false)
+    hidden      Boolean                @default(true)
     techs       Technologie[]
     lecons      Lecon[]
     Progression ProgressionFormation[]
