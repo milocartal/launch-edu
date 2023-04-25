@@ -25,3 +25,7 @@ select{
     border: solid 1px #0E6370;
     border-radius: 10px;
 }
+
+#listTech{
+    overflow-y: scroll;
+}

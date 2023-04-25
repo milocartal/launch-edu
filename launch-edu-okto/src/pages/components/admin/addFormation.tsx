@@ -39,7 +39,7 @@ const Admin: NextPage = () => {
     //document.getElementById("defaultOpen").click();
 
     const [content, setContent] = useState('');
-    const [tab, setTab] = useState("tech")
+    const [tab, setTab] = useState("normal")
 
     const { data: sessionData } = useSession();
 
@@ -68,16 +68,6 @@ const Admin: NextPage = () => {
         const techno = await addtech.mutateAsync({ name: nameT })
     }
 
-    async function handlerAddType(event: React.SyntheticEvent) {
-        //event.preventDefault()
-        const target = event.target as typeof event.target & {
-            typeName: { value: string };
-        };
-        const nameT = target.typeName.value; // typechecks!
-        console.log(nameT)
-        const type = await addtype.mutateAsync({ name: nameT })
-    }
-
     async function handleFormation(event: React.SyntheticEvent) {
         //event.preventDefault()
         const target = event.target as typeof event.target & {
@@ -94,15 +84,13 @@ const Admin: NextPage = () => {
         await addFormation.mutateAsync({ title: title, description: content, difficulte: diff, techno: techno })
     }
 
-    async function techTab(event: React.SyntheticEvent) {
+    async function normal(event: React.SyntheticEvent) {
+        setTab('normal')
+    }
+    async function techAdd(event: React.SyntheticEvent) {
         setTab('tech')
     }
-    async function etapeTab(event: React.SyntheticEvent) {
-        setTab('etape')
-    }
-    async function formationTab(event: React.SyntheticEvent) {
-        setTab('formation')
-    }
+
 
     return (
         <>
@@ -112,12 +100,14 @@ const Admin: NextPage = () => {
                 <link rel="icon" href="/okto.png" />
             </Head>
             {user ? <main className="flex min-h-screen bg-white justify-between">
+
+
                 <div className="fixed w-full pr-40 border-b-4 border-[#63aeab] bg-white top-0 right-0 left-28 h-[4rem]" />
 
-                <div className="flex item-center justify-start gap-12 fixed w-full pr-40  top-0 right-0 left-28 h-[4rem]">
-                    <button className="px-10 py-3 font-semibold border-[#0E6073] transition hover:border-b-4">Vos Cours</button>
-                    <button className="px-10 py-3 font-semibold  border-[#0E6073] transition hover:border-b-4">Explorer</button>
-                    <button className="px-10 py-3 font-semibold  border-[#0E6073] border-b-4 " autoFocus>Gérez les cours</button>
+                <div className="flex item-center justify-start gap-12 fixed w-full pr-40  top-0 right-0 left-28 h-[4rem] text-[#63aeab]">
+                    <button className="px-10 py-3 font-semibold border-[#0E6073] transition hover:border-b-4 hover:text-[#0E6073]">Vos Cours</button>
+                    <button className="px-10 py-3 font-semibold  border-[#0E6073] transition hover:border-b-4 hover:text-[#0E6073]">Explorer</button>
+                    <button className="px-10 py-3 font-semibold  border-[#0E6073] border-b-4 text-[#0E6073]" autoFocus>Gérez les cours</button>
                     {sessionData && sessionData.user?.image && <Link href={`/components/users/${sessionData.user.id}`}><img src={sessionData.user.image} className="max-w-[3rem]"></img></Link>}
                 </div>
                 <div className="flex flex-col items-center justify-between gap-2 min-h-screen top-0 left-0 bg-[#0E6073] fixed m-w-xs p-2">
@@ -125,97 +115,75 @@ const Admin: NextPage = () => {
                     <AuthShowcase />
                 </div>
 
-                <div className="flex w-full max-h-screen flex-col items-center ml-[6rem]">
-                    <div className="flex gap-10 mt-28">
-                        {tab === "tech" &&
-                            <div id="technologie-form" >
-                                <form onSubmit={handlerAddTech} className="flex flex-col gap-5 item-center justify-center" method="POST">
-                                    <h1 className="text-5xl font-extrabold tracking-tight  sm:text-[3rem]"><label htmlFor="techName">Technologies</label></h1>
-                                    <input name="techName" id="techName" type="text" placeholder="Nouvelle technologie"></input>
-                                    <button className="rounded-full bg-[#0E6073]/10 px-10 py-3 font-semibold  no-underline transition hover:bg-[#0E6073]/20" type="submit">Ajouter</button>
-                                </form>
 
-                                <div className="grid grid-cols-1 gap-4 sm:grid-cols-5 md:gap-8">
-                                    {techList as Technologie[] && techList && techList.length > 0 && techList.map((techno) => {
-                                        return (
-                                            <div className="container flex items-center justify-center gap-12 py-5" key={techno.id}>
-                                                <p className="">{techno.name}</p>
-                                                <button
-                                                    onClick={() => {
-                                                        deltech.mutateAsync({ id: techno.id });
-                                                        window.location.reload()
-                                                    }}
-                                                    className="rounded-full bg-[#0E6073]/10 px-3 py-1 font-semibold text-red-600 no-underline transition hover:bg-[#0E6073]/20">
-                                                    x
-                                                </button>
-                                            </div>
-                                        )
-                                    })}
+                <div className="flex w-full max-h-screen ml-[6rem] gap-10 mt-28">
+
+                    <div className="flex flex-col gap-4 h-[15rem]" id="listTech">
+                        {techList as Technologie[] && techList && techList.length > 0 && techList.map((techno) => {
+                            return (
+                                <div className="container flex items-center justify-between p-5 bg-pink-500" key={techno.id}>
+                                    <p className="">{techno.name}</p>
+                                    <button
+                                        onClick={() => {
+                                            deltech.mutateAsync({ id: techno.id });
+                                            window.location.reload()
+                                        }}
+                                        className="rounded-full bg-[#0E6073]/10 px-3 py-1 font-semibold text-red-600 no-underline transition hover:bg-[#0E6073]/20">
+                                        x
+                                    </button>
                                 </div>
-                            </div>
-                        }
-
-                        {tab === "etape" &&
-                            <div id="type-etape-formulaire">
-                                <form onSubmit={handlerAddType} className="flex flex-col gap-5 item-center justify-center" method="POST">
-                                    <h1 className="text-5xl font-extrabold tracking-tight  sm:text-[3rem]"><label htmlFor="typeName">Types des étapes</label></h1>
-                                    <input name="typeName" id="typeName" type="text" placeholder="Nouveau type pour les étapes"></input>
-                                    <button className="rounded-full bg-[#0E6073]/10 px-10 py-3 font-semibold  no-underline transition hover:bg-[#0E6073]/20" type="submit">Ajouter</button>
-                                </form>
-
-                                <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 md:gap-8">
-                                    {typeList as EtapeType[] && typeList && typeList.length > 0 && typeList.map((typ) => {
-                                        return (
-                                            <div className="container flex items-center justify-center gap-12 py-5" key={typ.id}>
-                                                <p className="">{typ.name}</p>
-                                                <button
-                                                    onClick={() => {
-                                                        deltype.mutateAsync({ id: typ.id });
-                                                        window.location.reload()
-                                                    }}
-                                                    className="rounded-full bg-[#0E6073]/10 px-3 py-1 font-semibold text-red-600 no-underline transition hover:bg-[#0E6073]/20">
-                                                    x
-                                                </button>
-                                            </div>
-                                        )
-                                    })}
-                                </div>
-                            </div>
-                        }
-
-                        {tab === "formation" &&
-                            <form onSubmit={handleFormation} className="flex flex-col gap-5 item-center justify-center" method="POST">
-                                <h1 className="text-5xl font-extrabold tracking-tight  sm:text-[3rem]">Créer une formation</h1>
-
-                                <input name="formTitle" id="formTitle" type="text" placeholder="Titre de la formation" required></input>
-
-
-                                <QuillNoSSRWrapper theme="snow" onChange={setContent} className="" placeholder="Description" />
-
-                                <label htmlFor="difficulte" className="mt-8">Choisir la difficulté:</label>
-                                <select id="difficulte" name="difficulte" required defaultValue="1">
-                                    <option value="1">Débutant</option>
-                                    <option value="2">Intermédiaire</option>
-                                    <option value="3">Avancé</option>
-                                </select>
-
-                                <label htmlFor="techno" className="">Choisir une technologie:</label>
-                                <select id="techno" name="techno" required>
-                                    {techList as Technologie[] && techList && techList.length > 0 && techList.map((techno) => {
-                                        return (
-                                            <option value={techno.id} key={techno.id}>{techno.name}</option>
-                                        )
-                                    })}
-                                </select>
-
-                                <div className="flex gap-2">
-                                    <input type="checkbox" id="hid" name="hid" required className="shadow-none" /><label htmlFor="hid"> En cochant cette case, vous êtes au courant que la formation créée sera invisible pour les utilisateurs.</label>
-                                </div>
-                                <button className="rounded-full bg-[#0E6073]/10 px-10 py-3 font-semibold  no-underline transition hover:bg-[#0E6073]/20" type="submit" value="submit">Ajouter</button>
-                            </form>
-                        }
-
+                            )
+                        })}
                     </div>
+
+
+                    <form onSubmit={handleFormation} className="flex flex-col gap-5 item-center" method="POST">
+                        <h1 className="text-5xl font-extrabold tracking-tight  sm:text-[3rem]">Créer une formation</h1>
+
+                        <input name="formTitle" id="formTitle" type="text" placeholder="Titre de la formation" required></input>
+
+
+                        <QuillNoSSRWrapper theme="snow" onChange={setContent} placeholder="Description" />
+                        <fieldset className="mt-8 flex">
+                            <legend >Choisir la difficulté:</legend>
+
+                            <label htmlFor="1" className="mt-8">débutant</label>
+                            <input type="radio" name="difficulte" id="1" value="1"/>
+
+                            <label htmlFor="2" className="mt-8">normal</label>
+                            <input type="radio" name="difficulte" id="2" value="2"/>
+
+                            <label htmlFor="3" className="mt-8">hard</label>
+                            <input type="radio" name="difficulte" id="3" value="3"/>
+                        </fieldset>
+
+                        <label htmlFor="techno" className="">Choisir une technologie:</label>
+                            <select id="techno" name="techno" required>
+                                {techList as Technologie[] && techList && techList.length > 0 && techList.map((techno) => {
+                                    return (
+                                        <option value={techno.id} key={techno.id}>{techno.name}</option>
+                                    )
+                                })}
+                            </select>
+
+
+
+                        <div className="flex gap-2">
+                            <input type="checkbox" id="hid" name="hid" required className="shadow-none" /><label htmlFor="hid"> En cochant cette case, vous êtes au courant que la formation créée sera invisible pour les utilisateurs.</label>
+                        </div>
+                        <button className="rounded-full bg-[#0E6073]/10 px-10 py-3 font-semibold  no-underline transition hover:bg-[#0E6073]/20" type="submit" value="submit">Ajouter</button>
+                    </form>
+                    {tab === "tech" &&
+                        <div className="fixed w-full h-full bg-[#0E6073]/90 top-0 right-0 left-0 bottom-0 flex justify-center items-center">
+                            <form onSubmit={handlerAddTech} className="flex flex-col gap-5 item-center justify-center bg-white rounded-xl p-8" method="POST">
+                                <h1 className="text-3xl font-extrabold tracking-tight "><label htmlFor="techName">Nouvelle Technologie</label></h1>
+                                <input name="techName" id="techName" type="text" placeholder="Nom de la technologie" required></input>
+                                <input name="logoTech" id="logoTech" type="url" placeholder="URL du Logo" required></input>
+                                <button onClick={normal} className="rounded-full bg-[#0E6073]/10 px-10 py-3 font-semibold  no-underline transition hover:bg-[#0E6073]/20" type="submit">Ajouter</button>
+                            </form>
+                        </div>}
+
+
                 </div>
 
 
