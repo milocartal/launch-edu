@@ -4,7 +4,7 @@ import { InferGetServerSidePropsType } from 'next'
 import { getServerSession } from "next-auth";
 import Head from "next/head";
 import Link from "next/link";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { getSession, signIn, signOut, useSession } from "next-auth/react";
 
 import { api } from "~/utils/api";
 import { prisma } from '~/server/db';
@@ -13,16 +13,33 @@ import { Etape, EtapeType, Lecon } from '@prisma/client';
 export const getServerSideProps: GetServerSideProps<{
     lecon: Lecon;
 }> = async function (context) {
+
+    const session = await getSession(context)
+
     const lecon = await prisma.lecon.findUnique({
         where: {
             id: context.query.id as string
         },
     });
-    return {
-        props: {
-            lecon: JSON.parse(JSON.stringify(lecon)) as Lecon
-        }
-    };
+    const idf = lecon?.idf;
+
+    if (!session) {
+      return {
+        redirect: {
+          destination: '/components/formations/'+idf,
+          permanent: false,
+        },
+      }
+    }
+    else {
+        
+        return {
+            props: {
+                lecon: JSON.parse(JSON.stringify(lecon)) as Lecon
+            }
+        };
+    }
+    
 };
 
 const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ lecon }) => {

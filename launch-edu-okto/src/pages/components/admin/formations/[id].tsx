@@ -86,6 +86,22 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                             <Link href="/"><button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">Home</button></Link>
                             <Link href="/components/formation"><button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">Liste Formations</button></Link>
                         </div>
+                        {admin ?
+                            <form onSubmit={handleLecon} className="flex flex-col gap-5 item-center justify-center" method="POST">
+                                <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[3rem]">Lecon</h1>
+
+                                <label htmlFor="leconTitle" className="text-white">Titre</label>
+                                <input name="leconTitle" id="leconTitle" type="text" placeholder="Title of the lecon" required></input>
+
+                                <label htmlFor="description" className="text-white">Description</label>
+                                <textarea name="description" id="description" placeholder="Description de la lecon" required></textarea>
+
+                                <button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20" type="submit" value="submit">Ajouter</button>
+                            </form> :
+                            <p></p>
+                        }
+
+
                     </div>
                 }
             </main>

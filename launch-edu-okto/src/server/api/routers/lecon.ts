@@ -13,6 +13,10 @@ export const leconRouter = createTRPCRouter({
         return prisma.lecon.findMany({ where: { idf: input.id } });
     }),
 
+    getAll2: protectedProcedure.input(z.object({ id: z.string() })).query(({ input }) => {
+        return prisma.lecon.findMany({ where: { idf: input.id } });
+    }),
+
     create: protectedProcedure.input(z.object({ title: z.string(), idf: z.string(), description: z.string() })).mutation(({ input }) => {
         return prisma.lecon.create({
             data: {

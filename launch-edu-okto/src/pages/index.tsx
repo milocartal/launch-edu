@@ -37,15 +37,11 @@ const Home: NextPage = () => {
                   href={`/components/technologies/${encodeURIComponent(tech.id)}`}
                   key={tech.id}
                 >
-
-
                   <h3 className="text-2xl font-bold">{tech.name}</h3>
                 </Link>
               )
             })}
           </div>
-
-          <img src="https://media.discordapp.net/attachments/688793736620146689/915869475423813662/20210709_215217.gif" className="max-w-[12em]"></img>
 
         </div>
 
@@ -61,6 +57,7 @@ const AuthShowcase: React.FC = () => {
 
   return (
     <div>
+      {sessionData && sessionData.user?.image && <Link href={`/components/users/${sessionData.user.id}`}><img src={sessionData.user.image} className="max-w-[3rem]"></img></Link>}
       {sessionData?.user.admin && <Link href="/components/admin"><img src="https://icones.pro/wp-content/uploads/2022/02/services-parametres-et-icone-d-engrenage-gris.png" className="max-w-[3rem]"></img></Link>}
       <button
         className="rounded-full px-3 py-3 font-semibold  no-underline transition hover:bg-white/10"
