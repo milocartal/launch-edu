@@ -3,6 +3,7 @@ import Head from "next/head";
 import Link from "next/link";
 import Image from 'next/image'
 import { signIn, signOut, useSession } from "next-auth/react";
+import { FaPenAlt } from "react-icons/fa";
 
 import { api } from "~/utils/api";
 import { Formation, Technologie } from "@prisma/client";
@@ -18,6 +19,8 @@ const Home: NextPage = () => {
   const currentTheme = theme === 'system' ? systemTheme : theme;
 
   const { data: techList } = api.technologie.getAll.useQuery()
+
+  console.log(theme)
   
   return (
     <>
@@ -29,7 +32,7 @@ const Home: NextPage = () => {
           @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
         </style>
       </Head>
-      <Image src="/homescreen-wave.svg" width="0" height="0" className="w-screen z-0 absolute" alt=""/>
+      <Image src={theme == "dark" ? "/homescreen-darkmode-wave.svg" : "/homescreen-wave.svg"} width="0" height="1500" className="w-screen z-0 absolute" alt=""/>
       <main className="flex min-h-screen flex-col items-center justify-center bg-white z-10 dark:bg-[#041F25]">
         <div className="flex flex-row items-start justify-between w-full px-16 z-10 mt-10">
           <Image src="/okto.png" alt="Logo Oktopod" width="64" height="64" />
@@ -101,7 +104,7 @@ const Home: NextPage = () => {
                   <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">débutant</p>
                 </div>
                 <div className="flex flex-row items-center justify-center">
-                  <Image src="/icons/pen-clip-solid.svg" width="25" height="25" alt=""/>
+                  <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]"/>
                   <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">3 leçons</p>
                 </div>
               </div>
@@ -130,7 +133,7 @@ const Home: NextPage = () => {
                   <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">débutant</p>
                 </div>
                 <div className="flex flex-row items-center justify-center">
-                  <Image src="/icons/pen-clip-solid.svg" width="25" height="25" alt=""/>
+                  <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]"/>
                   <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">3 leçons</p>
                 </div>
               </div>
@@ -159,7 +162,7 @@ const Home: NextPage = () => {
                   <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">débutant</p>
                 </div>
                 <div className="flex flex-row items-center justify-center">
-                  <Image src="/icons/pen-clip-solid.svg" width="25" height="25" alt=""/>
+                  <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]"/>
                   <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">3 leçons</p>
                 </div>
               </div>
@@ -188,7 +191,7 @@ const Home: NextPage = () => {
                   <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">débutant</p>
                 </div>
                 <div className="flex flex-row items-center justify-center">
-                  <Image src="/icons/pen-clip-solid.svg" width="25" height="25" alt=""/>
+                  <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]"/>
                   <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">3 leçons</p>
                 </div>
               </div>
@@ -225,7 +228,7 @@ const Home: NextPage = () => {
                   <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">débutant</p>
                 </div>
                 <div className="flex flex-row items-center justify-center">
-                  <Image src="/icons/pen-clip-solid.svg" width="25" height="25" alt=""/>
+                  <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]"/>
                   <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">3 leçons</p>
                 </div>
               </div>
@@ -254,7 +257,7 @@ const Home: NextPage = () => {
                   <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">débutant</p>
                 </div>
                 <div className="flex flex-row items-center justify-center">
-                  <Image src="/icons/pen-clip-solid.svg" width="25" height="25" alt=""/>
+                  <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]"/>
                   <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">3 leçons</p>
                 </div>
               </div>
@@ -283,7 +286,7 @@ const Home: NextPage = () => {
                   <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">débutant</p>
                 </div>
                 <div className="flex flex-row items-center justify-center">
-                  <Image src="/icons/pen-clip-solid.svg" width="25" height="25" alt=""/>
+                  <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]"/>
                   <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">3 leçons</p>
                 </div>
               </div>
@@ -312,7 +315,7 @@ const Home: NextPage = () => {
                   <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">débutant</p>
                 </div>
                 <div className="flex flex-row items-center justify-center">
-                  <Image src="/icons/pen-clip-solid.svg" width="25" height="25" alt=""/>
+                  <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]"/>
                   <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">3 leçons</p>
                 </div>
               </div>
