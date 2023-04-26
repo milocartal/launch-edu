@@ -7,11 +7,15 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { api } from "~/utils/api";
 import { Formation, Technologie } from "@prisma/client";
 import dynamic from "next/dynamic";
+import { useTheme } from "next-themes";
 
 const Home: NextPage = () => {
   const { data: sessionData } = useSession();
   const { data: formations } = api.formation.getAll.useQuery()
   const admin = sessionData?.user.admin
+
+  const { systemTheme, theme, setTheme } = useTheme();
+  const currentTheme = theme === 'system' ? systemTheme : theme;
 
   const { data: techList } = api.technologie.getAll.useQuery()
   
@@ -37,8 +41,8 @@ const Home: NextPage = () => {
             >
               <p className="text-white font-Inter">CONNEXION</p>
             </button>
-            <button className="flex flex-row justify-center items-center ml-8 rounded-full bg-white/10 w-10 h-10 shadow-md" onClick={() => toggleMode()}>
-              <Image src="/icons/moon-solid.svg" width="0" height="0" className="w-2/5" alt=""/>
+            <button onClick={() => theme == "dark"? setTheme('light'): setTheme("dark")} className="flex flex-row justify-center items-center ml-8 rounded-full bg-white/10 w-10 h-10 shadow-md">
+              <Image src={theme == "dark"? "/icons/sun-solid.svg" : "/icons/moon-solid.svg"} width="0" height="0" className="w-2/5" alt=""/>
             </button>
           </div>
         </div>
