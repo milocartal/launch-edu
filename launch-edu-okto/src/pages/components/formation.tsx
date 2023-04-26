@@ -10,7 +10,6 @@ const Home: NextPage = () => {
   const { data: sessionData } = useSession();
   const { data: formations } = api.formation.getAll.useQuery()
   const admin = sessionData?.user.admin
-  let parser = new DOMParser();
 
   return (
     <>
@@ -34,8 +33,8 @@ const Home: NextPage = () => {
               let dif: string;
               switch (forma.difficulte) {
                 case 1: dif = "Débutant"; break;
-                case 2: dif = "Moyen"; break;
-                case 3: dif = "Expert"; break;
+                case 2: dif = "Intemédiaire"; break;
+                case 3: dif = "Avancé"; break;
                 default: dif = "Débutant";
               }
               if (!forma.hidden || forma.hidden && admin)
@@ -49,6 +48,9 @@ const Home: NextPage = () => {
 
                     <span className="text-lg">
                       {dif}
+                      {forma.difficulte === 1 && <Easy/>}
+                      {forma.difficulte === 2 && <Med/>}
+                      {forma.difficulte === 3 && <Hard/>}
                     </span>
                   </Link>
                 )
@@ -78,6 +80,54 @@ const AuthShowcase: React.FC = () => {
       </button>
     </div>
 
+  );
+};
+
+const Easy: React.FC = () => {
+  return (
+      <div className="flex flex-row items-end">
+          <svg width="7" height="11">
+              <rect width="7" height="11" className="fill-[#0E6073]" />
+          </svg>
+          <svg width="7" height="21" className="mx-1">
+              < rect width="7" height="21" className="fill-[#989898] dark:fill-[#2EA3A5]" />
+          </svg >
+          <svg width="7" height="30">
+              <rect width="7" height="30" className="fill-[#989898] dark:fill-[#2EA3A5]" />
+          </svg >
+      </div >
+  );
+};
+
+const Med: React.FC = () => {
+  return (
+      <div className="flex flex-row items-end">
+          <svg width="7" height="11">
+              <rect width="7" height="11" className="fill-[#0E6073]" />
+          </svg>
+          <svg width="7" height="21" className="mx-1">
+              < rect width="7" height="21" className="fill-[#0E6073]" />
+          </svg >
+          <svg width="7" height="30">
+              <rect width="7" height="30" className="fill-[#989898] dark:fill-[#2EA3A5]" />
+          </svg >
+      </div >
+  );
+};
+
+const Hard: React.FC = () => {
+  return (
+      <div className="flex flex-row items-end">
+          <svg width="7" height="11">
+              <rect width="7" height="11" className="fill-[#0E6073]" />
+          </svg>
+          <svg width="7" height="21" className="mx-1">
+              < rect width="7" height="21" className="fill-[#0E6073]" />
+          </svg >
+          <svg width="7" height="30">
+              <rect width="7" height="30" className="fill-[#0E6073]" />
+          </svg >
+      </div >
   );
 };
 

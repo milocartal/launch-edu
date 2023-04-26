@@ -4,8 +4,9 @@ import Link from "next/link";
 import { getSession, signIn, signOut, useSession } from "next-auth/react";
 import { type Session as SessionAuth } from 'next-auth'
 
-import { api } from "../../../utils/api";
+import { api } from "~/utils/api";
 import { EtapeType, Formation, Session, Technologie, User } from "@prisma/client";
+import { Easy, Med, Hard } from "~/utils/function"
 
 import dynamic from "next/dynamic";
 import { MouseEventHandler, useState } from "react";
@@ -99,6 +100,9 @@ const Admin: NextPage = () => {
 
                                     <span className="text-lg">
                                         {dif}
+                                        {forma.difficulte === 1 && <Easy />}
+                                        {forma.difficulte === 2 && <Med />}
+                                        {forma.difficulte === 3 && <Hard />}
                                     </span>
                                     <span className="text-lg">
                                         {hide}
