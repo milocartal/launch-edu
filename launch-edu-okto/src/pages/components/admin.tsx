@@ -65,7 +65,7 @@ const Admin: NextPage = () => {
         };
         const nameT = target.techName.value; // typechecks!
         console.log(nameT)
-        const techno = await addtech.mutateAsync({ name: nameT })
+        const techno = await addtech.mutateAsync({ name: nameT, url:""})
     }
 
     async function handlerAddType(event: React.SyntheticEvent) {

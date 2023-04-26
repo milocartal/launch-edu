@@ -28,4 +28,10 @@ select{
 
 #listTech{
     overflow-y: scroll;
+    scrollbar-width: 0;
+}
+
+#listTech::-webkit-scrollbar {
+    display: none;
+  
 }

@@ -59,6 +59,7 @@ const AuthShowcase: React.FC = () => {
     <div>
       {sessionData && sessionData.user?.image && <Link href={`/components/users/${sessionData.user.id}`}><img src={sessionData.user.image} className="max-w-[3rem]"></img></Link>}
       {sessionData?.user.admin && <Link href="/components/admin"><img src="https://icones.pro/wp-content/uploads/2022/02/services-parametres-et-icone-d-engrenage-gris.png" className="max-w-[3rem]"></img></Link>}
+      {sessionData?.user.admin && <Link href="/components/admin/main"><img src="https://icones.pro/wp-content/uploads/2022/02/services-parametres-et-icone-d-engrenage-gris.png" className="max-w-[3rem]"></img></Link>}
       <button
         className="rounded-full px-3 py-3 font-semibold  no-underline transition hover:bg-white/10"
         onClick={sessionData ? () => void signOut() : () => void signIn()}

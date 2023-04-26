@@ -9,9 +9,9 @@ import { prisma } from "~/server/db";
 
 export const technologieRouter = createTRPCRouter({
 
-    create: protectedProcedure.input(z.object({ name: z.string() })).mutation(({ input }) => {
+    create: protectedProcedure.input(z.object({ name: z.string(), url: z.string()})).mutation(({ input }) => {
         return prisma.technologie.create({
-            data: { name: input.name }
+            data: { name: input.name, logo: input.url }
         })
     }),
 
