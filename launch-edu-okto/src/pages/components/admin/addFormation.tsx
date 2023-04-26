@@ -140,8 +140,11 @@ const Admin: NextPage = () => {
                                                             deltech.mutateAsync({ id: techno.id });
                                                             window.location.reload()
                                                         }}
-                                                        className="rounded-full bg-[#0E6073]/10 px-3 py-1 font-semibold text-red-600 no-underline transition hover:bg-[#0E6073]/20">
-                                                        x
+                                                        className="rounded-full font-semibold text-red-600 no-underline">
+                                                        <svg width="10" height="10" viewBox="20 0 10 50" overflow="visible" stroke="#0e6073" stroke-width="10" stroke-linecap="round" className={`hover:stroke-red-500 ${selectedTech === techno.id ? 'stroke-white' : ''}`}>
+                                                            <line x2="50" y2="50" />
+                                                            <line x1="50" y2="50" />
+                                                        </svg>
                                                     </button>
                                                 </div>
 
@@ -159,17 +162,23 @@ const Admin: NextPage = () => {
                             <input name="formTitle" id="formTitle" type="text" placeholder="Titre de la formation" required className="inputAddForm" autoComplete="off" />
 
                             <QuillNoSSRWrapper theme="snow" onChange={setContent} placeholder="Description" className="h-[30%] shadow-xl pb-11" />
-                            <fieldset className="mt-8 flex">
-                                <legend>Choisir la difficulté:</legend>
+                            <fieldset className="mt-8 flex gap-5 w-full justify-center">
+                                <legend>Difficulté:</legend>
+                                <div className="flex flex-col items-center gap-2">
+                                    <label htmlFor="1" className="mt-8">Débutant</label>
+                                    <input type="radio" name="difficulte" id="1" value="1" required className="shadow-none" />
+                                </div>
 
-                                <label htmlFor="1" className="mt-8">débutant</label>
-                                <input type="radio" name="difficulte" id="1" value="1" required className="shadow-none" />
+                                <div className="flex flex-col items-center gap-2">
+                                    <label htmlFor="2" className="mt-8">Intermédiaire</label>
+                                    <input type="radio" name="difficulte" id="2" value="2" required className="shadow-none" />
+                                </div>
 
-                                <label htmlFor="2" className="mt-8">normal</label>
-                                <input type="radio" name="difficulte" id="2" value="2" required className="shadow-none" />
+                                <div className="flex flex-col items-center gap-2">
+                                    <label htmlFor="3" className="mt-8">Avancé</label>
+                                    <input type="radio" name="difficulte" id="3" value="3" required className="shadow-none" />
+                                </div>
 
-                                <label htmlFor="3" className="mt-8">hard</label>
-                                <input type="radio" name="difficulte" id="3" value="3" required className="shadow-none" />
                             </fieldset>
 
 
