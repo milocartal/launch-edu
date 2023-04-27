@@ -21,9 +21,9 @@ const Home: NextPage = () => {
   const { systemTheme, theme, setTheme } = useTheme();
   const currentTheme = theme === 'system' ? systemTheme : theme;
 
-  const { data: techList } = api.technologie.getAll.useQuery()
+  console.log(currentTheme)
 
-  console.log(theme)
+  const { data: techList } = api.technologie.getAll.useQuery()
   
   return (
     <>
@@ -47,7 +47,7 @@ const Home: NextPage = () => {
             >
               <p className="text-white font-Inter">CONNEXION</p>
             </button>
-            <button onClick={() => theme == "dark"? setTheme('light'): setTheme("dark")} className="flex flex-row justify-center items-center ml-8 rounded-full bg-white/10 w-10 h-10 shadow-md">
+            <button onClick={() => theme === "dark"? setTheme('light'): setTheme("dark")} className="flex flex-row justify-center items-center ml-8 rounded-full bg-white/10 w-10 h-10 shadow-md">
               {theme == "dark"? <FaSun className="w-2/5 text-[#fff]"/> : <FaMoon className="w-2/5 text-[#fff]"/>}
             </button>
           </div>
@@ -204,8 +204,9 @@ const Home: NextPage = () => {
           <h1 className="text-4xl self-start mb-11 mt-12 text-[#0E6073] dark:text-white">Trouvez le bon cours pour vous</h1>
           <div className="bg-white width mb-24 w-8/12 h-16 flex flex-row items-center px-8 rounded-full shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)]">
             <HiMagnifyingGlass className="h-9 w-9 text-[#989898]"/>
-            <input className=" h-16 w-40 shadow-none w-full" type="text"/>
+            <input className=" h-16 w-40 shadow-none w-full bg-none" type="text"/>
           </div>
+
           <div className="flex flex-row w-full h-96 items-center">
             <div className="flex flex-col items-center bg-white/20 rounded-3xl shadow-lg w-3/12 h-full mx-2 relative">
               <div className="absolute -top-20">
@@ -236,6 +237,7 @@ const Home: NextPage = () => {
                 </div>
               </div>
             </div>
+
             <div className="flex flex-col items-center bg-white/20 rounded-3xl shadow-lg w-3/12 h-full mx-2 relative">
               <div className="absolute -top-20">
                 <Image src="/python.png" width="173" height="200" alt=""/>
@@ -265,6 +267,7 @@ const Home: NextPage = () => {
                 </div>
               </div>
             </div>
+
             <div className="flex flex-col items-center bg-white/20 rounded-3xl shadow-lg w-3/12 h-full mx-2 relative">
               <div className="absolute -top-20">
                 <Image src="/python.png" width="173" height="200" alt=""/>
@@ -294,6 +297,7 @@ const Home: NextPage = () => {
                 </div>
               </div>
             </div>
+
             <div className="flex flex-col items-center bg-white/20 rounded-3xl shadow-lg w-3/12 h-full mx-2 relative">
               <div className="absolute -top-20">
                 <Image src="/python.png" width="173" height="200" alt=""/>
@@ -323,6 +327,7 @@ const Home: NextPage = () => {
                 </div>
               </div>
             </div>
+
           </div>
 
           {/* <img src="https://media.discordapp.net/attachments/688793736620146689/915869475423813662/20210709_215217.gif" className="max-w-[12em]"></img> */}
