@@ -6,6 +6,8 @@ import { signIn, signOut, useSession } from "next-auth/react";
 
 import { FaPenAlt, FaMoon, FaSun } from "react-icons/fa";
 import { HiMagnifyingGlass } from "react-icons/hi2";
+import { GrUserAdmin } from "react-icons/gr"
+import { RiAdminLine } from "react-icons/ri";
 
 import { api } from "~/utils/api";
 import { EasyText, MedText, HardText } from "~/utils/function"
@@ -14,19 +16,26 @@ import { Formation, Technologie } from "@prisma/client";
 import dynamic from "next/dynamic";
 import { useTheme } from "next-themes";
 import { prisma } from "~/server/db";
+import { useState } from "react";
 
 const Home: NextPage = () => {
   const { systemTheme, theme, setTheme } = useTheme();
   const currentTheme = theme === 'system' ? systemTheme : theme;
 
+  const [SearchTerm, setSearchTerm] = useState('');
+
   const { data: sessionData } = useSession();
+  const user = sessionData?.user
   const admin = sessionData?.user.admin
 
-  const {data: formations }= api.formation.getAll.useQuery();
+  const { data: formations } = api.formation.getAll.useQuery();
   const getLecon = api.formation.getLecons.useMutation();
   const { data: last4 } = api.formation.getLast4.useQuery()
 
-  const { data: techList } = api.technologie.getAll.useQuery()
+  const handleSearchTerm = (e: React.ChangeEvent<HTMLInputElement>) => {
+		let value = e.target.value;
+		setSearchTerm(value);
+	};
 
   return (
     <>
@@ -38,30 +47,36 @@ const Home: NextPage = () => {
           @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
         </style>
       </Head>
+
       <Image src={theme == "dark" ? "/homescreen-darkmode-wave.svg" : "/homescreen-wave.svg"} width="0" height="1500" className="w-screen z-0 absolute" alt="" />
+
       <main className="flex min-h-screen flex-col items-center justify-center bg-white z-10 dark:bg-[#041F25]">
         <div className="flex flex-row items-start justify-between w-full px-16 z-10 mt-10">
-          <Image src="/okto.png" alt="Logo Oktopod" width="64" height="64" />
-          <div className="flex flex-row justify-around items-center">
-            {sessionData?.user.admin && <Link href="/components/admin"><img src="https://icones.pro/wp-content/uploads/2022/02/services-parametres-et-icone-d-engrenage-gris.png" className="max-w-[3rem]"></img></Link>}
+          <Link href={"/"}><Image src="/okto.png" alt="Logo Oktopod" width="64" height="64" /></Link>
+          <div className="flex flex-row justify-around items-center gap-1">
+            {admin && <Link href="/admin/main" className="text-white"><RiAdminLine className="text-white text-[2rem]" /></Link>}
+
+            {user && <Link href={"/components/formation"} className=" px-3 py-3 text-white font-semibold font-Inter rounded-full hover:bg-white/10">MON ESPACE</Link>}
             <button
               className="rounded-full px-3 py-3 font-semibold  no-underline transition hover:bg-white/10"
               onClick={sessionData ? () => void signOut() : () => void signIn()}
             >
-              <p className="text-white font-Inter">CONNEXION</p>
+              {sessionData ? <img src="/arrow.png" className="max-w-[1.5rem]"></img> : <p className="text-white font-Inter">CONNEXION</p>}
             </button>
-            <button onClick={() => theme === "dark" ? setTheme('light') : setTheme("dark")} className="flex flex-row justify-center items-center ml-8 rounded-full bg-white/10 w-10 h-10 shadow-md">
+            <button onClick={() => theme === "dark" ? setTheme('light') : setTheme("dark")} className="flex flex-row justify-center items-center ml-3 rounded-full bg-white/10 w-10 h-10 shadow-md">
               {theme == "dark" ? <FaSun className="w-2/5 text-[#fff]" /> : <FaMoon className="w-2/5 text-[#fff]" />}
             </button>
           </div>
         </div>
+
         <div className="container flex flex-col items-center columns-12 justify-center z-10 pt-10 px-12 ">
           <div className="container flex flex-row items-center justify-center mb-12">
             <div className="w-3/5">
               <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem] mb-12">
                 Des cours sur mesure
               </h1>
-              <p className="text-white text-xl font-Inter">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nulla nisl, placerat sed mauris vitae, vestibulum sollicitudin libero.</p>
+              {/*<p className="text-white text-xl font-Inter">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nulla nisl, placerat sed mauris vitae, vestibulum sollicitudin libero.</p>*/}
+              <p className="text-white text-xl font-Inter">La vie, c'est comme une boîte de chocolat. Ça dure moins longtemps avec les gros.</p>
             </div>
             <Image src="/learn.png" width="1037" height="991" className="w-4/5" alt="" />
           </div>
@@ -90,7 +105,7 @@ const Home: NextPage = () => {
             {last4 as Formation[] && last4 && last4.length > 0 && last4.map((forma) => {
               if (!forma.hidden || (forma.hidden && admin)) {
                 return (
-                  <div className="flex flex-col items-center bg-white/20 rounded-3xl shadow-lg w-full h-96 mx-2 relative" key={forma.id}>
+                  <Link href={`/components/formations/${forma.id}`} className="flex flex-col items-center bg-white/20 rounded-3xl shadow-lg w-full h-96 mx-2 relative transition hover:scale-[1.05]" key={forma.id}>
                     <div className="absolute -top-20 flex items-end justify-end w-[170px] h-[150px]">
                       {forma.techs[0] && forma.techs[0].logo && <img src={forma.techs[0].logo} alt="" />}
                     </div>
@@ -109,7 +124,7 @@ const Home: NextPage = () => {
                         <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">{forma.lecons.length.toString()} leçons</p>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 )
               }
             })}
@@ -118,14 +133,16 @@ const Home: NextPage = () => {
           <h1 className="text-4xl self-start mb-11 mt-12 text-[#0E6073] dark:text-white">Trouvez le bon cours pour vous</h1>
           <div className="bg-white width mb-24 w-8/12 h-16 flex flex-row items-center px-8 rounded-full shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)]">
             <HiMagnifyingGlass className="h-9 w-9 text-[#989898]" />
-            <input className=" h-16 w-40 shadow-none w-full bg-transparent" type="text" />
+            <input className=" h-16 w-40 shadow-none w-full bg-transparent dark:text-[#041f25]" type="text" name="searchValue" id="searchValue" onChange={handleSearchTerm}/>
           </div>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-4 w-full items-center gap-y-32 mt-6">
-            {formations as Formation[] && formations && formations.length > 0 && formations.map((forma) => {
+            {formations as Formation[] && formations && formations.length > 0 && formations.filter((forma) => {
+              return forma.title.toLowerCase().includes(SearchTerm.toLowerCase())
+            }).map((forma) => {
               if (!forma.hidden || (forma.hidden && admin)) {
                 return (
-                  <div className="flex flex-col items-center bg-white/20 rounded-3xl shadow-lg w-full h-96 mx-2 relative" key={forma.id}>
+                  <Link href={`/components/formations/${forma.id}`} className="flex flex-col items-center bg-white/20 rounded-3xl shadow-lg w-full h-96 mx-2 relative transition hover:scale-[1.05]" key={forma.id}>
                     <div className="absolute -top-20 flex items-end justify-end w-[170px] h-[150px]">
                       {forma.techs[0] && forma.techs[0].logo && <img src={forma.techs[0].logo} alt="" />}
                     </div>
@@ -144,7 +161,7 @@ const Home: NextPage = () => {
                         <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">{forma.lecons.length.toString()} leçons</p>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 )
               }
             })}
@@ -155,7 +172,7 @@ const Home: NextPage = () => {
         </div>
         <div className="w-full bg-[#0e6370] h-40 bottom-0 mt-12 flex flex-row px-48 justify-between items-center">
           <div className="flex flex-row justify-between items-center">
-            <Image src="/Oktopod-carré-blanc.png" width="100" height="30" className="h-20 mr-4" alt="Logo Oktopod" />
+            <Link target="_blank" href={"https://www.oktopod.io/"}><Image src="/Oktopod-carré-blanc.png" width="100" height="30" className="h-20 mr-4" alt="Logo Oktopod" /></Link>
             <p className="text-sm font-Inter text-white mx-4">© 2023 Oktopod</p>
           </div>
           <div className="flex flex-row justify-between items-center">
@@ -177,7 +194,7 @@ const AuthShowcase: React.FC = () => {
     <div>
       {sessionData && sessionData.user?.image && <Link href={`/components/users/${sessionData.user.id}`}><img src={sessionData.user.image} className="max-w-[3rem]"></img></Link>}
       {sessionData?.user.admin && <Link href="/components/admin"><img src="https://icones.pro/wp-content/uploads/2022/02/services-parametres-et-icone-d-engrenage-gris.png" className="max-w-[3rem]"></img></Link>}
-      {sessionData?.user.admin && <Link href="/components/admin/main"><img src="https://icones.pro/wp-content/uploads/2022/02/services-parametres-et-icone-d-engrenage-gris.png" className="max-w-[3rem]"></img></Link>}
+      {sessionData?.user.admin && <Link href="/admin/main"><img src="https://icones.pro/wp-content/uploads/2022/02/services-parametres-et-icone-d-engrenage-gris.png" className="max-w-[3rem]"></img></Link>}
       <button
         className="rounded-full px-3 py-3 font-semibold  no-underline transition hover:bg-white/10"
         onClick={sessionData ? () => void signOut() : () => void signIn()}
