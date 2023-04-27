@@ -24,7 +24,7 @@ const Home: NextPage = () => {
   console.log(currentTheme)
 
   const { data: techList } = api.technologie.getAll.useQuery()
-  
+
   return (
     <>
       <Head>
@@ -35,7 +35,7 @@ const Home: NextPage = () => {
           @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
         </style>
       </Head>
-      <Image src={theme == "dark" ? "/homescreen-darkmode-wave.svg" : "/homescreen-wave.svg"} width="0" height="1500" className="w-screen z-0 absolute" alt=""/>
+      <Image src={theme == "dark" ? "/homescreen-darkmode-wave.svg" : "/homescreen-wave.svg"} width="0" height="1500" className="w-screen z-0 absolute" alt="" />
       <main className="flex min-h-screen flex-col items-center justify-center bg-white z-10 dark:bg-[#041F25]">
         <div className="flex flex-row items-start justify-between w-full px-16 z-10 mt-10">
           <Image src="/okto.png" alt="Logo Oktopod" width="64" height="64" />
@@ -47,8 +47,8 @@ const Home: NextPage = () => {
             >
               <p className="text-white font-Inter">CONNEXION</p>
             </button>
-            <button onClick={() => theme === "dark"? setTheme('light'): setTheme("dark")} className="flex flex-row justify-center items-center ml-8 rounded-full bg-white/10 w-10 h-10 shadow-md">
-              {theme == "dark"? <FaSun className="w-2/5 text-[#fff]"/> : <FaMoon className="w-2/5 text-[#fff]"/>}
+            <button onClick={() => theme === "dark" ? setTheme('light') : setTheme("dark")} className="flex flex-row justify-center items-center ml-8 rounded-full bg-white/10 w-10 h-10 shadow-md">
+              {theme == "dark" ? <FaSun className="w-2/5 text-[#fff]" /> : <FaMoon className="w-2/5 text-[#fff]" />}
             </button>
           </div>
         </div>
@@ -60,7 +60,7 @@ const Home: NextPage = () => {
               </h1>
               <p className="text-white text-xl font-Inter">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nulla nisl, placerat sed mauris vitae, vestibulum sollicitudin libero.</p>
             </div>
-            <Image src="/learn.png" width="1037" height="991" className="w-4/5" alt=""/>
+            <Image src="/learn.png" width="1037" height="991" className="w-4/5" alt="" />
           </div>
           {/* <AuthShowcase />
           <Link href="/components/formation"><button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">Liste Formations</button></Link> */}
@@ -80,12 +80,12 @@ const Home: NextPage = () => {
               )
             })}
           </div>
-          
+
           <h1 className="text-4xl self-start mb-24 mt-20 text-[#0E6073] dark:text-white">Nouveautés</h1>
           <div className="flex flex-row w-full h-96 items-center">
             <div className="flex flex-col items-center bg-white/20 rounded-3xl shadow-lg w-3/12 h-full mx-2 relative">
               <div className="absolute -top-20">
-                <Image src="/python.png" width="173" height="200" alt=""/>
+                <Image src="/python.png" width="173" height="200" alt="" />
               </div>
               <div className="w-full px-4 flex flex-col items-center mt-24">
                 <h3 className="text-3xl mb-3 text-cyan-700 text-[#0E6073] dark:text-[#63AEAB]">Initiation Python</h3>
@@ -95,26 +95,26 @@ const Home: NextPage = () => {
                 <div className="flex flex-row items-center justify-center">
                   <div className="flex flex-row items-end">
                     <svg width="7" height="11">
-                      <rect width="7" height="11" className="fill-[#0E6073]"/>
+                      <rect width="7" height="11" className="fill-[#0E6073]" />
                     </svg>
                     <svg width="7" height="21" className="mx-1">
-                      <rect width="7" height="21" className="fill-[#989898] dark:fill-[#2EA3A5]"/>
+                      <rect width="7" height="21" className="fill-[#989898] dark:fill-[#2EA3A5]" />
                     </svg>
                     <svg width="7" height="30">
-                      <rect width="7" height="30" className="fill-[#989898] dark:fill-[#2EA3A5]"/>
+                      <rect width="7" height="30" className="fill-[#989898] dark:fill-[#2EA3A5]" />
                     </svg>
                   </div>
                   <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">débutant</p>
                 </div>
                 <div className="flex flex-row items-center justify-center">
-                  <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]"/>
+                  <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]" />
                   <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">3 leçons</p>
                 </div>
               </div>
             </div>
             <div className="flex flex-col items-center bg-white/20 rounded-3xl shadow-lg w-3/12 h-full mx-2 relative">
               <div className="absolute -top-20">
-                <Image src="/python.png" width="173" height="200" alt=""/>
+                <Image src="/python.png" width="173" height="200" alt="" />
               </div>
               <div className="w-full px-4 flex flex-col items-center mt-24">
                 <h3 className="text-3xl mb-3 text-cyan-700 text-[#0E6073] dark:text-[#63AEAB]">Initiation Python</h3>
@@ -124,26 +124,26 @@ const Home: NextPage = () => {
                 <div className="flex flex-row items-center justify-center">
                   <div className="flex flex-row items-end">
                     <svg width="7" height="11">
-                      <rect width="7" height="11" className="fill-[#0E6073]"/>
+                      <rect width="7" height="11" className="fill-[#0E6073]" />
                     </svg>
                     <svg width="7" height="21" className="mx-1">
-                      <rect width="7" height="21" className="fill-[#989898] dark:fill-[#2EA3A5]"/>
+                      <rect width="7" height="21" className="fill-[#989898] dark:fill-[#2EA3A5]" />
                     </svg>
                     <svg width="7" height="30">
-                      <rect width="7" height="30" className="fill-[#989898] dark:fill-[#2EA3A5]"/>
+                      <rect width="7" height="30" className="fill-[#989898] dark:fill-[#2EA3A5]" />
                     </svg>
                   </div>
                   <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">débutant</p>
                 </div>
                 <div className="flex flex-row items-center justify-center">
-                  <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]"/>
+                  <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]" />
                   <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">3 leçons</p>
                 </div>
               </div>
             </div>
             <div className="flex flex-col items-center bg-white/20 rounded-3xl shadow-lg w-3/12 h-full mx-2 relative">
               <div className="absolute -top-20">
-                <Image src="/python.png" width="173" height="200" alt=""/>
+                <Image src="/python.png" width="173" height="200" alt="" />
               </div>
               <div className="w-full px-4 flex flex-col items-center mt-24">
                 <h3 className="text-3xl mb-3 text-cyan-700 text-[#0E6073] dark:text-[#63AEAB]">Initiation Python</h3>
@@ -153,26 +153,26 @@ const Home: NextPage = () => {
                 <div className="flex flex-row items-center justify-center">
                   <div className="flex flex-row items-end">
                     <svg width="7" height="11">
-                      <rect width="7" height="11" className="fill-[#0E6073]"/>
+                      <rect width="7" height="11" className="fill-[#0E6073]" />
                     </svg>
                     <svg width="7" height="21" className="mx-1">
-                      <rect width="7" height="21" className="fill-[#989898] dark:fill-[#2EA3A5]"/>
+                      <rect width="7" height="21" className="fill-[#989898] dark:fill-[#2EA3A5]" />
                     </svg>
                     <svg width="7" height="30">
-                      <rect width="7" height="30" className="fill-[#989898] dark:fill-[#2EA3A5]"/>
+                      <rect width="7" height="30" className="fill-[#989898] dark:fill-[#2EA3A5]" />
                     </svg>
                   </div>
                   <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">débutant</p>
                 </div>
                 <div className="flex flex-row items-center justify-center">
-                  <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]"/>
+                  <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]" />
                   <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">3 leçons</p>
                 </div>
               </div>
             </div>
             <div className="flex flex-col items-center bg-white/20 rounded-3xl shadow-lg w-3/12 h-full mx-2 relative">
               <div className="absolute -top-20">
-                <Image src="/python.png" width="173" height="200" alt=""/>
+                <Image src="/python.png" width="173" height="200" alt="" />
               </div>
               <div className="w-full px-4 flex flex-col items-center mt-24">
                 <h3 className="text-3xl mb-3 text-cyan-700 text-[#0E6073] dark:text-[#63AEAB]">Initiation Python</h3>
@@ -182,19 +182,19 @@ const Home: NextPage = () => {
                 <div className="flex flex-row items-center justify-center">
                   <div className="flex flex-row items-end">
                     <svg width="7" height="11">
-                      <rect width="7" height="11" className="fill-[#0E6073]"/>
+                      <rect width="7" height="11" className="fill-[#0E6073]" />
                     </svg>
                     <svg width="7" height="21" className="mx-1">
-                      <rect width="7" height="21" className="fill-[#989898] dark:fill-[#2EA3A5]"/>
+                      <rect width="7" height="21" className="fill-[#989898] dark:fill-[#2EA3A5]" />
                     </svg>
                     <svg width="7" height="30">
-                      <rect width="7" height="30" className="fill-[#989898] dark:fill-[#2EA3A5]"/>
+                      <rect width="7" height="30" className="fill-[#989898] dark:fill-[#2EA3A5]" />
                     </svg>
                   </div>
                   <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">débutant</p>
                 </div>
                 <div className="flex flex-row items-center justify-center">
-                  <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]"/>
+                  <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]" />
                   <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">3 leçons</p>
                 </div>
               </div>
@@ -203,14 +203,14 @@ const Home: NextPage = () => {
 
           <h1 className="text-4xl self-start mb-11 mt-12 text-[#0E6073] dark:text-white">Trouvez le bon cours pour vous</h1>
           <div className="bg-white width mb-24 w-8/12 h-16 flex flex-row items-center px-8 rounded-full shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)]">
-            <HiMagnifyingGlass className="h-9 w-9 text-[#989898]"/>
-            <input className=" h-16 w-40 shadow-none w-full bg-none" type="text"/>
+            <HiMagnifyingGlass className="h-9 w-9 text-[#989898]" />
+            <input className=" h-16 w-40 shadow-none w-full bg-none" type="text" />
           </div>
 
           <div className="flex flex-row w-full h-96 items-center">
             <div className="flex flex-col items-center bg-white/20 rounded-3xl shadow-lg w-3/12 h-full mx-2 relative">
               <div className="absolute -top-20">
-                <Image src="/python.png" width="173" height="200" alt=""/>
+                <Image src="/python.png" width="173" height="200" alt="" />
               </div>
               <div className="w-full px-4 flex flex-col items-center mt-24">
                 <h3 className="text-3xl mb-3 text-cyan-700 text-[#0E6073] dark:text-[#63AEAB]">Initiation Python</h3>
@@ -220,19 +220,19 @@ const Home: NextPage = () => {
                 <div className="flex flex-row items-center justify-center">
                   <div className="flex flex-row items-end">
                     <svg width="7" height="11">
-                      <rect width="7" height="11" className="fill-[#0E6073]"/>
+                      <rect width="7" height="11" className="fill-[#0E6073]" />
                     </svg>
                     <svg width="7" height="21" className="mx-1">
-                      <rect width="7" height="21" className="fill-[#989898] dark:fill-[#2EA3A5]"/>
+                      <rect width="7" height="21" className="fill-[#989898] dark:fill-[#2EA3A5]" />
                     </svg>
                     <svg width="7" height="30">
-                      <rect width="7" height="30" className="fill-[#989898] dark:fill-[#2EA3A5]"/>
+                      <rect width="7" height="30" className="fill-[#989898] dark:fill-[#2EA3A5]" />
                     </svg>
                   </div>
                   <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">débutant</p>
                 </div>
                 <div className="flex flex-row items-center justify-center">
-                  <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]"/>
+                  <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]" />
                   <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">3 leçons</p>
                 </div>
               </div>
@@ -240,7 +240,7 @@ const Home: NextPage = () => {
 
             <div className="flex flex-col items-center bg-white/20 rounded-3xl shadow-lg w-3/12 h-full mx-2 relative">
               <div className="absolute -top-20">
-                <Image src="/python.png" width="173" height="200" alt=""/>
+                <Image src="/python.png" width="173" height="200" alt="" />
               </div>
               <div className="w-full px-4 flex flex-col items-center mt-24">
                 <h3 className="text-3xl mb-3 text-cyan-700 text-[#0E6073] dark:text-[#63AEAB]">Initiation Python</h3>
@@ -250,19 +250,19 @@ const Home: NextPage = () => {
                 <div className="flex flex-row items-center justify-center">
                   <div className="flex flex-row items-end">
                     <svg width="7" height="11">
-                      <rect width="7" height="11" className="fill-[#0E6073]"/>
+                      <rect width="7" height="11" className="fill-[#0E6073]" />
                     </svg>
                     <svg width="7" height="21" className="mx-1">
-                      <rect width="7" height="21" className="fill-[#989898] dark:fill-[#2EA3A5]"/>
+                      <rect width="7" height="21" className="fill-[#989898] dark:fill-[#2EA3A5]" />
                     </svg>
                     <svg width="7" height="30">
-                      <rect width="7" height="30" className="fill-[#989898] dark:fill-[#2EA3A5]"/>
+                      <rect width="7" height="30" className="fill-[#989898] dark:fill-[#2EA3A5]" />
                     </svg>
                   </div>
                   <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">débutant</p>
                 </div>
                 <div className="flex flex-row items-center justify-center">
-                  <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]"/>
+                  <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]" />
                   <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">3 leçons</p>
                 </div>
               </div>
@@ -270,7 +270,7 @@ const Home: NextPage = () => {
 
             <div className="flex flex-col items-center bg-white/20 rounded-3xl shadow-lg w-3/12 h-full mx-2 relative">
               <div className="absolute -top-20">
-                <Image src="/python.png" width="173" height="200" alt=""/>
+                <Image src="/python.png" width="173" height="200" alt="" />
               </div>
               <div className="w-full px-4 flex flex-col items-center mt-24">
                 <h3 className="text-3xl mb-3 text-cyan-700 text-[#0E6073] dark:text-[#63AEAB]">Initiation Python</h3>
@@ -280,19 +280,19 @@ const Home: NextPage = () => {
                 <div className="flex flex-row items-center justify-center">
                   <div className="flex flex-row items-end">
                     <svg width="7" height="11">
-                      <rect width="7" height="11" className="fill-[#0E6073]"/>
+                      <rect width="7" height="11" className="fill-[#0E6073]" />
                     </svg>
                     <svg width="7" height="21" className="mx-1">
-                      <rect width="7" height="21" className="fill-[#989898] dark:fill-[#2EA3A5]"/>
+                      <rect width="7" height="21" className="fill-[#989898] dark:fill-[#2EA3A5]" />
                     </svg>
                     <svg width="7" height="30">
-                      <rect width="7" height="30" className="fill-[#989898] dark:fill-[#2EA3A5]"/>
+                      <rect width="7" height="30" className="fill-[#989898] dark:fill-[#2EA3A5]" />
                     </svg>
                   </div>
                   <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">débutant</p>
                 </div>
                 <div className="flex flex-row items-center justify-center">
-                  <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]"/>
+                  <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]" />
                   <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">3 leçons</p>
                 </div>
               </div>
@@ -300,7 +300,7 @@ const Home: NextPage = () => {
 
             <div className="flex flex-col items-center bg-white/20 rounded-3xl shadow-lg w-3/12 h-full mx-2 relative">
               <div className="absolute -top-20">
-                <Image src="/python.png" width="173" height="200" alt=""/>
+                <Image src="/python.png" width="173" height="200" alt="" />
               </div>
               <div className="w-full px-4 flex flex-col items-center mt-24">
                 <h3 className="text-3xl mb-3 text-cyan-700 text-[#0E6073] dark:text-[#63AEAB]">Initiation Python</h3>
@@ -310,19 +310,19 @@ const Home: NextPage = () => {
                 <div className="flex flex-row items-center justify-center">
                   <div className="flex flex-row items-end">
                     <svg width="7" height="11">
-                      <rect width="7" height="11" className="fill-[#0E6073]"/>
+                      <rect width="7" height="11" className="fill-[#0E6073]" />
                     </svg>
                     <svg width="7" height="21" className="mx-1">
-                      <rect width="7" height="21" className="fill-[#989898] dark:fill-[#2EA3A5]"/>
+                      <rect width="7" height="21" className="fill-[#989898] dark:fill-[#2EA3A5]" />
                     </svg>
                     <svg width="7" height="30">
-                      <rect width="7" height="30" className="fill-[#989898] dark:fill-[#2EA3A5]"/>
+                      <rect width="7" height="30" className="fill-[#989898] dark:fill-[#2EA3A5]" />
                     </svg>
                   </div>
                   <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">débutant</p>
                 </div>
                 <div className="flex flex-row items-center justify-center">
-                  <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]"/>
+                  <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]" />
                   <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">3 leçons</p>
                 </div>
               </div>
@@ -332,13 +332,13 @@ const Home: NextPage = () => {
 
           {/* <img src="https://media.discordapp.net/attachments/688793736620146689/915869475423813662/20210709_215217.gif" className="max-w-[12em]"></img> */}
 
-        </div> 
-        <div className="w-full bg-cyan-700 h-40 bottom-0 mt-12 flex flex-row px-48 justify-between items-center">
-        <div className="flex flex-row justify-between items-center">
-          <Image src="/Oktopod-carré-blanc.png" width="100" height="30" className="h-20 mr-4" alt="Logo Oktopod"/>
-          <p className="text-sm font-Inter text-white mx-4">© 2023 Oktopod</p>
         </div>
-        <div className="flex flex-row justify-between items-center">
+        <div className="w-full bg-[#0e6370] h-40 bottom-0 mt-12 flex flex-row px-48 justify-between items-center">
+          <div className="flex flex-row justify-between items-center">
+            <Image src="/Oktopod-carré-blanc.png" width="100" height="30" className="h-20 mr-4" alt="Logo Oktopod" />
+            <p className="text-sm font-Inter text-white mx-4">© 2023 Oktopod</p>
+          </div>
+          <div className="flex flex-row justify-between items-center">
             <p className="text-sm font-Inter text-white mx-4 hover:text-[#63AEAB]">Mentions légales</p>
             <p className="text-sm font-Inter text-white pl-4 border-l-2 hover:text-[#63AEAB]">Connexion</p>
           </div>
