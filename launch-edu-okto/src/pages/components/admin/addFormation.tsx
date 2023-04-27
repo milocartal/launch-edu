@@ -10,6 +10,10 @@ import { EtapeType, Session, Technologie, User, Formation } from '@prisma/client
 import dynamic from "next/dynamic";
 import { MouseEventHandler, useState } from "react";
 
+import { IconContext } from "react-icons";
+import { HiArrowSmLeft } from "react-icons/hi";
+import { HiXMark } from "react-icons/hi2"
+
 const QuillNoSSRWrapper = dynamic(import('react-quill'), {
     ssr: false,
     loading: () => <p>Loading ...</p>,
@@ -122,9 +126,7 @@ const Admin: NextPage = () => {
                     <form onSubmit={handleFormation} className="flex justify-center gap-[15%] item-center w-full h-full text-[#041f25]" method="POST">
                         <fieldset className="flex flex-col max-h-[70%] w-[40%]">
                             <div className="flex gap-4 w-[100%] mb-10">
-                                <Link href="/components/admin/main"><svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#0e6073" className="bi bi-arrow-left" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />
-                                </svg></Link>
+                                <Link href="/components/admin/main"><HiArrowSmLeft className="text-[3rem] text-[#0e6073]" /></Link>
                                 <h1 className="text-5xl font-extrabold tracking-tight  sm:text-[2.5rem] text-[#0e6073]">Créer une formation</h1>
                             </div>
                             <fieldset className="flex flex-col justify-between h-full w-full shadow-xl shadow-black/30 rounded-lg">
@@ -141,10 +143,7 @@ const Admin: NextPage = () => {
                                                             window.location.reload()
                                                         }}
                                                         className="rounded-full font-semibold text-red-600 no-underline">
-                                                        <svg width="10" height="10" viewBox="20 0 10 50" overflow="visible" stroke="#0e6073" stroke-width="10" stroke-linecap="round" className={`hover:stroke-red-500 ${selectedTech === techno.id ? 'stroke-white' : ''}`}>
-                                                            <line x2="50" y2="50" />
-                                                            <line x1="50" y2="50" />
-                                                        </svg>
+                                                        <HiXMark className="text-[1.5rem] text-[#0e6073] hover:text-red-500" />
                                                     </button>
                                                 </div>
 
@@ -182,7 +181,6 @@ const Admin: NextPage = () => {
                             </fieldset>
 
 
-
                             <div className="flex gap-2">
                                 <input type="checkbox" id="hid" name="hid" required className="shadow-none" /><label htmlFor="hid"> En cochant cette case, vous êtes au courant que la formation créée sera invisible pour les utilisateurs.</label>
                             </div>
@@ -196,10 +194,7 @@ const Admin: NextPage = () => {
                         <div className="fixed w-full h-full bg-[#0E6073]/90 top-0 right-0 left-0 bottom-0 flex justify-center items-center">
                             <form onSubmit={handlerAddTech} className="relative flex flex-col gap-5 item-center justify-start bg-white rounded-xl p-16 w-[30%]" method="POST">
                                 <button onClick={normal} className="absolute top-3 right-4 rounded-full font-semibold  no-underline transition hover:text-red-500">
-                                    <svg width="15" height="15" viewBox="20 0 10 50" overflow="visible" stroke="#0e6073" stroke-width="10" stroke-linecap="round" className="hover:stroke-red-500">
-                                        <line x2="50" y2="50" />
-                                        <line x1="50" y2="50" />
-                                    </svg>
+                                    <HiXMark className="text-[2rem] text-[#0e6073] hover:text-red-500" />
                                 </button>
                                 <h1 className="text-xl font-extrabold tracking-tight text-[#0e6073] "><label htmlFor="techName">Nouvelle thématique</label></h1>
                                 <input name="techName" id="techName" type="text" placeholder="Nom de la technologie" required className="inputAddForm" autoComplete="off"></input>

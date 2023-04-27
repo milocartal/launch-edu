@@ -11,6 +11,8 @@ import { Easy, Med, Hard } from "~/utils/function"
 import dynamic from "next/dynamic";
 import { MouseEventHandler, useState } from "react";
 
+import { HiXMark } from "react-icons/hi2"
+
 const QuillNoSSRWrapper = dynamic(import('react-quill'), {
     ssr: false,
     loading: () => <p>Loading ...</p>,
@@ -112,8 +114,8 @@ const Admin: NextPage = () => {
                                             delFormation.mutateAsync({ id: forma.id });
                                             window.location.reload()
                                         }}
-                                        className="rounded-full bg-[#0E6073]/10 px-3 py-1 font-semibold text-red-600 no-underline transition hover:bg-[#0E6073]/20">
-                                        x
+                                        className="rounded-full px-3 py-1 font-semibold no-underline">
+                                        <HiXMark className="text-[2rem] text-[#0e6073] hover:text-red-500" />
                                     </button>
                                 </Link>
                             )
