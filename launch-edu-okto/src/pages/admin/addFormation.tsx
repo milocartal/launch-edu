@@ -4,7 +4,7 @@ import Link from "next/link";
 import { getSession, signIn, signOut, useSession } from "next-auth/react";
 import { type Session as SessionAuth } from 'next-auth'
 
-import { api } from "../../../utils/api";
+import { api } from "../../utils/api";
 import { EtapeType, Session, Technologie, User, Formation } from '@prisma/client';
 
 import dynamic from "next/dynamic";
@@ -86,7 +86,6 @@ const Admin: NextPage = () => {
         //const desc = target.description.value;
         const diff: number = +target.difficulte.value;
         const techno = target.techno.value;
-        //console.log("Info Ta mere ",title," ", content," ", diff," ", techno)
         await addFormation.mutateAsync({ title: title, description: content, difficulte: diff, techno: techno })
     }
 

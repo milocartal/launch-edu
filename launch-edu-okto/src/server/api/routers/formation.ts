@@ -9,8 +9,27 @@ import { prisma } from "~/server/db";
 
 export const formationRouter = createTRPCRouter({
 
-    getAll: publicProcedure.query(({ ctx }) => {
-        return ctx.prisma.formation.findMany();
+    getAll: publicProcedure.query(() => {
+        return prisma.formation.findMany({
+            include: {
+                techs: true,
+                lecons: true,
+            }
+        })
+    }),
+
+    getLast4: publicProcedure.query(() => {
+        return prisma.formation.findMany({
+            include: {
+                techs: true,
+                lecons: true,
+            },
+            orderBy: {
+                updatedAt: 'desc'
+            },
+            take: 4
+
+        })
     }),
 
     getAllTech: publicProcedure.input(z.object({ id: z.string() })).query(({ input }) => {
@@ -40,5 +59,13 @@ export const formationRouter = createTRPCRouter({
 
     delete: protectedProcedure.input(z.object({ id: z.string() })).mutation(({ input }) => {
         return prisma.formation.delete({ where: { id: input.id } })
+    }),
+
+    getLecons: publicProcedure.input(z.object({ id: z.string() })).mutation(({ input }) => {
+        return prisma.lecon.findMany({
+            where: {
+                idf: input.id
+            }
+        })
     }),
 });

@@ -1,4 +1,4 @@
-import { type NextPage } from "next";
+import { GetServerSideProps, InferGetServerSidePropsType, type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import Image from 'next/image'
@@ -7,21 +7,24 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { FaPenAlt, FaMoon, FaSun } from "react-icons/fa";
 import { HiMagnifyingGlass } from "react-icons/hi2";
 
-
 import { api } from "~/utils/api";
+import { Easy, Med, Hard } from "~/utils/function"
+
 import { Formation, Technologie } from "@prisma/client";
 import dynamic from "next/dynamic";
 import { useTheme } from "next-themes";
+import { prisma } from "~/server/db";
 
 const Home: NextPage = () => {
-  const { data: sessionData } = useSession();
-  const { data: formations } = api.formation.getAll.useQuery()
-  const admin = sessionData?.user.admin
-
   const { systemTheme, theme, setTheme } = useTheme();
   const currentTheme = theme === 'system' ? systemTheme : theme;
 
-  console.log(currentTheme)
+  const { data: sessionData } = useSession();
+  const admin = sessionData?.user.admin
+
+  const {data: formations }= api.formation.getAll.useQuery();
+  const getLecon = api.formation.getLecons.useMutation();
+  const { data: last4 } = api.formation.getLast4.useQuery()
 
   const { data: techList } = api.technologie.getAll.useQuery()
 
@@ -82,252 +85,69 @@ const Home: NextPage = () => {
           </div>
 
           <h1 className="text-4xl self-start mb-24 mt-20 text-[#0E6073] dark:text-white">Nouveautés</h1>
-          <div className="flex flex-row w-full h-96 items-center">
-            <div className="flex flex-col items-center bg-white/20 rounded-3xl shadow-lg w-3/12 h-full mx-2 relative">
-              <div className="absolute -top-20">
-                <Image src="/python.png" width="173" height="200" alt="" />
-              </div>
-              <div className="w-full px-4 flex flex-col items-center mt-24">
-                <h3 className="text-3xl mb-3 text-cyan-700 text-[#0E6073] dark:text-[#63AEAB]">Initiation Python</h3>
-                <p className="text-sm font-Inter dark:text-[#2EA3A5]">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nulla nisl, placerat sid sed mauris vitae, vestibulum sollicitudin set libero onec nulla nisl, placerat. Consectetur adipiscing elit.</p>
-              </div>
-              <div className="flex flex-row items-center justify-around mt-5 w-full px-5 absolute bottom-8">
-                <div className="flex flex-row items-center justify-center">
-                  <div className="flex flex-row items-end">
-                    <svg width="7" height="11">
-                      <rect width="7" height="11" className="fill-[#0E6073]" />
-                    </svg>
-                    <svg width="7" height="21" className="mx-1">
-                      <rect width="7" height="21" className="fill-[#989898] dark:fill-[#2EA3A5]" />
-                    </svg>
-                    <svg width="7" height="30">
-                      <rect width="7" height="30" className="fill-[#989898] dark:fill-[#2EA3A5]" />
-                    </svg>
+
+          <div className="flex flex-row w-full h-96 items-center mt-6">
+            {last4 as Formation[] && last4 && last4.length > 0 && last4.map((forma) => {
+              if (!forma.hidden || (forma.hidden && admin)) {
+                return (
+                  <div className="flex flex-col items-center bg-white/20 rounded-3xl shadow-lg w-full h-96 mx-2 relative" key={forma.id}>
+                    <div className="absolute -top-20 flex items-end justify-end w-[170px] h-[150px]">
+                      {forma.techs[0] && forma.techs[0].logo && <img src={forma.techs[0].logo} alt="" />}
+                    </div>
+                    <div className="w-full px-4 flex flex-col items-center mt-20">
+                      <h3 className="text-3xl mb-3 text-cyan-700 text-[#0E6073] dark:text-[#63AEAB]">{forma.title}</h3>
+                      <div className="text-sm font-Inter dark:text-[#2EA3A5]" dangerouslySetInnerHTML={{ __html: forma.description }} />
+                    </div>
+                    <div className="flex flex-row items-center justify-around mt-5 w-full px-5 absolute bottom-8">
+                      <div className="flex flex-row items-center justify-center">
+                        {forma.difficulte === 1 && <Easy />}
+                        {forma.difficulte === 2 && <Med />}
+                        {forma.difficulte === 3 && <Hard />}
+                      </div>
+                      <div className="flex flex-row items-center justify-center">
+                        <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]" />
+                        <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">{forma.lecons.length.toString()} leçons</p>
+                      </div>
+                    </div>
                   </div>
-                  <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">débutant</p>
-                </div>
-                <div className="flex flex-row items-center justify-center">
-                  <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]" />
-                  <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">3 leçons</p>
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-col items-center bg-white/20 rounded-3xl shadow-lg w-3/12 h-full mx-2 relative">
-              <div className="absolute -top-20">
-                <Image src="/python.png" width="173" height="200" alt="" />
-              </div>
-              <div className="w-full px-4 flex flex-col items-center mt-24">
-                <h3 className="text-3xl mb-3 text-cyan-700 text-[#0E6073] dark:text-[#63AEAB]">Initiation Python</h3>
-                <p className="text-sm font-Inter dark:text-[#2EA3A5]">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nulla nisl, placerat sid sed mauris vitae, vestibulum sollicitudin set libero onec nulla nisl, placerat. Consectetur adipiscing elit.</p>
-              </div>
-              <div className="flex flex-row items-center justify-around mt-5 w-full px-5 absolute bottom-8">
-                <div className="flex flex-row items-center justify-center">
-                  <div className="flex flex-row items-end">
-                    <svg width="7" height="11">
-                      <rect width="7" height="11" className="fill-[#0E6073]" />
-                    </svg>
-                    <svg width="7" height="21" className="mx-1">
-                      <rect width="7" height="21" className="fill-[#989898] dark:fill-[#2EA3A5]" />
-                    </svg>
-                    <svg width="7" height="30">
-                      <rect width="7" height="30" className="fill-[#989898] dark:fill-[#2EA3A5]" />
-                    </svg>
-                  </div>
-                  <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">débutant</p>
-                </div>
-                <div className="flex flex-row items-center justify-center">
-                  <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]" />
-                  <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">3 leçons</p>
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-col items-center bg-white/20 rounded-3xl shadow-lg w-3/12 h-full mx-2 relative">
-              <div className="absolute -top-20">
-                <Image src="/python.png" width="173" height="200" alt="" />
-              </div>
-              <div className="w-full px-4 flex flex-col items-center mt-24">
-                <h3 className="text-3xl mb-3 text-cyan-700 text-[#0E6073] dark:text-[#63AEAB]">Initiation Python</h3>
-                <p className="text-sm font-Inter dark:text-[#2EA3A5]">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nulla nisl, placerat sid sed mauris vitae, vestibulum sollicitudin set libero onec nulla nisl, placerat. Consectetur adipiscing elit.</p>
-              </div>
-              <div className="flex flex-row items-center justify-around mt-5 w-full px-5 absolute bottom-8">
-                <div className="flex flex-row items-center justify-center">
-                  <div className="flex flex-row items-end">
-                    <svg width="7" height="11">
-                      <rect width="7" height="11" className="fill-[#0E6073]" />
-                    </svg>
-                    <svg width="7" height="21" className="mx-1">
-                      <rect width="7" height="21" className="fill-[#989898] dark:fill-[#2EA3A5]" />
-                    </svg>
-                    <svg width="7" height="30">
-                      <rect width="7" height="30" className="fill-[#989898] dark:fill-[#2EA3A5]" />
-                    </svg>
-                  </div>
-                  <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">débutant</p>
-                </div>
-                <div className="flex flex-row items-center justify-center">
-                  <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]" />
-                  <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">3 leçons</p>
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-col items-center bg-white/20 rounded-3xl shadow-lg w-3/12 h-full mx-2 relative">
-              <div className="absolute -top-20">
-                <Image src="/python.png" width="173" height="200" alt="" />
-              </div>
-              <div className="w-full px-4 flex flex-col items-center mt-24">
-                <h3 className="text-3xl mb-3 text-cyan-700 text-[#0E6073] dark:text-[#63AEAB]">Initiation Python</h3>
-                <p className="text-sm font-Inter dark:text-[#2EA3A5]">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nulla nisl, placerat sid sed mauris vitae, vestibulum sollicitudin set libero onec nulla nisl, placerat. Consectetur adipiscing elit.</p>
-              </div>
-              <div className="flex flex-row items-center justify-around mt-5 w-full px-5 absolute bottom-8">
-                <div className="flex flex-row items-center justify-center">
-                  <div className="flex flex-row items-end">
-                    <svg width="7" height="11">
-                      <rect width="7" height="11" className="fill-[#0E6073]" />
-                    </svg>
-                    <svg width="7" height="21" className="mx-1">
-                      <rect width="7" height="21" className="fill-[#989898] dark:fill-[#2EA3A5]" />
-                    </svg>
-                    <svg width="7" height="30">
-                      <rect width="7" height="30" className="fill-[#989898] dark:fill-[#2EA3A5]" />
-                    </svg>
-                  </div>
-                  <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">débutant</p>
-                </div>
-                <div className="flex flex-row items-center justify-center">
-                  <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]" />
-                  <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">3 leçons</p>
-                </div>
-              </div>
-            </div>
+                )
+              }
+            })}
           </div>
 
           <h1 className="text-4xl self-start mb-11 mt-12 text-[#0E6073] dark:text-white">Trouvez le bon cours pour vous</h1>
           <div className="bg-white width mb-24 w-8/12 h-16 flex flex-row items-center px-8 rounded-full shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)]">
             <HiMagnifyingGlass className="h-9 w-9 text-[#989898]" />
-            <input className=" h-16 w-40 shadow-none w-full bg-none" type="text" />
+            <input className=" h-16 w-40 shadow-none w-full bg-transparent" type="text" />
           </div>
 
-          <div className="flex flex-row w-full h-96 items-center">
-            <div className="flex flex-col items-center bg-white/20 rounded-3xl shadow-lg w-3/12 h-full mx-2 relative">
-              <div className="absolute -top-20">
-                <Image src="/python.png" width="173" height="200" alt="" />
-              </div>
-              <div className="w-full px-4 flex flex-col items-center mt-24">
-                <h3 className="text-3xl mb-3 text-cyan-700 text-[#0E6073] dark:text-[#63AEAB]">Initiation Python</h3>
-                <p className="text-sm font-Inter dark:text-[#2EA3A5]">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nulla nisl, placerat sid sed mauris vitae, vestibulum sollicitudin set libero onec nulla nisl, placerat. Consectetur adipiscing elit.</p>
-              </div>
-              <div className="flex flex-row items-center justify-around mt-5 w-full px-5 absolute bottom-8">
-                <div className="flex flex-row items-center justify-center">
-                  <div className="flex flex-row items-end">
-                    <svg width="7" height="11">
-                      <rect width="7" height="11" className="fill-[#0E6073]" />
-                    </svg>
-                    <svg width="7" height="21" className="mx-1">
-                      <rect width="7" height="21" className="fill-[#989898] dark:fill-[#2EA3A5]" />
-                    </svg>
-                    <svg width="7" height="30">
-                      <rect width="7" height="30" className="fill-[#989898] dark:fill-[#2EA3A5]" />
-                    </svg>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-4 w-full items-center gap-y-32 mt-6">
+            {formations as Formation[] && formations && formations.length > 0 && formations.map((forma) => {
+              if (!forma.hidden || (forma.hidden && admin)) {
+                return (
+                  <div className="flex flex-col items-center bg-white/20 rounded-3xl shadow-lg w-full h-96 mx-2 relative" key={forma.id}>
+                    <div className="absolute -top-20 flex items-end justify-end w-[170px] h-[150px]">
+                      {forma.techs[0] && forma.techs[0].logo && <img src={forma.techs[0].logo} alt="" />}
+                    </div>
+                    <div className="w-full px-4 flex flex-col items-center mt-20">
+                      <h3 className="text-3xl mb-3 text-cyan-700 text-[#0E6073] dark:text-[#63AEAB]">{forma.title}</h3>
+                      <div className="text-sm font-Inter dark:text-[#2EA3A5]" dangerouslySetInnerHTML={{ __html: forma.description }} />
+                    </div>
+                    <div className="flex flex-row items-center justify-around mt-5 w-full px-5 absolute bottom-8">
+                      <div className="flex flex-row items-center justify-center">
+                        {forma.difficulte === 1 && <Easy />}
+                        {forma.difficulte === 2 && <Med />}
+                        {forma.difficulte === 3 && <Hard />}
+                      </div>
+                      <div className="flex flex-row items-center justify-center">
+                        <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]" />
+                        <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">{forma.lecons.length.toString()} leçons</p>
+                      </div>
+                    </div>
                   </div>
-                  <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">débutant</p>
-                </div>
-                <div className="flex flex-row items-center justify-center">
-                  <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]" />
-                  <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">3 leçons</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-col items-center bg-white/20 rounded-3xl shadow-lg w-3/12 h-full mx-2 relative">
-              <div className="absolute -top-20">
-                <Image src="/python.png" width="173" height="200" alt="" />
-              </div>
-              <div className="w-full px-4 flex flex-col items-center mt-24">
-                <h3 className="text-3xl mb-3 text-cyan-700 text-[#0E6073] dark:text-[#63AEAB]">Initiation Python</h3>
-                <p className="text-sm font-Inter dark:text-[#2EA3A5]">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nulla nisl, placerat sid sed mauris vitae, vestibulum sollicitudin set libero onec nulla nisl, placerat. Consectetur adipiscing elit.</p>
-              </div>
-              <div className="flex flex-row items-center justify-around mt-5 w-full px-5 absolute bottom-8">
-                <div className="flex flex-row items-center justify-center">
-                  <div className="flex flex-row items-end">
-                    <svg width="7" height="11">
-                      <rect width="7" height="11" className="fill-[#0E6073]" />
-                    </svg>
-                    <svg width="7" height="21" className="mx-1">
-                      <rect width="7" height="21" className="fill-[#989898] dark:fill-[#2EA3A5]" />
-                    </svg>
-                    <svg width="7" height="30">
-                      <rect width="7" height="30" className="fill-[#989898] dark:fill-[#2EA3A5]" />
-                    </svg>
-                  </div>
-                  <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">débutant</p>
-                </div>
-                <div className="flex flex-row items-center justify-center">
-                  <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]" />
-                  <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">3 leçons</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-col items-center bg-white/20 rounded-3xl shadow-lg w-3/12 h-full mx-2 relative">
-              <div className="absolute -top-20">
-                <Image src="/python.png" width="173" height="200" alt="" />
-              </div>
-              <div className="w-full px-4 flex flex-col items-center mt-24">
-                <h3 className="text-3xl mb-3 text-cyan-700 text-[#0E6073] dark:text-[#63AEAB]">Initiation Python</h3>
-                <p className="text-sm font-Inter dark:text-[#2EA3A5]">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nulla nisl, placerat sid sed mauris vitae, vestibulum sollicitudin set libero onec nulla nisl, placerat. Consectetur adipiscing elit.</p>
-              </div>
-              <div className="flex flex-row items-center justify-around mt-5 w-full px-5 absolute bottom-8">
-                <div className="flex flex-row items-center justify-center">
-                  <div className="flex flex-row items-end">
-                    <svg width="7" height="11">
-                      <rect width="7" height="11" className="fill-[#0E6073]" />
-                    </svg>
-                    <svg width="7" height="21" className="mx-1">
-                      <rect width="7" height="21" className="fill-[#989898] dark:fill-[#2EA3A5]" />
-                    </svg>
-                    <svg width="7" height="30">
-                      <rect width="7" height="30" className="fill-[#989898] dark:fill-[#2EA3A5]" />
-                    </svg>
-                  </div>
-                  <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">débutant</p>
-                </div>
-                <div className="flex flex-row items-center justify-center">
-                  <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]" />
-                  <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">3 leçons</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-col items-center bg-white/20 rounded-3xl shadow-lg w-3/12 h-full mx-2 relative">
-              <div className="absolute -top-20">
-                <Image src="/python.png" width="173" height="200" alt="" />
-              </div>
-              <div className="w-full px-4 flex flex-col items-center mt-24">
-                <h3 className="text-3xl mb-3 text-cyan-700 text-[#0E6073] dark:text-[#63AEAB]">Initiation Python</h3>
-                <p className="text-sm font-Inter dark:text-[#2EA3A5]">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nulla nisl, placerat sid sed mauris vitae, vestibulum sollicitudin set libero onec nulla nisl, placerat. Consectetur adipiscing elit.</p>
-              </div>
-              <div className="flex flex-row items-center justify-around mt-5 w-full px-5 absolute bottom-8">
-                <div className="flex flex-row items-center justify-center">
-                  <div className="flex flex-row items-end">
-                    <svg width="7" height="11">
-                      <rect width="7" height="11" className="fill-[#0E6073]" />
-                    </svg>
-                    <svg width="7" height="21" className="mx-1">
-                      <rect width="7" height="21" className="fill-[#989898] dark:fill-[#2EA3A5]" />
-                    </svg>
-                    <svg width="7" height="30">
-                      <rect width="7" height="30" className="fill-[#989898] dark:fill-[#2EA3A5]" />
-                    </svg>
-                  </div>
-                  <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">débutant</p>
-                </div>
-                <div className="flex flex-row items-center justify-center">
-                  <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]" />
-                  <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">3 leçons</p>
-                </div>
-              </div>
-            </div>
-
+                )
+              }
+            })}
           </div>
 
           {/* <img src="https://media.discordapp.net/attachments/688793736620146689/915869475423813662/20210709_215217.gif" className="max-w-[12em]"></img> */}
@@ -340,7 +160,7 @@ const Home: NextPage = () => {
           </div>
           <div className="flex flex-row justify-between items-center">
             <p className="text-sm font-Inter text-white mx-4 hover:text-[#63AEAB]">Mentions légales</p>
-            <p className="text-sm font-Inter text-white pl-4 border-l-2 hover:text-[#63AEAB]">Connexion</p>
+            <button onClick={sessionData ? () => void signOut() : () => void signIn()} className="text-sm font-Inter text-white pl-4 border-l-2 hover:text-[#63AEAB]">{sessionData ? "Déconnexion" : "Connexion"}</button>
           </div>
         </div>
       </main>
