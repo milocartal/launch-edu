@@ -8,7 +8,7 @@ import { FaPenAlt, FaMoon, FaSun } from "react-icons/fa";
 import { HiMagnifyingGlass } from "react-icons/hi2";
 
 import { api } from "~/utils/api";
-import { Easy, Med, Hard } from "~/utils/function"
+import { EasyText, MedText, HardText } from "~/utils/function"
 
 import { Formation, Technologie } from "@prisma/client";
 import dynamic from "next/dynamic";
@@ -68,7 +68,7 @@ const Home: NextPage = () => {
           {/* <AuthShowcase />
           <Link href="/components/formation"><button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">Liste Formations</button></Link> */}
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
+          {/*<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
             {techList as Technologie[] && techList && techList.length > 0 && techList.map((tech) => {
               return (
                 <Link
@@ -82,7 +82,7 @@ const Home: NextPage = () => {
                 </Link>
               )
             })}
-          </div>
+          </div>*/}
 
           <h1 className="text-4xl self-start mb-24 mt-20 text-[#0E6073] dark:text-white">Nouveautés</h1>
 
@@ -100,9 +100,9 @@ const Home: NextPage = () => {
                     </div>
                     <div className="flex flex-row items-center justify-around mt-5 w-full px-5 absolute bottom-8">
                       <div className="flex flex-row items-center justify-center">
-                        {forma.difficulte === 1 && <Easy />}
-                        {forma.difficulte === 2 && <Med />}
-                        {forma.difficulte === 3 && <Hard />}
+                        {forma.difficulte === 1 && <EasyText />}
+                        {forma.difficulte === 2 && <MedText />}
+                        {forma.difficulte === 3 && <HardText />}
                       </div>
                       <div className="flex flex-row items-center justify-center">
                         <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]" />
@@ -135,9 +135,9 @@ const Home: NextPage = () => {
                     </div>
                     <div className="flex flex-row items-center justify-around mt-5 w-full px-5 absolute bottom-8">
                       <div className="flex flex-row items-center justify-center">
-                        {forma.difficulte === 1 && <Easy />}
-                        {forma.difficulte === 2 && <Med />}
-                        {forma.difficulte === 3 && <Hard />}
+                        {forma.difficulte === 1 && <EasyText />}
+                        {forma.difficulte === 2 && <MedText />}
+                        {forma.difficulte === 3 && <HardText />}
                       </div>
                       <div className="flex flex-row items-center justify-center">
                         <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]" />
