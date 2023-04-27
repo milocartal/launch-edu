@@ -1,6 +1,6 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import Header from "./header";
+import Header from "../../utils/header";
 import Link from "next/link";
 import Image from 'next/image'
 import { signIn, signOut, useSession } from "next-auth/react";
@@ -68,7 +68,6 @@ const Home: NextPage = () => {
                       <h3 className="text-md font-bold mt-12">{forma.title}</h3>
 
                       <span className="absolute right-5">
-                        {/* {dif} */}
                         {forma.difficulte === 1 && <Easy/>}
                         {forma.difficulte === 2 && <Med/>}
                         {forma.difficulte === 3 && <Hard/>}

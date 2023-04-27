@@ -24,7 +24,7 @@ const Header = () => {
          <div className="flex item-center justify-center gap-5">
              <div className="bg-white flex flex-row justify-start items-center width mb-24 w-96 h-12 flex flex-row px-8 rounded-full shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)]">
                  <HiMagnifyingGlass className="h-8 w-8 text-[#989898]" />
-                 <input className=" h-10 w-full shadow-none w-full bg-none" type="text" />
+                 <input className="h-10 shadow-none w-full bg-transparent" type="text" />
              </div>
              {sessionData && sessionData.user?.image && <Link href={`/components/users/${sessionData.user.id}`}><img src={sessionData.user.image} className="max-w-[3rem]"></img></Link>}
          </div>
