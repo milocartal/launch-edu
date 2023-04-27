@@ -10,7 +10,8 @@ const Header = () => {
 
     return (
     <>
-    <div className="fixed w-full pr-40 border-b-4 border-[#63aeab] bg-white top-0 right-0 left-28 h-[4rem]" /><div className="flex item-center justify-between gap-12 fixed w-full pr-40 top-0 right-0 left-28 h-[4rem] text-[#63aeab]">
+    <div className="fixed w-full pr-40 border-b-4 border-[#63aeab] bg-white top-0 right-0 left-28 h-[4rem]" />
+      <div className="flex item-center justify-between gap-12 fixed w-full pr-40 top-0 right-0 left-28 h-[4rem] text-[#63aeab]">
          <div className="flex item-center justify-evenly">
              <button className="px-10 py-3 font-semibold border-[#0E6073] transition hover:border-b-4 hover:text-[#0E6073]">Vos cours</button>
              <button className="px-10 py-3 font-semibold border-[#0E6073] border-b-4 text-[#0E6073]">Explorer</button>
@@ -24,11 +25,11 @@ const Header = () => {
              </div>
              {sessionData && sessionData.user?.image && <Link href={`/components/users/${sessionData.user.id}`}><img src={sessionData.user.image} className="max-w-[3rem]"></img></Link>}
          </div>
-        </div>
-        <div className="flex flex-col items-center justify-between gap-2 min-h-screen top-0 left-0 bg-[#0E6073] fixed m-w-xs p-2">
-            <Link href="/"><img src="/okto.png" className="max-w-[3rem]"></img></Link>
-            <AuthShowcase />
-        </div>
+      </div>
+      <div className="flex flex-col items-center justify-between gap-2 min-h-screen top-0 left-0 bg-[#0E6073] fixed m-w-xs p-2">
+          <Link href="/"><img src="/okto.png" className="max-w-[3rem]"></img></Link>
+          <AuthShowcase />
+      </div>
     </>
     );
   }
