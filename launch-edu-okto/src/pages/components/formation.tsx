@@ -1,4 +1,5 @@
 import { type NextPage } from "next";
+import React, { useState } from 'react';
 import Head from "next/head";
 import Header from "../../utils/header";
 import Link from "next/link";
@@ -7,12 +8,30 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { IoCheckmarkCircle } from "react-icons/io5";
 
 import { api } from "~/utils/api";
+import { Easy, Med, Hard } from "~/utils/function";
 import { Formation } from "@prisma/client";
 
 const Home: NextPage = () => {
   const { data: sessionData } = useSession();
   const { data: formations } = api.formation.getAll.useQuery()
   const admin = sessionData?.user.admin
+  const [filterType, setFilterType] = useState("alphabetique")
+
+  function changeFilterType(type: string){
+    setFilterType(type)
+  }
+
+  formations as Formation[] && formations && formations.length > 0 && filterType == "alphabetique" ? formations.sort(function (a, b){
+    if (a.title < b.title) {
+      return -1;
+    }
+    if (a.title > b.title) {
+      return 1;
+    }
+    return 0;
+  }) : formations as Formation[] && formations && formations.length > 0 && filterType == "diff" && formations.sort(function (a, b){
+    return a.difficulte - b.difficulte;
+  })
 
   return (
     <>
@@ -32,13 +51,13 @@ const Home: NextPage = () => {
               </h1>
               <div className="flex flex-row items-center justify-evenly">
                 <p className="mr-2">Trier par : </p>
-                <button className="px-4 py-1 bg-[#0E6073] rounded-full mx-1">
+                <button className="px-4 py-1 bg-[#0E6073] rounded-full mx-1" onClick={() => changeFilterType("alphabetique")}>
                   <p className="text-[#fff]">Thématique</p>
                 </button>
-                <button className="px-4 py-1 bg-[#D9D9D9] rounded-full mx-1">
+                <button className="px-4 py-1 bg-[#D9D9D9] rounded-full mx-1" onClick={() => changeFilterType("alphabetique")}>
                   <p className="text-[#0E6073]">Progression</p>
                 </button>
-                <button className="px-4 py-1 bg-[#D9D9D9] rounded-full mx-1">
+                <button className="px-4 py-1 bg-[#D9D9D9] rounded-full mx-1" onClick={() => changeFilterType("diff")}>
                   <p className="text-[#0E6073]">Niveau</p>
                 </button>
               </div>
@@ -50,13 +69,6 @@ const Home: NextPage = () => {
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-5 md:gap-8 w-full">
               {formations as Formation[] && formations && formations.length > 0 && formations.map((forma) => {
-                let dif: string;
-                switch (forma.difficulte) {
-                  case 1: dif = "Débutant"; break;
-                  case 2: dif = "Intermédiaire"; break;
-                  case 3: dif = "Avancé"; break;
-                  default: dif = "Débutant";
-                }
                 if (!forma.hidden || forma.hidden && admin)
                   return (
                     <Link
@@ -65,14 +77,15 @@ const Home: NextPage = () => {
                       key={forma.id}
                     >
                       <Image src="/python.png" width="100" height="100" className="w-5/12 absolute -top-10" alt=""/>
-                      <h3 className="text-md font-bold mt-12">{forma.title}</h3>
+                      <h3 className="text-md font-bold mt-12 text-center">{forma.title}</h3>
 
-                      <span className="absolute right-5">
+                      <span className="absolute right-5">                     
                         {forma.difficulte === 1 && <Easy/>}
                         {forma.difficulte === 2 && <Med/>}
                         {forma.difficulte === 3 && <Hard/>}
                       </span>
-                      <IoCheckmarkCircle className="h-7 w-7 text-[#0E6073] absolute left-5"/>
+                      <p className="h-7 w-7 text-[#0E6073] absolute left-5">10%</p>
+                      {/* <IoCheckmarkCircle className="h-7 w-7 text-[#0E6073] absolute left-5"/> */}
                     </Link>
                   )
               })}
@@ -104,51 +117,4 @@ const AuthShowcase: React.FC = () => {
   );
 };
 
-const Easy: React.FC = () => {
-  return (
-      <div className="flex flex-row items-end">
-          <svg width="6" height="11">
-              <rect width="6" height="11" className="fill-[#0E6073]" />
-          </svg>
-          <svg width="6" height="19" className="mx-1">
-              < rect width="6" height="19" className="fill-[#989898] dark:fill-[#2EA3A5]" />
-          </svg >
-          <svg width="6" height="28">
-              <rect width="6" height="28" className="fill-[#989898] dark:fill-[#2EA3A5]" />
-          </svg >
-      </div >
-  );
-};
-
-const Med: React.FC = () => {
-  return (
-      <div className="flex flex-row items-end">
-          <svg width="6" height="11">
-              <rect width="6" height="11" className="fill-[#0E6073]" />
-          </svg>
-          <svg width="6" height="19" className="mx-1">
-              < rect width="6" height="19" className="fill-[#0E6073]" />
-          </svg >
-          <svg width="6" height="28">
-              <rect width="6" height="28" className="fill-[#989898] dark:fill-[#2EA3A5]" />
-          </svg >
-      </div >
-  );
-};
-
-const Hard: React.FC = () => {
-  return (
-      <div className="flex flex-row items-end">
-          <svg width="6" height="11">
-              <rect width="6" height="11" className="fill-[#0E6073]" />
-          </svg>
-          <svg width="6" height="19" className="mx-1">
-              < rect width="6" height="19" className="fill-[#0E6073]" />
-          </svg >
-          <svg width="6" height="28">
-              <rect width="6" height="28" className="fill-[#0E6073]" />
-          </svg >
-      </div >
-  );
-};
 
