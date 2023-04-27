@@ -1,16 +1,11 @@
-import { type NextPage } from "next";
-import Head from "next/head";
 import Link from "next/link";
-import Image from 'next/image'
 import { signIn, signOut, useSession } from "next-auth/react";
 import { HiMagnifyingGlass } from "react-icons/hi2";
 
 import { api } from "~/utils/api";
-import { Formation } from "@prisma/client";
 
 const Header = () => {
   const { data: sessionData } = useSession();
-  const { data: formations } = api.formation.getAll.useQuery()
   const admin = sessionData?.user.admin
 
     return (
@@ -19,7 +14,8 @@ const Header = () => {
          <div className="flex item-center justify-evenly">
              <button className="px-10 py-3 font-semibold border-[#0E6073] transition hover:border-b-4 hover:text-[#0E6073]">Vos cours</button>
              <button className="px-10 py-3 font-semibold border-[#0E6073] border-b-4 text-[#0E6073]">Explorer</button>
-             <button className="px-10 py-3 font-semibold border-[#0E6073] transition hover:border-b-4 hover:text-[#0E6073]" autoFocus>Gérez les cours</button>
+             
+             {admin && <button className="px-10 py-3 font-semibold border-[#0E6073] transition hover:border-b-4 hover:text-[#0E6073]" autoFocus>Gérez les cours</button>}
          </div>
          <div className="flex item-center justify-center gap-5">
              <div className="bg-white flex flex-row justify-start items-center width mb-24 w-96 h-12 flex flex-row px-8 rounded-full shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)]">
