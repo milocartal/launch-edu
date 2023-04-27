@@ -213,7 +213,7 @@ const Admin: NextPage = () => {
                 </div>
 
 
-            </main> : <img src="https://media.discordapp.net/attachments/688793736620146689/915869475423813662/20210709_215217.gif" alt="Pas Admnin, Ratio"></img>
+            </main> : <img src="https://media.discordapp.net/attachments/688793736620146689/915869475423813662/20210709_215217.gif" alt="Pas Admin, Ratio"></img>
 
             }
         </>
