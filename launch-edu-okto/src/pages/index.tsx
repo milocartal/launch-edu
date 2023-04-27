@@ -3,7 +3,10 @@ import Head from "next/head";
 import Link from "next/link";
 import Image from 'next/image'
 import { signIn, signOut, useSession } from "next-auth/react";
-import { FaPenAlt } from "react-icons/fa";
+
+import { FaPenAlt, FaMoon, FaSun } from "react-icons/fa";
+import { HiMagnifyingGlass } from "react-icons/hi2";
+
 
 import { api } from "~/utils/api";
 import { Formation, Technologie } from "@prisma/client";
@@ -45,7 +48,7 @@ const Home: NextPage = () => {
               <p className="text-white font-Inter">CONNEXION</p>
             </button>
             <button onClick={() => theme == "dark"? setTheme('light'): setTheme("dark")} className="flex flex-row justify-center items-center ml-8 rounded-full bg-white/10 w-10 h-10 shadow-md">
-              <Image src={theme == "dark"? "/icons/sun-solid.svg" : "/icons/moon-solid.svg"} width="0" height="0" className="w-2/5" alt=""/>
+              {theme == "dark"? <FaSun className="w-2/5 text-[#fff]"/> : <FaMoon className="w-2/5 text-[#fff]"/>}
             </button>
           </div>
         </div>
@@ -199,8 +202,8 @@ const Home: NextPage = () => {
           </div>
 
           <h1 className="text-4xl self-start mb-11 mt-12 text-[#0E6073] dark:text-white">Trouvez le bon cours pour vous</h1>
-          <div className="bg-white width mb-24 w-8/12 h-16 flex flex-row px-8 rounded-full shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)]">
-            <Image src="/icons/magnifying-glass-solid.svg" width="35" height="35" alt=""/>
+          <div className="bg-white width mb-24 w-8/12 h-16 flex flex-row items-center px-8 rounded-full shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)]">
+            <HiMagnifyingGlass className="h-9 w-9 text-[#989898]"/>
             <input className=" h-16 w-40 shadow-none w-full" type="text"/>
           </div>
           <div className="flex flex-row w-full h-96 items-center">
