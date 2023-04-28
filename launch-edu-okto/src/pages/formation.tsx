@@ -42,8 +42,6 @@ const Home: NextPage = () => {
       </Head>
       <main className="flex min-h-screen flex-col items-center bg-white">
 
-        <Header />
-
         <div className="container flex flex-col items-start justify-start gap-12 px-4 py-20 ">
           <div className="flex flex-row items-center justify-between w-full px-10">
             <h1 className="text-3xl font-bold tracking-tight text-[#0E6073]">
@@ -93,9 +91,8 @@ const Home: NextPage = () => {
                 )
             })}
           </div>
-
-
         </div>
+        <Header selected={2}/>
       </main>
     </>
   );
