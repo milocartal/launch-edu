@@ -58,7 +58,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
     
         <Header />
 
-        <div className="container flex flex-col items-start justify-start gap-12 px-4 py-20 ">
+        <div className="container flex flex-col items-start justify-start gap-12 px-4 py-20">
             <div className="flex flex-row items-center justify-between px-10 w-9/12">
                 <div className="flex flex-row items-center justify-start">
                     <button className="mr-5"><FaArrowLeft className="h-6 w-6 text-[#0E6073]"/></button>
@@ -74,7 +74,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                     <h2 className="text-xl font-bold tracking-tight text-[#0E6073]">Description</h2>
                     <div className="flex flex-row ">
                         <div className="flex flex-row items-center">
-                            {formation.difficulte === 1 && <EasyText className="text-[#0E6073]"/>}
+                            {formation.difficulte === 1 && <EasyText />}
                             {formation.difficulte === 2 && <MedText />}
                             {formation.difficulte === 3 && <HardText />}
                         </div>
@@ -111,7 +111,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                 </div>
             </div>
 
-            <div className="w-3/12 absolute right-0 flex flex-col items-center justify-around">
+            <div className="w-3/12 absolute right-0 flex flex-col items-center justify-between h-5/6 pt-10 mr-5">
                 <Image src="/python.png" width="100" height="100" className="w-7/12 z-10" alt=""/>
                 {admin && 
                 <div>
