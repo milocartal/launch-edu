@@ -13,6 +13,8 @@ import { MouseEventHandler, useState } from "react";
 import { IconContext } from "react-icons";
 import { HiArrowSmLeft } from "react-icons/hi";
 import { HiXMark } from "react-icons/hi2"
+import { HiMagnifyingGlass } from "react-icons/hi2";
+import { BiUserCircle } from "react-icons/bi"
 
 const QuillNoSSRWrapper = dynamic(import('react-quill'), {
     ssr: false,
@@ -106,17 +108,25 @@ const Admin: NextPage = () => {
             </Head>
             {user ? <main className="flex min-h-screen bg-white justify-between dark:bg-[#041F25]">
 
-                <div className="fixed w-full pr-40 border-b-4 border-[#63aeab] bg-white top-0 right-0 left-28 h-[4rem] dark:bg-[#041F25]" />
-                <div className="flex item-center justify-start gap-12 fixed w-full pr-40  top-0 right-0 left-28 h-[4rem] text-[#63aeab]">
-                    <button className="px-10 py-3 font-semibold border-[#0E6073] transition hover:border-b-4 hover:text-[#0E6073]">Vos Cours</button>
-                    <button className="px-10 py-3 font-semibold  border-[#0E6073] transition hover:border-b-4 hover:text-[#0E6073]">Explorer</button>
-                    <button className="px-10 py-3 font-semibold  border-[#0E6073] border-b-4 text-[#0E6073]" autoFocus>Gérez les cours</button>
-                    {sessionData && sessionData.user?.image && <Link href={`/components/users/${sessionData.user.id}`}><img src={sessionData.user.image} className="max-w-[3rem]"></img></Link>}
-                </div>
-                <div className="flex flex-col items-center justify-between gap-2 min-h-screen top-0 left-0 bg-[#0E6073] fixed m-w-xs p-2">
-                    <Link href="/"><img src="/okto.png" className="max-w-[3rem]"></img></Link>
-                    <AuthShowcase />
-                </div>
+            <div className="fixed w-full pr-40 border-b-4 border-[#63aeab] bg-white top-0 right-0 left-28 h-[4rem]" /><div className="flex item-center justify-between gap-12 fixed w-full pr-40 top-0 right-0 left-28 h-[4rem] text-[#63aeab]">
+                        <div className="flex item-center justify-evenly">
+                            <button className="px-10 py-3 font-semibold border-[#0E6073] transition hover:border-b-4 hover:text-[#0E6073]">Vos cours</button>
+                            <Link href={`/formation`}><button className="px-10 h-full font-semibold border-[#0E6073] transition hover:border-b-4 hover:text-[#0E6073]">Explorer</button></Link>
+
+                            <Link href={`/admin/main`}><button className="px-10 h-full font-semibold border-[#0E6073] border-b-4 text-[#0E6073]" autoFocus>Gérez les cours</button></Link>
+                        </div>
+                        <div className="flex item-center justify-center gap-5">
+                            <div className="bg-white flex flex-row justify-start items-center width mb-24 w-96 h-12 flex flex-row px-8 rounded-full shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)]">
+                                <HiMagnifyingGlass className="h-8 w-8 text-[#989898]" />
+                                <input className="h-10 shadow-none w-full bg-transparent" type="text" />
+                            </div>
+                            {sessionData && sessionData.user?.image && <Link href={`/components/users/${sessionData.user.id}`}><img src={sessionData.user.image} className="max-w-[3rem]"></img></Link>}
+                        </div>
+                    </div>
+                    <div className="flex flex-col items-center justify-between gap-2 min-h-screen top-0 left-0 bg-[#0E6073] fixed m-w-xs p-2">
+                        <Link href="/"><img src="/okto.png" className="max-w-[3rem]"></img></Link>
+                        <AuthShowcase />
+                    </div>
 
 
                 <div className="flex w-full max-h-screen ml-[6rem] gap-10 mt-24 mr-10">
@@ -128,6 +138,7 @@ const Admin: NextPage = () => {
                                 <Link href="/admin/main"><HiArrowSmLeft className="text-[3rem] text-[#0e6073]" /></Link>
                                 <h1 className="text-5xl font-extrabold tracking-tight  sm:text-[2.5rem] text-[#0e6073]">Créer une formation</h1>
                             </div>
+                            <p className="mb-3">Choisir une thématique:</p>
                             <fieldset className="flex flex-col justify-between h-full w-full shadow-xl shadow-black/30 rounded-lg">
                                 <fieldset className="flex flex-col w-full rounded-t-lg" id="listTech">
                                     {techList as Technologie[] && techList && techList.length > 0 && techList.map((techno) => {
@@ -151,7 +162,7 @@ const Admin: NextPage = () => {
                                     })}
                                 </fieldset>
                                 <div className="flex items-center justify-center h-[5rem] w-full bg-[#2ea3a5] text-white hover:cursor-pointer transition hover:bg-[#0e6073] rounded-b-lg" onClick={(e) => setTab("tech")}>
-                                    + Ajouter une technologie
+                                    + Ajouter une nouvelle technologie
                                 </div>
                             </fieldset>
                         </fieldset>
@@ -220,11 +231,16 @@ const AuthShowcase: React.FC = () => {
     const { data: sessionData } = useSession();
 
     return (
-        <button
-            className="rounded-full px-3 py-3 font-semibold  no-underline transition hover:bg-white/10"
-            onClick={sessionData ? () => void signOut() : () => void signIn()}
-        >
-            {sessionData ? <img src="/arrow.png" className="max-w-[1.5rem]"></img> : "Sign in"}
-        </button>
+        <div>
+            {sessionData ?
+                <button className="rounded-full px-3 py-3 font-semibold  no-underline transition hover:bg-white/10" onClick={() => void signOut()}>
+                    <img src="/arrow.png" className="max-w-[1.5rem]"></img>
+                </button> :
+                <button className="rounded-full px-2 py-3 font-semibold  no-underline transition hover:bg-white/10" onClick={() => void signIn()}>
+                    <BiUserCircle className="text-[2rem] text-white" />
+                </button>}
+        </div>
+
     );
 };
+

@@ -80,8 +80,6 @@ const Home: NextPage = () => {
             </div>
             <Image src="/learn.png" width="1037" height="991" className="w-4/5" alt="" />
           </div>
-          {/* <AuthShowcase />
-          <Link href="/components/formation"><button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">Liste Formations</button></Link> */}
 
           {/*<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
             {techList as Technologie[] && techList && techList.length > 0 && techList.map((tech) => {
@@ -142,7 +140,7 @@ const Home: NextPage = () => {
             }).map((forma) => {
               if (!forma.hidden || (forma.hidden && admin)) {
                 return (
-                  <Link href={`/components/formations/${forma.id}`} className="flex flex-col items-center bg-white/20 rounded-3xl shadow-lg w-full h-96 mx-2 relative transition hover:scale-[1.05]" key={forma.id}>
+                  <Link href={`/formations/${forma.id}`} className="flex flex-col items-center bg-white/20 rounded-3xl shadow-lg w-full h-96 mx-2 relative transition hover:scale-[1.05]" key={forma.id}>
                     <div className="absolute -top-20 flex items-end justify-end w-[170px] h-[150px]">
                       {forma.techs[0] && forma.techs[0].logo && <img src={forma.techs[0].logo} alt="" />}
                     </div>
@@ -170,7 +168,7 @@ const Home: NextPage = () => {
           {/* <img src="https://media.discordapp.net/attachments/688793736620146689/915869475423813662/20210709_215217.gif" className="max-w-[12em]"></img> */}
 
         </div>
-        <div className="w-full bg-[#0e6370] h-40 bottom-0 mt-12 flex flex-row px-48 justify-between items-center">
+        <div className="w-full bg-[#0e6370] h-36 bottom-0 mt-12 flex flex-row px-48 justify-between items-center">
           <div className="flex flex-row justify-between items-center">
             <Link target="_blank" href={"https://www.oktopod.io/"}><Image src="/Oktopod-carré-blanc.png" width="100" height="30" className="h-20 mr-4" alt="Logo Oktopod" /></Link>
             <p className="text-sm font-Inter text-white mx-4">© 2023 Oktopod</p>

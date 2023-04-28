@@ -42,9 +42,8 @@ const Home: NextPage = () => {
       </Head>
       <main className="flex min-h-screen flex-col items-center bg-white">
 
-        <Header />
 
-        <div className="container flex flex-col items-start justify-start gap-12 px-4 py-20 ">
+        <div className="flex flex-col items-start justify-start gap-12 pl-24 pt-20 pr-6">
           <div className="flex flex-row items-center justify-between w-full px-10">
             <h1 className="text-3xl font-bold tracking-tight text-[#0E6073]">
               Trouvez le cours parfait
@@ -62,10 +61,6 @@ const Home: NextPage = () => {
               </button>
             </div>
           </div>
-          {/* <div className="flex flex-col items-center gap-2 fixed">
-              <AuthShowcase />
-              <Link href="/"><button className="rounded-full bg-[#0E6070]/10 px-10 py-3 font-semibold no-underline transition hover:bg-[#0E6070]/20">Home</button></Link>
-            </div> */}
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-5 md:gap-8 w-full">
             {formations as Formation[] && formations && formations.length > 0 && formations.map((forma) => {
@@ -73,10 +68,9 @@ const Home: NextPage = () => {
                 return (
                   <Link
                     className="flex flex-col items-center min-w-[50px] max-w-2xl gap-4 rounded-xl bg-[#0E6070]/10 p-4 hover:bg-[#0E6070]/20 relative mt-6"
-                    href={`/components/formations/${encodeURIComponent(forma.id)}`}
+                    href={`/formations/${encodeURIComponent(forma.id)}`}
                     key={forma.id}
                   >
-                    {/*forma.techs[0] && forma.techs[0].logo && <img src={forma.techs[0].logo} width="100" height="100" className="w-5/12 absolute -top-10" alt="" />*/}
                     <div className="absolute -top-11 flex items-end justify-end w-[100px] h-[100px]">
                       {forma.techs[0] && forma.techs[0].logo && <img src={forma.techs[0].logo} alt="" />}
                     </div>
@@ -93,9 +87,8 @@ const Home: NextPage = () => {
                 )
             })}
           </div>
-
-
         </div>
+        <Header selected={2}/>
       </main>
     </>
   );

@@ -26,7 +26,7 @@ export const getServerSideProps: GetServerSideProps<{
     if (!session) {
       return {
         redirect: {
-          destination: '/components/formations/'+idf,
+          destination: '/formations/'+idf,
           permanent: false,
         },
       }
