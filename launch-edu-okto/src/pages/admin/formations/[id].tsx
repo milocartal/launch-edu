@@ -85,7 +85,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                     </div>
                 </div>
                 <div className="text-sm font-Inter text-[#222222] self-start mt-3" dangerouslySetInnerHTML={{ __html: formation.description }} />
-                <button className="w-3/12 bg-[#0E6073] h-14 rounded-full my-3 self-end mt-3">
+                <button className="w-3/12 bg-[#0E6073] h-14 rounded-full my-3 self-end mt-3 hover:bg-[#0a4654]">
                     <p>Commencer</p>
                 </button>
                 <h2 className="text-xl font-bold tracking-tight text-[#0E6073] self-start mb-3">Vue d'ensemble</h2>
@@ -115,10 +115,10 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                 <Image src="/python.png" width="100" height="100" className="w-7/12 z-10" alt=""/>
                 {admin && 
                 <div>
-                    <button className="w-full bg-[#2EA3A5] h-14 rounded-full my-3">
+                    <button className="w-full bg-[#2EA3A5] h-14 rounded-full my-3 hover:bg-[#27888a]">
                         <p>Modifier les données du cours</p>
                     </button>
-                    <button className="w-full bg-[#920000] h-14 rounded-full my-3">
+                    <button className="w-full bg-[#920000] h-14 rounded-full my-3 hover:bg-[#6e0000]">
                         <p>Supprimer</p>
                     </button>
                 </div>
