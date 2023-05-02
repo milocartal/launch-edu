@@ -12,6 +12,11 @@ iframe {
     height: 100px;
 }
 
+.testimg{
+    overflow:clip;
+    overflow: hidden;
+}
+
 .inputAddForm {
     background: none;
     padding: 1rem;

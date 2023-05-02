@@ -8,7 +8,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { IoCheckmarkCircle } from "react-icons/io5";
 
 import { api } from "~/utils/api";
-import { Easy, Med, Hard } from "~/pages/components/difficulties";
+import { Difficulty} from "~/pages/components/difficulties";
 import { Formation } from "@prisma/client";
 
 const Home: NextPage = () => {
@@ -77,9 +77,7 @@ const Home: NextPage = () => {
                     <h3 className="text-md font-bold mt-12 text-center">{forma.title}</h3>
 
                     <span className="absolute right-5">
-                      {forma.difficulte === 1 && <Easy />}
-                      {forma.difficulte === 2 && <Med />}
-                      {forma.difficulte === 3 && <Hard />}
+                      {<Difficulty level={forma.difficulte}/>}
                     </span>
                     <p className="h-7 w-7 text-[#0E6073] absolute left-5">10%</p>
                     {/* <IoCheckmarkCircle className="h-7 w-7 text-[#0E6073] absolute left-5"/> */}

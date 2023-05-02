@@ -29,8 +29,9 @@ const Home: NextPage = () => {
   const admin = sessionData?.user.admin
 
   const { data: formations } = api.formation.getAll.useQuery();
-  const getLecon = api.formation.getLecons.useMutation();
-  const { data: last4 } = api.formation.getLast4.useQuery()
+  const { data: last4 } = api.formation.getLast4.useQuery();
+
+  const { data: techs } = api.technologie.getAll.useQuery();
 
   const handleSearchTerm = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value;
@@ -132,32 +133,21 @@ const Home: NextPage = () => {
             <input className=" h-16 w-40 shadow-none w-full bg-transparent dark:text-[#041f25]" type="text" name="searchValue" id="searchValue" onChange={handleSearchTerm} />
           </div>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-4 w-full items-center gap-y-32 mt-6">
-            {formations as Formation[] && formations && formations.length > 0 && formations.filter((forma) => {
-              return forma.title.toLowerCase().includes(SearchTerm.toLowerCase())
-            }).map((forma) => {
-              if (!forma.hidden || (forma.hidden && admin)) {
-                return (
-                  <Link href={`/formations/${forma.id}`} className="flex flex-col items-center bg-white/20 rounded-3xl shadow-lg w-full h-96 mx-2 relative transition hover:scale-[1.05]" key={forma.id}>
-                    <div className="absolute -top-20 flex items-end justify-end w-[170px] h-[150px]">
-                      {forma.techs[0] && forma.techs[0].logo && <img src={forma.techs[0].logo} alt="" />}
-                    </div>
-                    <div className="w-full px-4 flex flex-col items-center mt-20">
-                      <h3 className="text-3xl mb-3 text-cyan-700 text-[#0E6073] dark:text-[#63AEAB]">{forma.title}</h3>
-                      <div className="text-sm font-Inter dark:text-[#2EA3A5]" dangerouslySetInnerHTML={{ __html: forma.description }} />
-                    </div>
-                    <div className="flex flex-row items-center justify-around mt-5 w-full px-5 absolute bottom-8">
-                      <div className="flex flex-row items-center justify-center">
-                        {<DifficultyText level={forma.difficulte} />}
-                      </div>
-                      <div className="flex flex-row items-center justify-center">
-                        <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]" />
-                        <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">{forma.lecons.length.toString()} leçons</p>
-                      </div>
-                    </div>
-                  </Link>
-                )
-              }
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-4 w-full items-center gap-y-32 mt-10">
+            {techs as Technologie[] && techs && techs.length > 0 && techs.filter((tech) => {
+              return tech.name.toLowerCase().includes(SearchTerm.toLowerCase())
+            }).map((tech) => {
+              return (
+                <Link href={`/technologies/${tech.id}`} className="flex flex-col items-center bg-white/20 rounded-3xl shadow-lg w-full mx-2 relative transition hover:scale-[1.05]" key={tech.id}>
+                  <div className="absolute -top-20 flex items-end justify-end w-[170px] h-[150px]">
+                    {tech.logo && <img src={tech.logo} alt="" />}
+                  </div>
+                  <div className="w-full px-4 flex flex-col items-center mt-20">
+                    <h3 className="text-3xl mb-3 text-cyan-700 text-[#0E6073] dark:text-[#63AEAB]">{tech.name}</h3>
+                  </div>
+                </Link>
+              )
+              
             })}
           </div>
 
