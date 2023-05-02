@@ -34,7 +34,8 @@ function Header (props:{selected: number}) {
                         <HiMagnifyingGlass className="h-8 w-8 text-[#989898]" />
                         <input className="h-10 shadow-none w-full bg-transparent" type="text" />
                     </div>
-                    {sessionData && sessionData.user?.image && <Link href={`/users/${sessionData.user.id}`} className="flex flex-col justify-center"><img src={sessionData.user.image} className="max-w-[3rem] rounded-full"></img></Link>}
+                    {sessionData && sessionData.user?.image && props.selected === 4 ? <Link href={`/users/${sessionData.user.id}`} className="flex flex-col justify-center"><img src={sessionData.user.image} className="max-w-[3rem] rounded-full border-4 border-[#0E6073]"></img></Link>:
+                    sessionData && sessionData.user?.image && <Link href={`/users/${sessionData.user.id}`} className="flex flex-col justify-center"><img src={sessionData.user.image} className="max-w-[3rem] rounded-full"></img></Link>}
                 </div>
             </div>
 

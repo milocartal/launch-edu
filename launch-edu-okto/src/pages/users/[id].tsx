@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { type NextPage } from 'next';
 import { type GetServerSideProps } from 'next'
 import { type InferGetServerSidePropsType } from 'next'
-import Link from "next/link";
+import { FaPenAlt } from "react-icons/fa";
 import Head from "next/head";
 import { getSession, useSession } from "next-auth/react";
 
@@ -66,7 +66,11 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                 <div className="flex max-h-screen flex-col items-center justify-center w-5/12 ml-20">
                     <div className="flex flex-col items-center justify-center h-full">
                         <div className="bg-[#e6e6e6] flex flex-row justify-center items-center mb-4 w-96 h-40 px-6 w-8/12 rounded-xl">
-                            {sessionData && sessionData.user?.image && <img src={sessionData.user.image} className="w-32 rounded-full mr-5"></img>}
+                            <button className="bg-[#0E6073] w-32 h-32 rounded-full flex justify-center items-center mr-5 text-transparent hover:text-[#fff]">
+                                <FaPenAlt className="absolute h-9 w-9 text-inherit"/>
+                                {sessionData && sessionData.user?.image && <img src={sessionData.user.image} className="w-32 h-32 rounded-full hover:opacity-30"></img>}
+                                
+                            </button>
                             <div>
                                 {sessionData && sessionData.user?.image &&<h3 className="text-xl font-bold tracking-tight text-[#0E6073]">{sessionData.user.name}</h3>}
                                 {sessionData && sessionData.user?.image &&<p className="text-base tracking-tight text-[#989898]">{sessionData.user.email}</p>}
