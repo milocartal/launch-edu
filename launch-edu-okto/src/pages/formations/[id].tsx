@@ -11,7 +11,7 @@ import { api } from "~/utils/api";
 import Header from "../components/header";
 import { prisma } from '~/server/db';
 import { Technologie, type Formation, Lecon } from '@prisma/client';
-import { EasyText, HardText, MedText } from '../components/difficulties';
+import { DifficultyText } from '../components/difficulties';
 
 export const getServerSideProps: GetServerSideProps<{
     formation: (Formation & {
@@ -89,9 +89,9 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                             <h2 className="text-xl font-bold tracking-tight text-[#0E6073]">Description</h2>
                             <div className="flex flex-row ">
                                 <div className="flex flex-row items-center">
-                                    {formation.difficulte === 1 && <EasyText />}
-                                    {formation.difficulte === 2 && <MedText />}
-                                    {formation.difficulte === 3 && <HardText />}
+                                {formation.difficulte === 1 && <DifficultyText level={1} />}
+                                {formation.difficulte === 2 && <DifficultyText level={2} />}
+                                {formation.difficulte === 3 && <DifficultyText level={3} />}
                                 </div>
                                 <div className="flex flex-row items-center ml-4">
                                     <FaPenAlt className="h-7 w-7 text-[#989898]" />

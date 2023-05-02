@@ -6,7 +6,7 @@ import { type Session as SessionAuth } from 'next-auth'
 
 import { api } from "~/utils/api";
 import { EtapeType, Formation, Session, Technologie, User } from "@prisma/client";
-import { EasyText, MedText, HardText } from "~/pages/components/difficulties"
+import { DifficultyText } from "~/pages/components/difficulties"
 import Header from "../components/header"
 
 import dynamic from "next/dynamic";
@@ -86,9 +86,9 @@ const Admin: NextPage = () => {
                                         <h3 className="text-md font-bold">{forma.title}</h3>
 
                                         <span className="text-lg">
-                                            {forma.difficulte === 1 && <EasyText />}
-                                            {forma.difficulte === 2 && <MedText />}
-                                            {forma.difficulte === 3 && <HardText />}
+                                            {forma.difficulte === 1 && <DifficultyText level={1} />}
+                                            {forma.difficulte === 2 && <DifficultyText level={2} />}
+                                            {forma.difficulte === 3 && <DifficultyText level={3} />}
                                         </span>
                                         <span className="text-lg">
                                             {hide}

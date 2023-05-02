@@ -10,7 +10,7 @@ import { GrUserAdmin } from "react-icons/gr"
 import { RiAdminLine } from "react-icons/ri";
 
 import { api } from "~/utils/api";
-import { EasyText, MedText, HardText } from "~/pages/components/difficulties"
+import { DifficultyText } from "~/pages/components/difficulties"
 
 import { Formation, Technologie } from "@prisma/client";
 import dynamic from "next/dynamic";
@@ -113,9 +113,9 @@ const Home: NextPage = () => {
                     </div>
                     <div className="flex flex-row items-center justify-around mt-5 w-full px-5 absolute bottom-8">
                       <div className="flex flex-row items-center justify-center">
-                        {forma.difficulte === 1 && <EasyText />}
-                        {forma.difficulte === 2 && <MedText />}
-                        {forma.difficulte === 3 && <HardText />}
+                        {forma.difficulte === 1 && <DifficultyText level={1} />}
+                        {forma.difficulte === 2 && <DifficultyText level={2} />}
+                        {forma.difficulte === 3 && <DifficultyText level={3} />}
                       </div>
                       <div className="flex flex-row items-center justify-center">
                         <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]" />
@@ -150,9 +150,9 @@ const Home: NextPage = () => {
                     </div>
                     <div className="flex flex-row items-center justify-around mt-5 w-full px-5 absolute bottom-8">
                       <div className="flex flex-row items-center justify-center">
-                        {forma.difficulte === 1 && <EasyText />}
-                        {forma.difficulte === 2 && <MedText />}
-                        {forma.difficulte === 3 && <HardText />}
+                        {forma.difficulte === 1 && <DifficultyText level={1} />}
+                        {forma.difficulte === 2 && <DifficultyText level={2} />}
+                        {forma.difficulte === 3 && <DifficultyText level={3} />}
                       </div>
                       <div className="flex flex-row items-center justify-center">
                         <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]" />
