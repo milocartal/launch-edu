@@ -17,14 +17,13 @@ function Header (props:{selected: number}) {
             <div className="flex justify-between gap-12 fixed w-full pr-40 top-0 right-0 left-28 h-[4rem] text-[#63aeab]">
                 <div className="flex justify-evenly">
                     {props.selected === 1 ?
-                        <Link href={`/userdashbord`}><button className="px-10 h-full font-semibold border-[#0E6073] border-b-4 text-[#0E6073]">Vos cours</button></Link> :
-                        <Link href={`/userdashbord`}><button className="px-10 h-full font-semibold border-[#0E6073] transition hover:border-b-4 hover:text-[#0E6073]">Vos cours</button></Link>
+                        <Link href={`/userdashboard`}><button className="px-10 h-full font-semibold border-[#0E6073] border-b-4 text-[#0E6073]">Vos cours</button></Link> :
+                        <Link href={`/userdashboard`}><button className="px-10 h-full font-semibold border-[#0E6073] transition hover:border-b-4 hover:text-[#0E6073]">Vos cours</button></Link>
                     }
                     {props.selected === 2 ?
                         <Link href={`/formation`}><button className="px-10 h-full font-semibold border-[#0E6073] border-b-4 text-[#0E6073]">Explorer</button></Link>:
                         <Link href={`/formation`}><button className="px-10 h-full font-semibold border-[#0E6073] transition hover:border-b-4 hover:text-[#0E6073]">Explorer</button></Link>
                     }
-                    
                     {admin && props.selected === 3 ?
                             <Link href={`/admin/main`}><button className="px-10 h-full font-semibold border-[#0E6073] border-b-4 text-[#0E6073]" autoFocus>Gérez les cours</button></Link>: admin ?
                             <Link href={`/admin/main`}><button className="px-10 h-full font-semibold border-[#0E6073] transition hover:border-b-4 hover:text-[#0E6073]" autoFocus>Gérez les cours</button></Link>:<></>}

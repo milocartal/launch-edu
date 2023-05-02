@@ -1,5 +1,6 @@
 import { type NextPage } from 'next';
 import Head from "next/head";
+import Image from 'next/image'
 
 import Header from './components/header';
 
@@ -13,9 +14,16 @@ const Technologies: NextPage = () => {
                 <link rel="icon" href="/okto.png" />
             </Head>
 
-            <main className="flex min-h-screen bg-white justify-between">
-                <div >
-                    <p className="mx-20 my-20 text-black">test</p>
+            <main className="flex min-h-screen bg-white flex flex-row justify-between">
+                <div className="flex flex-col items-start justify-start gap-12 pl-24 pt-20 pr-6">
+                    <h1 className="text-3xl font-bold tracking-tight text-[#0E6073] mx-10">Reprendre où vous en étiez</h1>
+                </div>
+                <div className="w-3/12 bg-[#0E6073] absolute right-0 flex flex-col items-start justify-start h-full pt-24 px-10">
+                    <h3 className="h-7 w-7 font-bold text-white mb-8 w-full">Cours terminés</h3>
+                    <div className="bg-white w-full rounded-xl">
+                        <Image src="/python.png" width="50" height="50" alt=""/>
+                        <h3 className="h-7 w-7 font-bold text-[#0E6073]">Initiation JS</h3>
+                    </div>
                 </div>
                 <Header selected={1}/>
             </main>
