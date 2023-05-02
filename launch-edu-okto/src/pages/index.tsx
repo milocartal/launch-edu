@@ -10,7 +10,7 @@ import { GrUserAdmin } from "react-icons/gr"
 import { RiAdminLine } from "react-icons/ri";
 
 import { api } from "~/utils/api";
-import { EasyText, MedText, HardText } from "~/pages/components/difficulties"
+import { DifficultyText } from "~/pages/components/difficulties"
 
 import { Formation, Technologie } from "@prisma/client";
 import dynamic from "next/dynamic";
@@ -33,9 +33,9 @@ const Home: NextPage = () => {
   const { data: last4 } = api.formation.getLast4.useQuery()
 
   const handleSearchTerm = (e: React.ChangeEvent<HTMLInputElement>) => {
-		let value = e.target.value;
-		setSearchTerm(value);
-	};
+    let value = e.target.value;
+    setSearchTerm(value);
+  };
 
   return (
     <>
@@ -113,9 +113,7 @@ const Home: NextPage = () => {
                     </div>
                     <div className="flex flex-row items-center justify-around mt-5 w-full px-5 absolute bottom-8">
                       <div className="flex flex-row items-center justify-center">
-                        {forma.difficulte === 1 && <EasyText />}
-                        {forma.difficulte === 2 && <MedText />}
-                        {forma.difficulte === 3 && <HardText />}
+                        {<DifficultyText level={forma.difficulte} />}
                       </div>
                       <div className="flex flex-row items-center justify-center">
                         <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]" />
@@ -131,7 +129,7 @@ const Home: NextPage = () => {
           <h1 className="text-4xl self-start mb-11 mt-12 text-[#0E6073] dark:text-white">Trouvez le bon cours pour vous</h1>
           <div className="bg-white width mb-24 w-8/12 h-16 flex flex-row items-center px-8 rounded-full shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)]">
             <HiMagnifyingGlass className="h-9 w-9 text-[#989898]" />
-            <input className=" h-16 w-40 shadow-none w-full bg-transparent dark:text-[#041f25]" type="text" name="searchValue" id="searchValue" onChange={handleSearchTerm}/>
+            <input className=" h-16 w-40 shadow-none w-full bg-transparent dark:text-[#041f25]" type="text" name="searchValue" id="searchValue" onChange={handleSearchTerm} />
           </div>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-4 w-full items-center gap-y-32 mt-6">
@@ -150,9 +148,7 @@ const Home: NextPage = () => {
                     </div>
                     <div className="flex flex-row items-center justify-around mt-5 w-full px-5 absolute bottom-8">
                       <div className="flex flex-row items-center justify-center">
-                        {forma.difficulte === 1 && <EasyText />}
-                        {forma.difficulte === 2 && <MedText />}
-                        {forma.difficulte === 3 && <HardText />}
+                        {<DifficultyText level={forma.difficulte} />}
                       </div>
                       <div className="flex flex-row items-center justify-center">
                         <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]" />

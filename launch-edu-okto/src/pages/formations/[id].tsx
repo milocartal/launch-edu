@@ -11,7 +11,7 @@ import { api } from "~/utils/api";
 import Header from "../components/header";
 import { prisma } from '~/server/db';
 import { Technologie, type Formation, Lecon } from '@prisma/client';
-import { EasyText, HardText, MedText } from '../components/difficulties';
+import { DifficultyText } from '../components/difficulties';
 
 export const getServerSideProps: GetServerSideProps<{
     formation: (Formation & {
@@ -30,12 +30,12 @@ export const getServerSideProps: GetServerSideProps<{
     });
     if (!formation) {
         return {
-          redirect: {
-            destination: '/formation',
-            permanent: false,
-          },
+            redirect: {
+                destination: '/formation',
+                permanent: false,
+            },
         }
-      }
+    }
     return {
         props: {
             formation: JSON.parse(JSON.stringify(formation)) as (Formation & {
@@ -89,9 +89,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                             <h2 className="text-xl font-bold tracking-tight text-[#0E6073]">Description</h2>
                             <div className="flex flex-row ">
                                 <div className="flex flex-row items-center">
-                                    {formation.difficulte === 1 && <EasyText />}
-                                    {formation.difficulte === 2 && <MedText />}
-                                    {formation.difficulte === 3 && <HardText />}
+                                    {<DifficultyText level={formation.difficulte} />}
                                 </div>
                                 <div className="flex flex-row items-center ml-4">
                                     <FaPenAlt className="h-7 w-7 text-[#989898]" />
@@ -129,14 +127,14 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                         Modifier les données du cours
                                     </button>
                                 </Link>
-                                <button onClick={() => { delFormation.mutateAsync({ id: formation.id }); window.location.reload()}} className="text-white w-full bg-[#920000] h-14 rounded-full my-3 hover:bg-[#6e0000]">
+                                <button onClick={() => { delFormation.mutateAsync({ id: formation.id }); window.location.reload() }} className="text-white w-full bg-[#920000] h-14 rounded-full my-3 hover:bg-[#6e0000]">
                                     Supprimer
                                 </button>
                             </div>
                         }
                     </div>
                 </div>
-                <Header selected={2}/>
+                <Header selected={2} />
             </main>
         </>
     );

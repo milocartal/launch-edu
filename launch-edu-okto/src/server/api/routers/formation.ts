@@ -62,7 +62,7 @@ export const formationRouter = createTRPCRouter({
         return prisma.formation.delete({ where: { id: input.id } })
     }),
 
-    update: protectedProcedure.input(z.object({ id: z.string(), title: z.string(), description: z.string(), difficulte: z.number(), techno: z.string() })).mutation(({ input }) => {
+    update: protectedProcedure.input(z.object({ id: z.string(), title: z.string(), description: z.string(), difficulte: z.number() })).mutation(({ input }) => {
         return prisma.formation.update({
             where: {
                 id: input.id
@@ -71,9 +71,6 @@ export const formationRouter = createTRPCRouter({
                 title: input.title,
                 description: input.description,
                 difficulte: input.difficulte,
-                techs: {
-                    connect: { id: input.techno }
-                }
             }
         })
     }),

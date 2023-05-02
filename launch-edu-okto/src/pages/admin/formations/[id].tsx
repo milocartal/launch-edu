@@ -11,7 +11,7 @@ import { api } from "~/utils/api";
 import Header from "../../components/header";
 import { prisma } from '~/server/db';
 import { Technologie, type Formation, Lecon, Etape, Prisma } from '@prisma/client';
-import { EasyText, HardText, MedText } from '../../components/difficulties';
+import { DifficultyText } from '../../components/difficulties';
 import etapes from '../../etapes/[id]';
 import { useState } from 'react';
 import { HiXMark } from 'react-icons/hi2';
@@ -68,12 +68,17 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
     const admin = sessionData?.user.admin
 
     const [tab, setTab] = useState("normal")
-    const [content, setContent] = useState('');
+    const [content, setContent] = useState(formation.description);
 
     const idf = formation.id
+    const updateFormation = api.formation.update.useMutation()
+
     const addLecon = api.lecon.create.useMutation()
     const delLecon = api.lecon.delete.useMutation()
     const { data: lecons } = api.lecon.getAll.useQuery({ id: idf })
+
+    const { data: techList } = api.technologie.getAll.useQuery()
+
 
     async function handleLecon(event: React.SyntheticEvent) {
         //event.preventDefault()
@@ -85,6 +90,21 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
         const desc = target.description.value;
         await addLecon.mutateAsync({ title: title, idf: idf, description: desc })
     }
+
+    async function handleFormation(event: React.SyntheticEvent) {
+        //event.preventDefault()
+        const target = event.target as typeof event.target & {
+            formTitle: { value: string };
+            description: { value: string };
+            difficulte: { value: string };
+        };
+        const title = target.formTitle.value;
+        const diff: number = +target.difficulte.value;
+        
+
+        await updateFormation.mutateAsync({id: formation.id, title: title, description: content, difficulte: diff })
+    }
+
     return (
         <>
             <Head>
@@ -106,9 +126,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                 <h2 className="text-xl font-bold tracking-tight text-[#0E6073]">Description</h2>
                                 <div className="flex flex-row ">
                                     <div className="flex flex-row items-center">
-                                        {formation.difficulte === 1 && <EasyText />}
-                                        {formation.difficulte === 2 && <MedText />}
-                                        {formation.difficulte === 3 && <HardText />}
+                                        {<DifficultyText level={formation.difficulte}/>}
                                     </div>
                                     <div className="flex flex-row items-center ml-4">
                                         <FaPenAlt className="h-7 w-7 text-[#989898]" />
@@ -142,7 +160,6 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                     <div className="flex flex-col max-h-full w-11/12 shadow-xl shadow-black/30 rounded-lg">
                         <div className="flex flex-col w-full rounded-t-lg" id="listTech">
                             {formation.lecons as Lecon[] && formation.lecons.length > 0 && formation.lecons.map((lecon) => {
-                                console.log(lecon.title, lecon)
                                 return (
                                     <Link href={`/admin/lecons/${lecon.id}`} className="w-full flex flex-row justify-between px-24 py-6 bg-white shadow-md mt-1 transition hover:bg-[#0E6070]/20" key={lecon.id}>
                                         <p className="text-base font-bold tracking-tight text-[#0E6073] self-start">{lecon.title}</p>
@@ -168,7 +185,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
 
                 {tab === "tech" &&
                     <div className="fixed w-full h-full bg-[#0E6073]/90 top-0 right-0 left-0 bottom-0 flex justify-center items-center">
-                        <form className="relative flex flex-col gap-5 item-center justify-start bg-white rounded-xl p-16 w-1/2" method="POST">
+                        <form onSubmit={handleFormation} className="relative flex flex-col gap-5 item-center justify-start bg-white rounded-xl p-16 w-1/2" method="POST">
                             <button onClick={(e) => setTab("normal")} className="absolute top-3 right-4 rounded-full font-semibold  no-underline transition hover:text-red-500">
                                 <HiXMark className="text-[2rem] text-[#0e6073] hover:text-red-500" />
                             </button>
@@ -193,16 +210,6 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                     <input type="radio" name="difficulte" id="3" value="3" required className="shadow-none" />
                                 </div>
                             </fieldset>
-
-                            <select name="pets" id="pet-select">
-                                <option value="">--Please choose an option--</option>
-                                <option value="dog">Dog</option>
-                                <option value="cat">Cat</option>
-                                <option value="hamster">Hamster</option>
-                                <option value="parrot">Parrot</option>
-                                <option value="spider">Spider</option>
-                                <option value="goldfish">Goldfish</option>
-                            </select>
 
                             <button className="rounded-full bg-[#0E6073] px-10 py-3 font-semibold text-white no-underline transition hover:bg-[#0E6073]/80" type="submit" value="submit">Sauvegarder les changements</button>
 

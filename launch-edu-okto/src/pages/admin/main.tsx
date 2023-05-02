@@ -6,7 +6,7 @@ import { type Session as SessionAuth } from 'next-auth'
 
 import { api } from "~/utils/api";
 import { EtapeType, Formation, Session, Technologie, User } from "@prisma/client";
-import { EasyText, MedText, HardText } from "~/pages/components/difficulties"
+import { DifficultyText } from "~/pages/components/difficulties"
 import Header from "../components/header"
 
 import dynamic from "next/dynamic";
@@ -86,9 +86,7 @@ const Admin: NextPage = () => {
                                         <h3 className="text-md font-bold">{forma.title}</h3>
 
                                         <span className="text-lg">
-                                            {forma.difficulte === 1 && <EasyText />}
-                                            {forma.difficulte === 2 && <MedText />}
-                                            {forma.difficulte === 3 && <HardText />}
+                                            {<DifficultyText level={forma.difficulte} />}
                                         </span>
                                         <span className="text-lg">
                                             {hide}
@@ -106,7 +104,7 @@ const Admin: NextPage = () => {
                             })}
                         </div>
                     </div>
-                    <Header selected={3}/>
+                    <Header selected={3} />
 
 
                 </main> : <img src="https://media.discordapp.net/attachments/688793736620146689/915869475423813662/20210709_215217.gif" alt="Pas Admnin, Ratio"></img>
