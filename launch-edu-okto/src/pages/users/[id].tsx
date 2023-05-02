@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { type NextPage } from 'next';
 import { type GetServerSideProps } from 'next'
 import { type InferGetServerSidePropsType } from 'next'
-import { FaPenAlt } from "react-icons/fa";
+import { FaPenAlt, FaEye, FaEyeSlash } from "react-icons/fa";
 import Head from "next/head";
 import { getSession, useSession } from "next-auth/react";
 
@@ -48,11 +48,21 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
     const { data: sessionData } = useSession();
     const admin = sessionData?.user.admin
 
+    
+    const [username, setUsername] = useState("")
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const [confirmPassword, setConfirmPassword] = useState("")
     const [passwordTest, setPasswordTest] = useState(true)
+    const [passwordShown, setPasswordShown] = useState(false)
 
-    function testingPasswords() {
-
-    }
+    useEffect(() => {
+      if (password === confirmPassword){
+          setPasswordTest(true)
+      } else { 
+          setPasswordTest(false) 
+      }
+    }, [password, confirmPassword]);
 
     return (
         <>
@@ -77,7 +87,7 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                             </div>
                         </div>
                         <button className="w-8/12 bg-[#0E6073] h-14 rounded-full my-3 mt-5 hover:bg-[#0a4654]" type="submit" value="submit">
-                            <p className="text-white">Mettre à jour</p>
+                            <p className="text-white">Mentions légales</p>
                         </button>
                         <button>
                             <p className="text-[#D00000]">Supprimer mon compte</p>
@@ -88,21 +98,27 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                     <h2 className="text-xl font-bold tracking-tight text-[#0E6073] mb-8">Mettre à jour mon profil</h2>
                     <form onSubmit={updateProfile} className="flex flex-col items-center" method="POST">
                         <div className="bg-white flex flex-row justify-start items-center mb-4 w-96 h-14 px-6 shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)] w-8/12">
-                            <input className="bg-transparent w-full h-12" name="username" id="username" type="text" placeholder="Nom d'utilisateur" required></input>
+                            <input className="bg-transparent w-full h-12" name="username" id="username" type="text" placeholder="Nom d'utilisateur" value={username} onChange={({ target }) => {setUsername(target.value)}} required></input>
                         </div>
                         <div className="bg-white flex flex-row justify-start items-center mb-4 w-96 h-14 px-6 shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)] w-8/12">
-                            <input className="bg-transparent w-full h-12" name="email" id="email" type="email" placeholder="Email" required></input>
+                            <input className="bg-transparent w-full h-12" name="email" id="email" type="email" placeholder="Email" value={email} onChange={({ target }) => {setEmail(target.value)}} required></input>
                         </div>
                         <div className="bg-white flex flex-row justify-start items-center mb-4 w-96 h-14 px-6 shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)] w-8/12">
-                            <input className="bg-transparent w-full h-12" name="password" id="password" type="password" placeholder="Nouveau mot de passe" required></input>
+                            <input className="bg-transparent w-full h-12" name="password" id="password" type={passwordShown ? "text" : "password"} placeholder="Nouveau mot de passe" minLength={8} maxLength={25} pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])" value={password} onChange={({ target }) => {setPassword(target.value)}} required></input>
+                            <button onClick={() => setPasswordShown(!passwordShown)}>
+                                {passwordShown ? <FaEyeSlash className=" text-[#989898] h-6 w-6"/> : <FaEye className=" text-[#989898] h-6 w-6"/>}
+                            </button>
                         </div>
                         <div className="bg-white flex flex-row justify-start items-center 2 w-96 h-14 px-6 shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)] w-8/12">
-                            <input className="bg-transparent w-full h-12" name="passwordConfirm" id="passwordConfirm" type="password" placeholder="Confirmer mot de passe" required></input>
+                            <input className="bg-transparent w-full h-12" name="passwordConfirm" id="passwordConfirm" type={passwordShown ? "text" : "password"} placeholder="Confirmer mot de passe" minLength={8} maxLength={25} pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])" value={confirmPassword} onChange={({ target }) => {setConfirmPassword(target.value)}} required></input>
+                            <button onClick={() => setPasswordShown(!passwordShown)}>
+                                {passwordShown ? <FaEyeSlash className=" text-[#989898] h-6 w-6"/> : <FaEye className=" text-[#989898] h-6 w-6"/>}
+                            </button>
                         </div>
-                        {passwordTest && <p>Les deux mots de passe ne correspondent pas.</p>}
+                        {!passwordTest && <p className="text-[#D00000]">Les deux mots de passe ne correspondent pas.</p>}
 
                         <button className="w-8/12 bg-[#0E6073] h-14 rounded-full my-3 self-center mt-5 hover:bg-[#0a4654]" type="submit" value="submit">
-                            <p className="text-white">Mentions légales</p>
+                            <p className="text-white">Mettre à jour</p>
                         </button>
                     </form>
                 </div>
