@@ -50,15 +50,27 @@ const Home: NextPage = () => {
             </h1>
             <div className="flex flex-row items-center justify-evenly">
               <p className="mr-2">Trier par : </p>
-              <button className="px-4 py-1 bg-[#0E6073] rounded-full mx-1" onClick={() => changeFilterType("alphabetique")}>
+              
+              {filterType === "alphabetique" ? <button className="px-4 py-1 bg-[#0E6073] rounded-full mx-1" onClick={() => changeFilterType("alphabetique")}>
                 <p className="text-[#fff]">Thématique</p>
-              </button>
+              </button> :
               <button className="px-4 py-1 bg-[#D9D9D9] rounded-full mx-1" onClick={() => changeFilterType("alphabetique")}>
+                <p className="text-[#0E6073]">Thématique</p>
+              </button>
+              }
+              {filterType === "progress" ? <button className="px-4 py-1 bg-[#0E6073] rounded-full mx-1" onClick={() => changeFilterType("progress")}>
+                <p className="text-[#fff]">Progression</p>
+              </button> :
+              <button className="px-4 py-1 bg-[#D9D9D9] rounded-full mx-1" onClick={() => changeFilterType("progress")}>
                 <p className="text-[#0E6073]">Progression</p>
               </button>
+              }
+              {filterType === "diff" ? <button className="px-4 py-1 bg-[#0E6073] rounded-full mx-1" onClick={() => changeFilterType("diff")}>
+                <p className="text-[#fff]">Niveau</p>
+              </button> :
               <button className="px-4 py-1 bg-[#D9D9D9] rounded-full mx-1" onClick={() => changeFilterType("diff")}>
-                <p className="text-[#0E6073]">Niveau</p>
-              </button>
+              <p className="text-[#0E6073]">Niveau</p>
+            </button>}
             </div>
           </div>
 
