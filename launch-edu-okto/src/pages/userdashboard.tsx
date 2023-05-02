@@ -1,7 +1,8 @@
 import { type NextPage } from 'next';
 import Head from "next/head";
 import Image from 'next/image'
-import { Difficulty } from "~/pages/components/difficulties"
+import { Difficulty, DifficultyText } from "~/pages/components/difficulties"
+import { FaPenAlt } from "react-icons/fa";
 
 import Header from './components/header';
 
@@ -16,8 +17,38 @@ const Technologies: NextPage = () => {
             </Head>
 
             <main className="flex min-h-screen bg-white flex flex-row justify-between">
-                <div className="flex flex-col items-start justify-start gap-12 pl-24 pt-20 pr-6">
+                <div className="flex flex-col items-start justify-start gap-12 pl-24 pt-20 pr-6 w-9/12">
                     <h1 className="text-3xl font-bold tracking-tight text-[#0E6073] mx-10">Reprendre où vous en étiez</h1>
+                    
+                    <button className="flex flex-row items-center w-full gap-3 rounded-xl bg-white py-7 pr-10 mt-6 shadow-[0px_10px_30px_0px_rgba(0,0,0,0.25)] relative">
+                        <Image src="/python.png" width="100" height="100" className="-top-12 -left-5 absolute" alt=""/>
+                        <div className="ml-20 flex flex-col justify-start items-start">
+                            <h3 className="font-bold text-[#0E6073] mb-3">Initiation JS</h3>
+                            <p className="text-sm font-Inter text-[#989898] text-left">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nulla nisl, placerat sid sed mauris vitae, alea sit vestibulum sollicitudin set libero onec nulla nisl, placerat.</p>
+                        </div>
+                        <div>
+                            <DifficultyText level={1}/>
+                            <div className="flex flex-row justify-around items-center mt-2">
+                                <FaPenAlt className="h-6 w-6 text-[#989898] dark:text-[#2EA3A5]" />
+                                <p className="text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">3 leçons</p>
+                            </div>
+                        </div>
+                    </button>
+
+                    <button className="flex flex-row items-center w-full gap-3 rounded-xl bg-white py-7 pr-10 mt-6 shadow-[0px_10px_30px_0px_rgba(0,0,0,0.25)] relative">
+                        <Image src="/python.png" width="100" height="100" className="-top-12 -left-5 absolute" alt=""/>
+                        <div className="ml-20 flex flex-col justify-start items-start">
+                            <h3 className="font-bold text-[#0E6073] mb-3">Initiation JS</h3>
+                            <p className="text-sm font-Inter text-[#989898] text-left">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nulla nisl, placerat sid sed mauris vitae, alea sit vestibulum sollicitudin set libero onec nulla nisl, placerat.</p>
+                        </div>
+                        <div>
+                            <DifficultyText level={1}/>
+                            <div className="flex flex-row justify-around items-center mt-2">
+                                <FaPenAlt className="h-6 w-6 text-[#989898] dark:text-[#2EA3A5]" />
+                                <p className="text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">3 leçons</p>
+                            </div>
+                        </div>
+                    </button>
                 </div>
 
                 <div className="w-3/12 bg-[#0E6073] absolute right-0 flex flex-col items-start justify-start h-full pt-24 px-10">
