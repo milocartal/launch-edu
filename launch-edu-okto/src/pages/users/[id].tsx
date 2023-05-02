@@ -104,7 +104,7 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                             <input className="bg-transparent w-full h-12" name="email" id="email" type="email" placeholder="Email" value={email} onChange={({ target }) => {setEmail(target.value)}} required></input>
                         </div>
                         <div className="bg-white flex flex-row justify-start items-center mb-4 w-96 h-14 px-6 shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)] w-8/12">
-                            <input className="bg-transparent w-full h-12" name="password" id="password" type={passwordShown ? "text" : "password"} placeholder="Nouveau mot de passe" minLength={8} pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Votre mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial parmi les caractères #@$?" value={password} onChange={({ target }) => {setPassword(target.value)}} required></input>
+                            <input className="bg-transparent w-full h-12" name="password" id="password" type={passwordShown ? "text" : "password"} placeholder="Nouveau mot de passe" minLength={8} pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Votre mot de passe doit contenir au moins une majuscule, une minuscule et un chiffre." value={password} onChange={({ target }) => {setPassword(target.value)}} required></input>
                             <button onClick={() => setPasswordShown(!passwordShown)}>
                                 {passwordShown ? <FaEyeSlash className=" text-[#989898] h-6 w-6"/> : <FaEye className=" text-[#989898] h-6 w-6"/>}
                             </button>
