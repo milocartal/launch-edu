@@ -91,7 +91,7 @@ const Admin: NextPage = () => {
         const diff: number = +target.difficulte.value;
         const techno = target.techno.value;
         //console.log("Info Ta mere ",title," ", content," ", diff," ", techno)
-        await addFormation.mutateAsync({ title: title, description: content, difficulte: diff, techno: techno })
+        await addFormation.mutateAsync({ title: title, description: content, difficulte: diff, techno: techno, hide:true })
     }
 
     async function techTab(event: React.SyntheticEvent) {

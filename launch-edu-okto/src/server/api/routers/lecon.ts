@@ -10,7 +10,11 @@ import { prisma } from "~/server/db";
 export const leconRouter = createTRPCRouter({
 
     getAll: publicProcedure.input(z.object({ id: z.string() })).query(({ input }) => {
-        return prisma.lecon.findMany({ where: { idf: input.id } });
+        return prisma.lecon.findMany({
+            where: {
+                idf: input.id
+            },
+        });
     }),
 
     getAll2: protectedProcedure.input(z.object({ id: z.string() })).query(({ input }) => {

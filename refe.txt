@@ -1,1 +1,31 @@
 <img src="https://media.discordapp.net/attachments/688793736620146689/915869475423813662/20210709_215217.gif" className="max-w-[12em]"></img>
+
+ {admin ?
+    <form onSubmit={handleLecon} className="flex flex-col gap-5 item-center justify-center" method="POST">
+        <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[3rem]">Lecon</h1>
+
+        <label htmlFor="leconTitle" className="text-white">Titre</label>
+        <input name="leconTitle" id="leconTitle" type="text" placeholder="Title of the lecon" required></input>
+
+        <label htmlFor="description" className="text-white">Description</label>
+        <textarea name="description" id="description" placeholder="Description de la lecon" required></textarea>
+
+        <button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20" type="submit" value="submit">Ajouter</button>
+    </form> :
+    <p></p>
+}
+
+const idf = formation.id
+const addLecon = api.lecon.create.useMutation()
+const { data: lecons } = api.lecon.getAll.useQuery({ id: idf })
+
+async function handleLecon(event: React.SyntheticEvent) {
+    //event.preventDefault()
+    const target = event.target as typeof event.target & {
+        leconTitle: { value: string };
+        description: { value: string };
+    };
+    const title = target.leconTitle.value;
+    const desc = target.description.value;
+    await addLecon.mutateAsync({ title: title, idf: idf, description: desc })
+}

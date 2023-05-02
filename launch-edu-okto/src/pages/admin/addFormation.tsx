@@ -16,6 +16,8 @@ import { HiXMark } from "react-icons/hi2"
 import { HiMagnifyingGlass } from "react-icons/hi2";
 import { BiUserCircle } from "react-icons/bi"
 
+import Header from "../components/header"
+
 const QuillNoSSRWrapper = dynamic(import('react-quill'), {
     ssr: false,
     loading: () => <p>Loading ...</p>,
@@ -45,6 +47,7 @@ const Admin: NextPage = () => {
     //document.getElementById("defaultOpen").click();
 
     const [content, setContent] = useState('');
+    const [hidden, setHide] = useState(true);
     const [tab, setTab] = useState("normal")
     const [selectedTech, setSelectTech] = useState<string>()
 
@@ -71,13 +74,13 @@ const Admin: NextPage = () => {
             techName: { value: string };
             logoTech: { value: string };
         };
-        const nameT = target.techName.value; // typechecks!
+        const nameT = target.techName.value;
         const logoUrl = target.logoTech.value;
         const techno = await addtech.mutateAsync({ name: nameT, url: logoUrl })
     }
 
     async function handleFormation(event: React.SyntheticEvent) {
-        //event.preventDefault()
+        event.preventDefault()
         const target = event.target as typeof event.target & {
             formTitle: { value: string };
             description: { value: string };
@@ -88,7 +91,8 @@ const Admin: NextPage = () => {
         //const desc = target.description.value;
         const diff: number = +target.difficulte.value;
         const techno = target.techno.value;
-        await addFormation.mutateAsync({ title: title, description: content, difficulte: diff, techno: techno })
+
+        await addFormation.mutateAsync({ title: title, description: content, difficulte: diff, techno: techno, hide: hidden })
     }
 
     async function normal(event: React.SyntheticEvent) {
@@ -108,25 +112,6 @@ const Admin: NextPage = () => {
             </Head>
             {user ? <main className="flex min-h-screen bg-white justify-between dark:bg-[#041F25]">
 
-            <div className="fixed w-full pr-40 border-b-4 border-[#63aeab] bg-white top-0 right-0 left-28 h-[4rem]" /><div className="flex item-center justify-between gap-12 fixed w-full pr-40 top-0 right-0 left-28 h-[4rem] text-[#63aeab]">
-                        <div className="flex item-center justify-evenly">
-                            <button className="px-10 py-3 font-semibold border-[#0E6073] transition hover:border-b-4 hover:text-[#0E6073]">Vos cours</button>
-                            <Link href={`/formation`}><button className="px-10 h-full font-semibold border-[#0E6073] transition hover:border-b-4 hover:text-[#0E6073]">Explorer</button></Link>
-
-                            <Link href={`/admin/main`}><button className="px-10 h-full font-semibold border-[#0E6073] border-b-4 text-[#0E6073]" autoFocus>Gérez les cours</button></Link>
-                        </div>
-                        <div className="flex item-center justify-center gap-5">
-                            <div className="bg-white flex flex-row justify-start items-center width mb-24 w-96 h-12 flex flex-row px-8 rounded-full shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)]">
-                                <HiMagnifyingGlass className="h-8 w-8 text-[#989898]" />
-                                <input className="h-10 shadow-none w-full bg-transparent" type="text" />
-                            </div>
-                            {sessionData && sessionData.user?.image && <Link href={`/components/users/${sessionData.user.id}`}><img src={sessionData.user.image} className="max-w-[3rem]"></img></Link>}
-                        </div>
-                    </div>
-                    <div className="flex flex-col items-center justify-between gap-2 min-h-screen top-0 left-0 bg-[#0E6073] fixed m-w-xs p-2">
-                        <Link href="/"><img src="/okto.png" className="max-w-[3rem]"></img></Link>
-                        <AuthShowcase />
-                    </div>
 
 
                 <div className="flex w-full max-h-screen ml-[6rem] gap-10 mt-24 mr-10">
@@ -192,9 +177,9 @@ const Admin: NextPage = () => {
 
 
                             <div className="flex gap-2">
-                                <input type="checkbox" id="hid" name="hid" required className="shadow-none" /><label htmlFor="hid"> En cochant cette case, vous êtes au courant que la formation créée sera invisible pour les utilisateurs.</label>
+                                <input type="checkbox" id="hid" name="hid" className="shadow-none" onClick={() => hidden ? setHide(false) : setHide(true)} /><label htmlFor="hid"> En cochant cette case, vous publiez la formation.</label>
                             </div>
-                            <button className="rounded-full bg-[#0E6073] px-10 py-3 font-semibold text-white no-underline transition hover:bg-[#0E6073]/20" type="submit" value="submit">Créer la formation</button>
+                            <button className="rounded-full bg-[#0E6073] px-10 py-3 font-semibold text-white no-underline transition hover:bg-[#0E6073]/80" type="submit" value="submit">Créer la formation</button>
                         </fieldset>
 
 
@@ -217,6 +202,7 @@ const Admin: NextPage = () => {
 
                 </div>
 
+            <Header selected={3}/>
 
             </main> : <img src="https://media.discordapp.net/attachments/688793736620146689/915869475423813662/20210709_215217.gif" alt="Pas Admnin, Ratio"></img>
 

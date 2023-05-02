@@ -44,12 +44,13 @@ export const formationRouter = createTRPCRouter({
         });
     }),
 
-    create: protectedProcedure.input(z.object({ title: z.string(), description: z.string(), difficulte: z.number(), techno: z.string() })).mutation(({ input }) => {
+    create: protectedProcedure.input(z.object({ title: z.string(), description: z.string(), difficulte: z.number(), techno: z.string(), hide: z.boolean() })).mutation(({ input }) => {
         return prisma.formation.create({
             data: {
                 title: input.title,
                 description: input.description,
                 difficulte: input.difficulte,
+                hidden: input.hide,
                 techs: {
                     connect: { id: input.techno }
                 }
@@ -61,10 +62,48 @@ export const formationRouter = createTRPCRouter({
         return prisma.formation.delete({ where: { id: input.id } })
     }),
 
+    update: protectedProcedure.input(z.object({ id: z.string(), title: z.string(), description: z.string(), difficulte: z.number(), techno: z.string() })).mutation(({ input }) => {
+        return prisma.formation.update({
+            where: {
+                id: input.id
+            },
+            data: {
+                title: input.title,
+                description: input.description,
+                difficulte: input.difficulte,
+                techs: {
+                    connect: { id: input.techno }
+                }
+            }
+        })
+    }),
+
     getLecons: publicProcedure.input(z.object({ id: z.string() })).mutation(({ input }) => {
         return prisma.lecon.findMany({
             where: {
                 idf: input.id
+            }
+        })
+    }),
+
+    setHidden: protectedProcedure.input(z.object({ id: z.string() })).mutation(({ input }) => {
+        return prisma.formation.update({
+            where: {
+                id: input.id,
+            },
+            data: {
+                hidden: true,
+            }
+        })
+    }),
+
+    setVisible: protectedProcedure.input(z.object({ id: z.string() })).mutation(({ input }) => {
+        return prisma.formation.update({
+            where: {
+                id: input.id,
+            },
+            data: {
+                hidden: false,
             }
         })
     }),
