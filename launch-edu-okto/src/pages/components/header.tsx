@@ -32,7 +32,7 @@ function Header (props:{selected: number}) {
                 <div className="flex justify-center items-center gap-5 mb-1">
                     <div className="bg-white flex flex-row justify-start items-center width w-96 h-12 px-8 rounded-full shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)]">
                         <HiMagnifyingGlass className="h-8 w-8 text-[#989898]" />
-                        <input className="h-10 shadow-none w-full bg-transparent" type="text" />
+                        <input className="h-10 shadow-none w-full bg-transparent text-black" type="text" />
                     </div>
                     {sessionData && sessionData.user?.image && props.selected === 4 ? <Link href={`/users/${sessionData.user.id}`} className="flex flex-col justify-center"><img src={sessionData.user.image} className="max-w-[3rem] rounded-full border-4 border-[#0E6073]"></img></Link>:
                     sessionData && sessionData.user?.image && <Link href={`/users/${sessionData.user.id}`} className="flex flex-col justify-center"><img src={sessionData.user.image} className="max-w-[3rem] rounded-full"></img></Link>}

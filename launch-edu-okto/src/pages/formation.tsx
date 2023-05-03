@@ -8,7 +8,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { IoCheckmarkCircle } from "react-icons/io5";
 
 import { api } from "~/utils/api";
-import { Difficulty} from "~/pages/components/difficulties";
+import { Difficulty } from "~/pages/components/difficulties";
 import { Formation } from "@prisma/client";
 
 const Home: NextPage = () => {
@@ -50,15 +50,27 @@ const Home: NextPage = () => {
             </h1>
             <div className="flex flex-row items-center justify-evenly">
               <p className="mr-2">Trier par : </p>
-              <button className="px-4 py-1 bg-[#0E6073] rounded-full mx-1" onClick={() => changeFilterType("alphabetique")}>
+              
+              {filterType === "alphabetique" ? <button className="px-4 py-1 bg-[#0E6073] rounded-full mx-1" onClick={() => changeFilterType("alphabetique")}>
                 <p className="text-[#fff]">Thématique</p>
-              </button>
+              </button> :
               <button className="px-4 py-1 bg-[#D9D9D9] rounded-full mx-1" onClick={() => changeFilterType("alphabetique")}>
+                <p className="text-[#0E6073]">Thématique</p>
+              </button>
+              }
+              {filterType === "progress" ? <button className="px-4 py-1 bg-[#0E6073] rounded-full mx-1" onClick={() => changeFilterType("progress")}>
+                <p className="text-[#fff]">Progression</p>
+              </button> :
+              <button className="px-4 py-1 bg-[#D9D9D9] rounded-full mx-1" onClick={() => changeFilterType("progress")}>
                 <p className="text-[#0E6073]">Progression</p>
               </button>
+              }
+              {filterType === "diff" ? <button className="px-4 py-1 bg-[#0E6073] rounded-full mx-1" onClick={() => changeFilterType("diff")}>
+                <p className="text-[#fff]">Niveau</p>
+              </button> :
               <button className="px-4 py-1 bg-[#D9D9D9] rounded-full mx-1" onClick={() => changeFilterType("diff")}>
-                <p className="text-[#0E6073]">Niveau</p>
-              </button>
+              <p className="text-[#0E6073]">Niveau</p>
+            </button>}
             </div>
           </div>
 
@@ -77,7 +89,7 @@ const Home: NextPage = () => {
                     <h3 className="text-md font-bold mt-12 text-center">{forma.title}</h3>
 
                     <span className="absolute right-5">
-                      {<Difficulty level={forma.difficulte}/>}
+                      <Difficulty level={forma.difficulte}/>
                     </span>
                     <p className="h-7 w-7 text-[#0E6073] absolute left-5">10%</p>
                     {/* <IoCheckmarkCircle className="h-7 w-7 text-[#0E6073] absolute left-5"/> */}
@@ -93,20 +105,3 @@ const Home: NextPage = () => {
 };
 
 export default Home;
-
-const AuthShowcase: React.FC = () => {
-  const { data: sessionData } = useSession();
-
-  return (
-    <div>
-      {sessionData?.user.admin && <Link href="/components/admin"><img src="https://icones.pro/wp-content/uploads/2022/02/services-parametres-et-icone-d-engrenage-gris.png" className="max-w-[3rem]"></img></Link>}
-      <button
-        className="rounded-full px-3 py-3 font-semibold  no-underline transition hover:bg-white/10"
-        onClick={sessionData ? () => void signOut() : () => void signIn()}
-      >
-        {sessionData ? <img src="/arrow.png" className="max-w-[1.5rem]"></img> : "Sign in"}
-      </button>
-    </div>
-
-  );
-};

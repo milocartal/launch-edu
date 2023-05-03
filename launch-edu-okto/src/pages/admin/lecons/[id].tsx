@@ -15,6 +15,7 @@ export const getServerSideProps: GetServerSideProps<{
 }> = async function (context) {
 
     const session = await getSession(context)
+    const admin = session?.user.admin
 
     const lecon = await prisma.lecon.findUnique({
         where: {
@@ -23,10 +24,10 @@ export const getServerSideProps: GetServerSideProps<{
     });
     const idf = lecon?.idf;
 
-    if (!session) {
+    if (!session || !admin) {
       return {
         redirect: {
-          destination: '/components/formations/'+idf,
+          destination: '/',
           permanent: false,
         },
       }

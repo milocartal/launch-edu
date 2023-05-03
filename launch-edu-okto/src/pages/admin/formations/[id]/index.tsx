@@ -4,15 +4,15 @@ import { type InferGetServerSidePropsType } from 'next'
 import Head from "next/head";
 import Link from "next/link";
 import Image from 'next/image'
-import { signIn, signOut, useSession } from "next-auth/react";
+import { getSession, signIn, signOut, useSession } from "next-auth/react";
 import { FaArrowLeft, FaPenAlt, FaPlay } from "react-icons/fa";
 
 import { api } from "~/utils/api";
-import Header from "../../components/header";
+import Header from "../../../components/header";
 import { prisma } from '~/server/db';
 import { Technologie, type Formation, Lecon, Etape, Prisma } from '@prisma/client';
-import { DifficultyText } from '../../components/difficulties';
-import etapes from '../../etapes/[id]';
+import { DifficultyText } from '../../../components/difficulties';
+import etapes from '../../../etapes/[id]';
 import { useState } from 'react';
 import { HiXMark } from 'react-icons/hi2';
 import dynamic from 'next/dynamic';
@@ -32,6 +32,18 @@ export const getServerSideProps: GetServerSideProps<{
         lecons: LeconWithEtapes[];
     });
 }> = async function (context) {
+    const session = await getSession(context)
+    const admin = session?.user.admin
+
+    if (!session || !admin) {
+      return {
+        redirect: {
+          destination: '/',
+          permanent: false,
+        },
+      }
+    }
+    
     const formation = await prisma.formation.findUnique({
         where: {
             id: context.query.id as string
@@ -79,18 +91,6 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
 
     const { data: techList } = api.technologie.getAll.useQuery()
 
-
-    async function handleLecon(event: React.SyntheticEvent) {
-        //event.preventDefault()
-        const target = event.target as typeof event.target & {
-            leconTitle: { value: string };
-            description: { value: string };
-        };
-        const title = target.leconTitle.value;
-        const desc = target.description.value;
-        await addLecon.mutateAsync({ title: title, idf: idf, description: desc })
-    }
-
     async function handleFormation(event: React.SyntheticEvent) {
         //event.preventDefault()
         const target = event.target as typeof event.target & {
@@ -117,7 +117,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
 
                 <section className='w-6/12 h-full flex flex-col justify-between items-center'>
                     <div className="flex flex-col gap-5 w-full">
-                        <div className="flex flex-row items-center justify-start px-10">
+                        <div className="flex flex-row items-center justify-start">
                             <Link href="/admin/main"><FaArrowLeft className="h-6 w-6 text-[#0E6073] mr-5" /></Link>
                             <h1 className="text-3xl font-bold tracking-tight text-[#0E6073]">{formation.title}</h1>
                         </div>
@@ -150,7 +150,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                         </div>
                     </div>
 
-                    <button className="h-[5rem] w-5/6 text-white bg-[#0e6073] rounded-lg hover:cursor-pointer transition hover:bg-[#0E6073]/80" onClick={(e) => setTab("tech")}>Modifier le formation</button>
+                    <button className="h-[5rem] w-5/6 text-white bg-[#0e6073] rounded-lg hover:cursor-pointer transition hover:bg-[#0E6073]/80" onClick={(e) => setTab("modif")}>Modifier le formation</button>
 
                 </section>
 
@@ -175,15 +175,15 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                     </Link>)
                             })}
                         </div>
-                        <div className="flex items-center justify-center h-[5rem] w-full bg-[#2ea3a5] text-white hover:cursor-pointer transition hover:bg-[#0e6073] rounded-b-lg" onClick={(e) => setTab("tech")}>
+                        <Link href={`/admin/formations/${formation.id}/addLesson`} className="flex items-center justify-center h-[5rem] w-full bg-[#2ea3a5] text-white hover:cursor-pointer transition hover:bg-[#0e6073] rounded-b-lg">
                             + Ajouter une lecon
-                        </div>
+                        </Link>
                     </div>
                 </aside>
 
                 <Header selected={3} />
 
-                {tab === "tech" &&
+                {tab === "modif" &&
                     <div className="fixed w-full h-full bg-[#0E6073]/90 top-0 right-0 left-0 bottom-0 flex justify-center items-center">
                         <form onSubmit={handleFormation} className="relative flex flex-col gap-5 item-center justify-start bg-white rounded-xl p-16 w-1/2" method="POST">
                             <button onClick={(e) => setTab("normal")} className="absolute top-3 right-4 rounded-full font-semibold  no-underline transition hover:text-red-500">
@@ -221,22 +221,3 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
 };
 
 export default Formations;
-
-const AuthShowcase: React.FC = () => {
-    const { data: sessionData } = useSession();
-
-    return (
-        <div className="flex flex-col items-center justify-center gap-4">
-            <p className="text-center text-2xl text-white">
-                {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
-            </p>
-            {sessionData?.user.admin && <Link href="/components/admin"><button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">Admin</button></Link>}
-            <button
-                className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-                onClick={sessionData ? () => void signOut() : () => void signIn()}
-            >
-                {sessionData ? "Sign out" : "Sign in"}
-            </button>
-        </div>
-    );
-};

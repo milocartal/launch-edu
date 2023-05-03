@@ -21,12 +21,22 @@ export const leconRouter = createTRPCRouter({
         return prisma.lecon.findMany({ where: { idf: input.id } });
     }),
 
-    create: protectedProcedure.input(z.object({ title: z.string(), idf: z.string(), description: z.string() })).mutation(({ input }) => {
+    getLast: protectedProcedure.mutation(()=>{
+        return prisma.lecon.findFirst({
+            orderBy: [
+                {
+                  updatedAt: 'desc',
+                },
+            ]
+        })
+    }),
+
+    create: protectedProcedure.input(z.object({ title: z.string(), idf: z.string() })).mutation(({ input }) => {
         return prisma.lecon.create({
             data: {
                 title: input.title,
                 idf: input.idf,
-                description: input.description,
+                description: "",
             }
         })
     }),
