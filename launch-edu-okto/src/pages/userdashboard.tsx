@@ -91,8 +91,8 @@ const Technologies: NextPage = () => {
                             </div>
                             <div className="flex flex-col justify-start h-full">
                                 <DifficultyText level={item.diff}/>
-                                <div className="flex flex-row justify-start items-center mt-2">
-                                    <FaPenAlt className="h-6 w-6 text-[#989898] dark:text-[#2EA3A5]" />
+                                <div className="flex flex-row justify-start items-center mt-5">
+                                    <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]" />
                                     <p className="text-sm ml-3 font-Inter text-[#989898] dark:text-[#2EA3A5]">3 leçons</p>
                                 </div>
                             </div>
@@ -107,8 +107,8 @@ const Technologies: NextPage = () => {
                             </div>
                             <div className="flex flex-col justify-start h-full">
                                 <DifficultyText level={item.diff}/>
-                                <div className="flex flex-row justify-start items-center mt-2">
-                                    <FaPenAlt className="h-6 w-6 text-[#989898] dark:text-[#2EA3A5]"/>
+                                <div className="flex flex-row justify-start items-center mt-5">
+                                    <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]"/>
                                     <p className="text-sm ml-3 font-Inter text-[#989898] dark:text-[#2EA3A5]">3 leçons</p>
                                 </div>
                             </div>
