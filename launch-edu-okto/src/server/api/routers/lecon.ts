@@ -31,12 +31,12 @@ export const leconRouter = createTRPCRouter({
         })
     }),
 
-    create: protectedProcedure.input(z.object({ title: z.string(), idf: z.string() })).mutation(({ input }) => {
+    create: protectedProcedure.input(z.object({ title: z.string(), idf: z.string(), description: z.string()})).mutation(({ input }) => {
         return prisma.lecon.create({
             data: {
                 title: input.title,
                 idf: input.idf,
-                description: "",
+                description: input.description,
             }
         })
     }),

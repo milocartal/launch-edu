@@ -165,7 +165,7 @@ const Admin: NextPage = () => {
 
                                 <div className="flex flex-col items-center gap-2">
                                     <label htmlFor="2" className="mt-8">Intermédiaire</label>
-                                    <input type="radio" name="difficulte" id="2" value="2" required className="shadow-none" />
+                                    <input type="radio" name="difficulte" id="2" value="2" required className="shadow-none" defaultChecked/>
                                 </div>
 
                                 <div className="flex flex-col items-center gap-2">

@@ -123,7 +123,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                         </div>
                         <div className="flex flex-col items-center w-full">
                             <div className="flex flex-row items-center justify-between w-full">
-                                <h2 className="text-xl font-bold tracking-tight text-[#0E6073]">Description</h2>
+                                <h1 className="text-xl font-bold tracking-tight text-[#0E6073]">Description</h1>
                                 <div className="flex flex-row ">
                                     <div className="flex flex-row items-center">
                                         {<DifficultyText level={formation.difficulte}/>}
@@ -136,7 +136,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                             </div>
                             <div className="text-sm font-Inter text-[#222222] self-start mt-6" dangerouslySetInnerHTML={{ __html: formation.description }} />
                             <div className="flex flex-col w-full my-10">
-                                <h2 className="text-xl font-bold tracking-tight text-[#0E6073]">Thématique(s)</h2>
+                                <h1 className="text-xl font-bold tracking-tight text-[#0E6073]">Thématique(s)</h1>
 
                                 <div className="w-11/12">
                                     {formation.techs as Technologie[] && formation.techs.length > 0 && formation.techs.map((tech) => {
@@ -156,7 +156,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
 
 
                 <aside className="w-5/12 right-0 flex flex-col items-center justify-start h-5/6 pt-10 mr-5">
-                    <h2 className="text-xl font-bold tracking-tight text-[#0E6073] self-start mb-3">Leçon(s) dans la formation</h2>
+                    <h1 className="text-xl font-bold tracking-tight text-[#0E6073] self-start mb-3">Leçon(s) dans la formation</h1>
                     <div className="flex flex-col max-h-full w-11/12 shadow-xl shadow-black/30 rounded-lg">
                         <div className="flex flex-col w-full rounded-t-lg" id="listTech">
                             {formation.lecons as Lecon[] && formation.lecons.length > 0 && formation.lecons.map((lecon) => {

@@ -83,9 +83,11 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
     const [tab, setTab] = useState("normal")
     const [type, setType] = useState("texte")
     const [content, setContent] = useState(formation.description);
+    const [url, setUrl] = useState("");
+
+    const [txtCours, setScript] = useState('');
 
     const idf = formation.id
-    const updateFormation = api.formation.update.useMutation()
 
     const addLecon = api.lecon.create.useMutation()
     const find = api.lecon.getLast.useMutation()
@@ -101,9 +103,10 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
             leconTitle: { value: string };
         };
         const title = target.leconTitle.value;
-        await addLecon.mutateAsync({ title: title, idf: idf })
+        await addLecon.mutateAsync({ title: title, idf: idf, description: "" })
         const lec = await find.mutateAsync()
         console.log(lec)
+        
     }
 
     return (
@@ -124,28 +127,28 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                     <form onSubmit={handleCrea} className='flex w-full justify-between h-full'>
                         <fieldset className='w-5/12 flex flex-col justify-between items-center'>
                             <fieldset className='w-full flex flex-col items-center'>
-                                <input type='text' name="leconTitle" placeholder='Titre de la leçon' className="inputAddForm w-full" />
+                                <input type='text' name="leconTitle" placeholder='Titre de la leçon' className="inputAddForm w-full" autoComplete="off" />
                                 <fieldset className="flex gap-5 w-full justify-center mb-6">
                                     <div className="flex flex-col items-center gap-2">
                                         <label htmlFor="1" className="mt-8">Vidéo</label>
-                                        <input type="radio" name="type" id="video" value="video" required className="shadow-none" onClick={(e) => setType("video")} />
+                                        <input type="radio" name="type" id="video" value="video" required className="shadow-none" onClick={(e) => {setType("video"); setScript('')}} />
                                     </div>
 
                                     <div className="flex flex-col items-center gap-2">
                                         <label htmlFor="2" className="mt-8">Texte</label>
-                                        <input type="radio" name="type" id="texte" value="texte" required className="shadow-none" onClick={(e) => setType("texte")} defaultChecked/>
+                                        <input type="radio" name="type" id="texte" value="texte" required className="shadow-none" onClick={(e) => {setType("texte"); setScript('')}} defaultChecked/>
                                     </div>
 
                                 </fieldset>
                                 {type === "video" &&
                                     <fieldset id='video' className='w-full'>
-                                        <input type='url' placeholder='Url de la vidéo' className="inputAddForm w-full mb-5"></input>
+                                        <input type='url' placeholder='Url de la vidéo' className="inputAddForm w-full mb-5" onChange={(e)=> setUrl(e.target.value)} autoComplete="off"></input>
                                         <QuillNoSSRWrapper placeholder='Transcript de la vidéo' className='h-[250px]' />
                                     </fieldset>}
 
                                 {type === "texte" &&
                                     <fieldset id='texte' className='w-full h-max'>
-                                        <QuillNoSSRWrapper placeholder='Texte du cours' className='h-[300px]' />
+                                        <QuillNoSSRWrapper placeholder='Texte du cours' className='h-[300px]' onChange={setScript}/>
                                     </fieldset>}
 
                             </fieldset>
@@ -155,15 +158,16 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
 
                         <fieldset className='w-5/12 flex flex-col justify-between items-center'>
                             <div className='w-full flex flex-col'>
-                                <h2 className="text-xl font-bold tracking-tight text-[#0E6073] self-start mb-3">Prévisualisation</h2>
+                                <h1 className="text-xl font-bold tracking-tight text-[#0E6073] self-start mb-3">Prévisualisation</h1>
                                 {type==="video" &&
                                 <iframe
-                                    src="https://www.youtube.com/embed/U8M5DvttVEg"
-                                    title="YouTube video player"
+                                    src={`https://www.youtube.com/embed/${url.replace("https://www.youtube.com/watch?v=","")}`}
+                                    title={`${formation.title}`}
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                     allowFullScreen
                                     className='w-[504px] h-[284px]'>
                                 </iframe>}
+                                {type==="texte"&& <div className="text-sm font-Inter dark:text-[#2EA3A5]" dangerouslySetInnerHTML={{ __html: txtCours }} />}
                             </div>
                             
                             <button type='submit' className="h-[5rem] w-full text-white bg-[#0e6073] rounded-3xl hover:cursor-pointer transition hover:bg-[#0E6073]/80">Créer la leçon</button>
@@ -178,33 +182,25 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
 
                 {tab === "exo" &&
                     <div className="fixed w-full h-full bg-[#0E6073]/90 top-0 right-0 left-0 bottom-0 flex justify-center items-center">
-                        <form className="relative flex flex-col gap-5 item-center justify-start bg-white rounded-xl p-16 w-1/2" method="POST">
-                            <button onClick={(e) => setTab("normal")} className="absolute top-3 right-4 rounded-full font-semibold  no-underline transition hover:text-red-500">
-                                <HiXMark className="text-[2rem] text-[#0e6073] hover:text-red-500" />
-                            </button>
+                        <form className="relative flex flex-col gap-5 item-center justify-start bg-white rounded-xl p-16 w-8/12" method="POST">
+                            <div className='flex w-full gap-5 justify-center mb-10'>
+                                <fieldset className='flex flex-col gap-3'>
+                                    <legend className=''>Exercice</legend>
+                                    <input type='text' name="leconTitle" placeholder="Url de la vidéo de l'exercice" className="inputAddForm w-full" autoComplete="off" />
+                                    <input type='text' name="leconTitle" placeholder="Url du code de l'exercice" className="inputAddForm w-full" autoComplete="off" />
+                                    <QuillNoSSRWrapper className='h-[150px]'/>
+                                </fieldset>
 
-                            <input name="formTitle" id="formTitle" type="text" placeholder="Titre de la formation" required className="inputAddForm" autoComplete="off" defaultValue={formation.title} />
+                                <fieldset className='flex flex-col gap-3'>
+                                    <legend>Solution</legend>
+                                    <input type='text' name="leconTitle" placeholder='Url de la vidéo de la solution' className="inputAddForm w-full" autoComplete="off" />
+                                    <input type='text' name="leconTitle" placeholder='Url du code de la solution' className="inputAddForm w-full" autoComplete="off" />
+                                    <QuillNoSSRWrapper className='h-[150px]'/>
+                                </fieldset>
+                            </div>
+                            
 
-                            <QuillNoSSRWrapper theme="snow" onChange={setContent} placeholder="Description" className="h-[30%] shadow-xl" defaultValue={formation.description} />
-                            <fieldset className="mt-8 flex gap-5 w-full justify-center">
-                                <legend>Difficulté:</legend>
-                                <div className="flex flex-col items-center gap-2">
-                                    <label htmlFor="1" className="mt-8">Débutant</label>
-                                    <input type="radio" name="difficulte" id="1" value="1" required className="shadow-none" />
-                                </div>
-
-                                <div className="flex flex-col items-center gap-2">
-                                    <label htmlFor="2" className="mt-8">Intermédiaire</label>
-                                    <input type="radio" name="difficulte" id="2" value="2" required className="shadow-none" />
-                                </div>
-
-                                <div className="flex flex-col items-center gap-2">
-                                    <label htmlFor="3" className="mt-8">Avancé</label>
-                                    <input type="radio" name="difficulte" id="3" value="3" required className="shadow-none" />
-                                </div>
-                            </fieldset>
-
-                            <button className="rounded-full bg-[#0E6073] px-10 py-3 font-semibold text-white no-underline transition hover:bg-[#0E6073]/80" type="submit" value="submit">Sauvegarder les changements</button>
+                            <div className="rounded-full bg-[#0E6073] px-10 py-3 font-semibold text-white no-underline transition hover:bg-[#0E6073]/80 hover:cursor-pointer text-center" onClick={(e)=> setTab("normal")}>Valider l'exercice</div>
 
                         </form>
                     </div>}

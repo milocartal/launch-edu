@@ -82,22 +82,6 @@ const Home: NextPage = () => {
             <Image src="/learn.png" width="1037" height="991" className="w-4/5" alt="" />
           </div>
 
-          {/*<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-            {techList as Technologie[] && techList && techList.length > 0 && techList.map((tech) => {
-              return (
-                <Link
-                  className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-                  href={`/components/technologies/${encodeURIComponent(tech.id)}`}
-                  key={tech.id}
-                >
-
-
-                  <h3 className="text-2xl font-bold">{tech.name}</h3>
-                </Link>
-              )
-            })}
-          </div>*/}
-
           <h1 className="text-4xl self-start mb-24 mt-20 text-[#0E6073] dark:text-white">Nouveautés</h1>
 
           <div className="flex flex-row w-full h-96 items-center mt-6">
@@ -170,23 +154,3 @@ const Home: NextPage = () => {
 };
 
 export default Home;
-
-const AuthShowcase: React.FC = () => {
-  const { data: sessionData } = useSession();
-
-  return (
-    <div>
-      {sessionData && sessionData.user?.image && <Link href={`/components/users/${sessionData.user.id}`}><img src={sessionData.user.image} className="max-w-[3rem]"></img></Link>}
-      {sessionData?.user.admin && <Link href="/components/admin"><img src="https://icones.pro/wp-content/uploads/2022/02/services-parametres-et-icone-d-engrenage-gris.png" className="max-w-[3rem]"></img></Link>}
-      {sessionData?.user.admin && <Link href="/admin/main"><img src="https://icones.pro/wp-content/uploads/2022/02/services-parametres-et-icone-d-engrenage-gris.png" className="max-w-[3rem]"></img></Link>}
-      <button
-        className="rounded-full px-3 py-3 font-semibold  no-underline transition hover:bg-white/10"
-        onClick={sessionData ? () => void signOut() : () => void signIn()}
-      >
-        {sessionData ? <img src="/arrow.png" className="max-w-[1.5rem]"></img> : "Sign in"}
-      </button>
-    </div>
-
-  );
-};
-

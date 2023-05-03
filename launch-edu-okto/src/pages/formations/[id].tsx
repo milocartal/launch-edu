@@ -86,7 +86,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
 
                     <div className="flex flex-col items-center pr-10 w-9/12">
                         <div className="flex flex-row items-center justify-between w-full">
-                            <h2 className="text-xl font-bold tracking-tight text-[#0E6073]">Description</h2>
+                            <h1 className="text-xl font-bold tracking-tight text-[#0E6073]">Description</h1>
                             <div className="flex flex-row ">
                                 <div className="flex flex-row items-center">
                                     {<DifficultyText level={formation.difficulte} />}
@@ -102,7 +102,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                             Commencer
                         </button>
 
-                        <h2 className="text-xl font-bold tracking-tight text-[#0E6073] self-start mb-3">Vue d'ensemble</h2>
+                        <h1 className="text-xl font-bold tracking-tight text-[#0E6073] self-start mb-3">Vue d'ensemble</h1>
 
                         <div className="w-10/12 shadow-lg">
                             {formation.lecons as Lecon[] && formation.lecons.length > 0 && formation.lecons.map((lecon) => {

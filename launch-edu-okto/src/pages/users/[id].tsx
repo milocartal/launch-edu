@@ -95,7 +95,7 @@ const user: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                     </div>
                 </div>
                 <div className="flex max-h-screen flex-col items-start justify-center w-5/12 mr-20">
-                    <h2 className="text-xl font-bold tracking-tight text-[#0E6073] mb-8">Mettre à jour mon profil</h2>
+                    <h1 className="text-xl font-bold tracking-tight text-[#0E6073] mb-8">Mettre à jour mon profil</h1>
                     <form onSubmit={updateProfile} className="flex flex-col items-center" method="POST">
                         <div className="bg-white flex flex-row justify-start items-center mb-4 w-96 h-14 px-6 shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)] w-8/12">
                             <input className="bg-transparent w-full h-12" name="username" id="username" type="text" placeholder="Nom d'utilisateur" value={username} onChange={({ target }) => {setUsername(target.value)}} required></input>
