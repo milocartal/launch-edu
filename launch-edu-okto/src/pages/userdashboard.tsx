@@ -58,8 +58,6 @@ const Technologies: NextPage = () => {
     },
     ]
 
-    console.log(selected)
-
     return (
         <>
             <Head>
