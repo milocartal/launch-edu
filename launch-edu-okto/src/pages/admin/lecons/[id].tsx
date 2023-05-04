@@ -5,15 +5,16 @@ import { getServerSession } from "next-auth";
 import Head from "next/head";
 import Link from "next/link";
 import { getSession, signIn, signOut, useSession } from "next-auth/react";
-import { FaArrowLeft, FaVideo } from "react-icons/fa";
+import { FaArrowLeft, FaVideo, FaGithub } from "react-icons/fa";
 
 import { api } from "~/utils/api";
 import { prisma } from '~/server/db';
-import { Etape, EtapeType, Lecon } from '@prisma/client';
+import { Etape, EtapeType, Lecon, Formation } from '@prisma/client';
 import Header from '~/pages/components/header';
 
 export const getServerSideProps: GetServerSideProps<{
     lecon: Lecon;
+    formation: Formation
 }> = async function (context) {
 
     const session = await getSession(context)
@@ -25,6 +26,16 @@ export const getServerSideProps: GetServerSideProps<{
         },
     });
     const idf = lecon?.idf;
+
+    const formation = await prisma.formation.findUnique({
+        where: {
+            id: lecon?.idf as string
+        },
+        include: {
+            techs: true,
+            lecons: true
+        }
+    });
 
     if (!session || !admin) {
       return {
@@ -38,14 +49,15 @@ export const getServerSideProps: GetServerSideProps<{
         
         return {
             props: {
-                lecon: JSON.parse(JSON.stringify(lecon)) as Lecon
+                lecon: JSON.parse(JSON.stringify(lecon)) as Lecon,
+                formation: JSON.parse(JSON.stringify(formation)) as Formation
             }
         };
     }
     
 };
 
-const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ lecon }) => {
+const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ lecon, formation }) => {
     const { data: sessionData } = useSession();
     const admin = sessionData?.user.admin
 
@@ -84,8 +96,8 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                 <div className="container flex flex-col items-start justify-start gap-12 px-4 py-20">
                     <div className="flex flex-row items-center justify-between px-10 w-7/12">
                         <div className="flex flex-row items-center justify-start">
-                            <button className="mr-5"><Link href={`/formation`}><FaArrowLeft className="h-6 w-6 text-[#0E6073]" /></Link></button>
-                            <h1 className="text-3xl font-bold tracking-tight text-[#0E6073]">{lecon.title}</h1>
+                            <button className="mr-5"><Link href={`/formations/${encodeURIComponent(lecon.idf)}`}><FaArrowLeft className="h-6 w-6 text-[#0E6073]" /></Link></button>
+                            <h1 className="text-3xl font-bold tracking-tight text-[#0E6073]">{lecon.title} de {formation.title}</h1>
                         </div>
                     </div>
                     <div className="flex flex-col items-center pr-10 w-7/12">
@@ -99,13 +111,37 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                                 </div>
                             </div>
                             <div className="text-sm font-Inter text-[#222222] self-start mt-3" dangerouslySetInnerHTML={{ __html: lecon.description }} />
-                            <button className="text-white w-4/12 bg-[#0E6073] h-14 rounded-full my-3 self-end mt-3 hover:bg-[#0a4654]">
-                                Voir la vidéo du cours
-                            </button>
-                            <div className="flex flex-row items-center justify-between w-full">
+                            <div className="self-end flex flex-row items-center justify-center w-8/12">
+                                <button className="text-white w-8/12 bg-[#0E6073] h-14 rounded-full my-3 self-end ml-2 hover:bg-[#0a4654]">
+                                    Voir la vidéo du cours
+                                </button>
+                                <button className="text-white w-3/12 bg-[#2EA3A5] flex flex-row items-center justify-center h-14 rounded-full my-3 ml-2 self-end hover:bg-[#248082]">
+                                    <FaGithub className="h-7 w-7 text-white" />
+                                </button>
+                            </div>
+                            <div className="flex flex-col items-start w-full mt-5">
                                 <h3 className="text-xl font-bold tracking-tight text-[#0E6073]">Transcript</h3>
+                                <p className="text-sm font-Inter text-[#222222] self-start mt-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus interdum hendrerit metus, non pretium libero. Nullam pulvinar, velit vel varius congue, eros libero varius est, nec semper tortor ligula quis sem. Nam blandit id turpis sed feugiat. Maecenas tincidunt aliquet tempor. Nam hendrerit ex laoreet sapien bibendum gravida. Donec ornare lorem vitae arcu fermentum, ac consectetur est accumsan. Sed elementum urna id odio auctor, nec tincidunt nibh sagittis. Aenean sodales leo eu metus bibendum laoreet at vel ex. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam sollicitudin augue massa, vel pretium metus sollicitudin eu.</p>
+                                <p className="text-sm font-Inter text-[#222222] self-start mt-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus interdum hendrerit metus, non pretium libero. Nullam pulvinar, velit vel varius congue, eros libero varius est, nec semper tortor ligula quis sem. Nam blandit id turpis sed feugiat. Maecenas tincidunt aliquet tempor. Nam hendrerit ex laoreet sapien bibendum gravida. Donec ornare lorem vitae arcu fermentum, ac consectetur est accumsan. Sed elementum urna id odio auctor, nec tincidunt nibh sagittis. Aenean sodales leo eu metus bibendum laoreet at vel ex. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam sollicitudin augue massa, vel pretium metus sollicitudin eu.</p>
+                                <p className="text-sm font-Inter text-[#222222] self-start mt-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus interdum hendrerit metus, non pretium libero. Nullam pulvinar, velit vel varius congue, eros libero varius est, nec semper tortor ligula quis sem. Nam blandit id turpis sed feugiat. Maecenas tincidunt aliquet tempor. Nam hendrerit ex laoreet sapien bibendum gravida. Donec ornare lorem vitae arcu fermentum, ac consectetur est accumsan. Sed elementum urna id odio auctor, nec tincidunt nibh sagittis. Aenean sodales leo eu metus bibendum laoreet at vel ex. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam sollicitudin augue massa, vel pretium metus sollicitudin eu.</p>
+                                <p className="text-sm font-Inter text-[#222222] self-start mt-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus interdum hendrerit metus, non pretium libero. Nullam pulvinar, velit vel varius congue, eros libero varius est, nec semper tortor ligula quis sem. Nam blandit id turpis sed feugiat. Maecenas tincidunt aliquet tempor. Nam hendrerit ex laoreet sapien bibendum gravida. Donec ornare lorem vitae arcu fermentum, ac consectetur est accumsan. Sed elementum urna id odio auctor, nec tincidunt nibh sagittis. Aenean sodales leo eu metus bibendum laoreet at vel ex. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam sollicitudin augue massa, vel pretium metus sollicitudin eu.</p>
                             </div>
                     </div>
+                </div>
+                <div className="w-5/12 fixed right-0 flex flex-col items-center justify-between h-5/6 pt-10 mr-5">
+
+                    <div className="bg-white mt-24 w-4/6 h-52 flex flex-col justify-start shadow-[4px_10px_20px_1px_rgba(0,0,0,0.25)]">
+                        <div className="bg-white w-full h-2/6 mb-4 flex flex-row items-center justify-start px-16 shadow-[4px_10px_20px_1px_rgba(0,0,0,0.25)]">
+                            <p className="font-semibold text-[#0E6073]">{lecon.title}</p>
+                        </div>
+                        <p className="px-20 mt-2 font-semibold text-[#0E6073]">Cours</p>
+                        <p className="px-20 mt-2 font-semibold text-[#0E6073]">Exercice</p>
+                        <p className="px-20 mt-2 font-semibold text-[#0E6073]">Solution</p>
+                    </div>
+                    <button className="text-white w-4/6 bg-[#0E6073] h-14 rounded-full hover:bg-[#0a4654]">
+                        Modifier la leçon
+                    </button>
+
                 </div>
             </main>
             <Header selected={3}/>

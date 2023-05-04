@@ -112,7 +112,7 @@ const Home: NextPage = () => {
           </div>
 
           <h1 className="text-4xl self-start mb-11 mt-12 text-[#0E6073] dark:text-white">Trouvez le bon cours pour vous</h1>
-          <div className="bg-white width mb-24 w-8/12 h-16 flex flex-row items-center px-8 rounded-full shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)]">
+          <div className="bg-white mb-24 w-8/12 h-16 flex flex-row items-center px-8 rounded-full shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)]">
             <HiMagnifyingGlass className="h-9 w-9 text-[#989898]" />
             <input className=" h-16 w-40 shadow-none w-full bg-transparent dark:text-[#041f25]" type="text" name="searchValue" id="searchValue" onChange={handleSearchTerm} />
           </div>
