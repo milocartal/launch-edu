@@ -24,7 +24,7 @@ model Technologie {
 
 model EtapeType {
     id     String  @id @default(cuid())
-    name   String
+    name   String  @unique
     etapes Etape[]
 }
 

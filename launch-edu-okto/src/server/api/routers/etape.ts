@@ -13,13 +13,14 @@ export const etapeRouter = createTRPCRouter({
         return prisma.etape.findMany({ where: { idl: input.id } });
     }),
 
-    create: protectedProcedure.input(z.object({ name: z.string(), idt: z.string(), description: z.string(), code: z.string(), idl: z.string() })).mutation(({ input }) => {
+    create: protectedProcedure.input(z.object({ name: z.string(), idt: z.string(), code: z.string(), video: z.string(), idl: z.string() })).mutation(({ input }) => {
         return prisma.etape.create({
             data: {
                 name: input.name,
                 idt: input.idt,
-                description: input.description,
+                description: "",
                 code: input.code,
+                video: input.video,
                 idl: input.idl
             }
         })

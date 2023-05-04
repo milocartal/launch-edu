@@ -13,10 +13,6 @@ export const userRouter = createTRPCRouter({
     return ctx.prisma.user.findMany();
   }),
 
-  getSecretMessage: protectedProcedure.query(() => {
-    return "Enjoy the class!";
-  }),
-
   getAdmin: protectedProcedure.query(() => {
     return prisma.user.findMany({ where: { admin: true } })
   })

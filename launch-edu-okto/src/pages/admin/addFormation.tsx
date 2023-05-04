@@ -213,20 +213,3 @@ const Admin: NextPage = () => {
 
 export default Admin;
 
-const AuthShowcase: React.FC = () => {
-    const { data: sessionData } = useSession();
-
-    return (
-        <div>
-            {sessionData ?
-                <button className="rounded-full px-3 py-3 font-semibold  no-underline transition hover:bg-white/10" onClick={() => void signOut()}>
-                    <img src="/arrow.png" className="max-w-[1.5rem]"></img>
-                </button> :
-                <button className="rounded-full px-2 py-3 font-semibold  no-underline transition hover:bg-white/10" onClick={() => void signIn()}>
-                    <BiUserCircle className="text-[2rem] text-white" />
-                </button>}
-        </div>
-
-    );
-};
-

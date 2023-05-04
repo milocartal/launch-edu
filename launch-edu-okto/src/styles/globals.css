@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+    @font-face {
+      font-family: Planc;
+      font-weight: 400;
+      src: url(/fonts/Planc-ExtraBold.ttf) format("ttf");
+    }
+    h1, h3 {
+      font-family: Planc, system-ui, sans-serif;
+    }
+}
+
 textarea:focus, input:focus{
     outline: none;
 }

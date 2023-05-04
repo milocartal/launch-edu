@@ -113,7 +113,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                 <link rel="icon" href="/okto.png" />
             </Head>
 
-            <main className="flex min-h-screen h-max bg-white pl-24 pt-20 pb-10 w-full justify-between">
+            <main className="flex min-h-screen h-screen bg-white pl-24 pt-20 pb-10 w-full justify-between">
 
                 <section className='w-6/12 h-full flex flex-col justify-between items-center'>
                     <div className="flex flex-col gap-5 w-full">

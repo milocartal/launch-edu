@@ -19,7 +19,15 @@ export const typeRouter = createTRPCRouter({
         return prisma.etapeType.delete({ where: { id: input.id }, })
     }),
 
-    getAll: publicProcedure.query(({ ctx }) => {
-        return ctx.prisma.etapeType.findMany();
+    getAll: publicProcedure.query(() => {
+        return prisma.etapeType.findMany();
     }),
+
+    getIdType: protectedProcedure.input(z.object({ name: z.string() })).query(({ input })=>{
+        return prisma.etapeType.findUniqueOrThrow({
+            where: {
+                name: input.name
+            }
+        })
+    })
 });

@@ -66,6 +66,10 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                             {etape.description}
                         </div>
 
+                        <div>
+                            {etape.video}
+                        </div>
+
                         <div className="text-lg">
                             {etape.code}
                         </div>
