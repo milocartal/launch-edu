@@ -86,12 +86,12 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                 <link rel="icon" href="/okto.png" />
             </Head>
 
-            <main className="flex min-h-screen h-screen bg-white pl-24 pt-10 pb-10 w-full justify-between">
+            <main className="flex min-h-screen bg-white pl-24 pt-10 w-full justify-between ">
 
-                <section className='w-10/12 h-full flex flex-col justify-between items-center pt-10'>
+                <section className='w-10/12 h-full flex flex-col justify-between items-center pt-10 mb-10'>
                     <div className="flex flex-col gap-5 w-full">
                         <div className="flex flex-row items-center justify-start">
-                            <Link href="/admin/main"><FaArrowLeft className="h-6 w-6 text-[#0E6073] mr-5" /></Link>
+                            <Link href={`/formations/${encodeURIComponent(lecon.idf)}`}><FaArrowLeft className="h-6 w-6 text-[#0E6073] mr-5" /></Link>
                             <h1 className="text-3xl font-bold tracking-tight text-[#0E6073]">{formation.title}</h1>
                         </div>
                     
@@ -114,11 +114,11 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                     <div className="w-full bg-[#1A808C] h-40 flex flex-col items-start pt-2">
                         <div className="w-full h-10 flex flex-row items-center px-8">
                             <p className="text-sm font-Inter text-[#63AEAB] mr-3">1</p>
-                            <p className="text-sm font-Inter text-white">Lesson 1</p>
+                            <p className="text-sm font-Inter text-white">Leçon 1</p>
                         </div>
                         <div className="bg-[#2EA3A5] w-full px-8 py-1 mb-2">
                             <button>
-                                <p className="ml-8 text-sm font-Inter text-white">Lesson</p>
+                                <p className="ml-8 text-sm font-Inter text-white">Leçon</p>
                             </button>
                         </div>
                         <button>
@@ -130,7 +130,7 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                     </div>
                     <button className="w-full h-10 flex flex-row items-center px-8">
                         <p className="text-sm font-Inter text-[#63AEAB] mr-3">2</p>
-                        <p className="text-sm font-Inter text-white">Lesson 2</p>
+                        <p className="text-sm font-Inter text-white">Leçon 2</p>
                     </button>
                 </div>
             </main>
