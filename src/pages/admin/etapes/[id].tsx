@@ -63,7 +63,7 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
 
                         <h3 className="text-2xl font-bold">{etape.name}</h3>
                         <div className="text-lg">
-                            {etape.description}
+                            {etape.transcript}
                         </div>
 
                         <div>

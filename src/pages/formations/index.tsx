@@ -1,7 +1,7 @@
 import { type NextPage } from "next";
 import React, { useState } from 'react';
 import Head from "next/head";
-import Header from "./components/header";
+import Header from "../components/header";
 import Link from "next/link";
 import Image from 'next/image'
 import { signIn, signOut, useSession } from "next-auth/react";

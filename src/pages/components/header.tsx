@@ -17,12 +17,12 @@ function Header (props:{selected: number}) {
             <div className="flex justify-between gap-12 fixed w-full pr-40 top-0 right-0 left-28 h-[4rem] text-[#63aeab]">
                 <div className="flex justify-evenly">
                     {props.selected === 1 ?
-                        <Link href={`/userdashbord`}><button className="px-10 h-full font-semibold border-[#0E6073] border-b-4 text-[#0E6073]">Vos cours</button></Link> :
-                        <Link href={`/userdashbord`}><button className="px-10 h-full font-semibold border-[#0E6073] transition hover:border-b-4 hover:text-[#0E6073]">Vos cours</button></Link>
+                        <Link href={`/dashboard`}><button className="px-10 h-full font-semibold border-[#0E6073] border-b-4 text-[#0E6073]">Vos cours</button></Link> :
+                        <Link href={`/dashboard`}><button className="px-10 h-full font-semibold border-[#0E6073] transition hover:border-b-4 hover:text-[#0E6073]">Vos cours</button></Link>
                     }
                     {props.selected === 2 ?
-                        <Link href={`/formation`}><button className="px-10 h-full font-semibold border-[#0E6073] border-b-4 text-[#0E6073]">Explorer</button></Link>:
-                        <Link href={`/formation`}><button className="px-10 h-full font-semibold border-[#0E6073] transition hover:border-b-4 hover:text-[#0E6073]">Explorer</button></Link>
+                        <Link href={`/formations`}><button className="px-10 h-full font-semibold border-[#0E6073] border-b-4 text-[#0E6073]">Explorer</button></Link>:
+                        <Link href={`/formations`}><button className="px-10 h-full font-semibold border-[#0E6073] transition hover:border-b-4 hover:text-[#0E6073]">Explorer</button></Link>
                     }
                     
                     {admin && props.selected === 3 ?
@@ -34,8 +34,8 @@ function Header (props:{selected: number}) {
                         <HiMagnifyingGlass className="h-8 w-8 text-[#989898]" />
                         <input className="h-10 shadow-none w-full bg-transparent text-black" type="text" />
                     </div>
-                    {sessionData && sessionData.user?.image && props.selected === 4 ? <Link href={`/users/${sessionData.user.id}`} className="flex flex-col justify-center"><img src={sessionData.user.image} className="max-w-[3rem] rounded-full border-4 border-[#0E6073]"></img></Link>:
-                    sessionData && sessionData.user?.image && <Link href={`/users/${sessionData.user.id}`} className="flex flex-col justify-center"><img src={sessionData.user.image} className="max-w-[3rem] rounded-full"></img></Link>}
+                    {sessionData && sessionData.user?.image && props.selected === 4 ? <Link href={`/users/${sessionData.user.id}`} className="block h-[3rem] w-[3rem]"><img src={sessionData.user.image} className="w-full h-full rounded-full border-4 border-[#0E6073] object-cover"></img></Link>:
+                    sessionData && sessionData.user?.image && <Link href={`/users/${sessionData.user.id}`} className="block h-[3rem] w-[3rem]"><img src={sessionData.user.image} className="w-full h-full rounded-full object-cover"></img></Link>}
                 </div>
             </div>
 

@@ -65,7 +65,7 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
         const idt = target.idt.value;
         const desc = target.description.value;
         const code = target.code.value;
-        await addEtape.mutateAsync({ name: name, idt: idt, description: desc, code: code, idl: idL })
+        //await addEtape.mutateAsync({ name: name, idt: idt, description: desc, code: code, idl: idL })
     }
 
     return (
@@ -93,9 +93,7 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                                         key={etape.id}
                                     >
                                         <h3 className="text-2xl font-bold">{etape.name}</h3>
-                                        <div className="text-lg">
-                                            {etape.description}
-                                        </div>
+                                        
 
                                         <div className="text-lg">
                                             <p>{etape.updatedAt.getDate()}/{etape.updatedAt.getMonth()}/{etape.updatedAt.getFullYear()} at {etape.updatedAt.getHours()}:{etape.updatedAt.getMinutes()}</p>

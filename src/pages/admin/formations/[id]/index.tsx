@@ -30,6 +30,7 @@ export const getServerSideProps: GetServerSideProps<{
     formation: (Formation & {
         techs: Technologie[];
         lecons: LeconWithEtapes[];
+        Prerequis: Formation[]
     });
 }> = async function (context) {
     const session = await getSession(context)
@@ -54,7 +55,8 @@ export const getServerSideProps: GetServerSideProps<{
                 include: {
                     etapes: true
                 }
-            }
+            },
+            Prerequis: true
         }
     });
     if (!formation) {
@@ -70,6 +72,7 @@ export const getServerSideProps: GetServerSideProps<{
             formation: JSON.parse(JSON.stringify(formation)) as (Formation & {
                 techs: Technologie[];
                 lecons: LeconWithEtapes[];
+                Prerequis: Formation[]
             })
         }
     };
@@ -78,6 +81,8 @@ export const getServerSideProps: GetServerSideProps<{
 const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ formation }) => {
     const { data: sessionData } = useSession();
     const admin = sessionData?.user.admin
+
+    console.log(formation)
 
     const [tab, setTab] = useState("normal")
     const [content, setContent] = useState(formation.description);

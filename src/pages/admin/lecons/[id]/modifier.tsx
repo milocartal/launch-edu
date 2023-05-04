@@ -11,12 +11,9 @@ import { api } from "~/utils/api";
 import Header from "../../../components/header";
 import { prisma } from '~/server/db';
 import { Technologie, type Formation, Lecon, Etape, Prisma } from '@prisma/client';
-import { DifficultyText } from '../../../components/difficulties';
-import etapes from '../../../etapes/[id]';
 import { useState } from 'react';
 import { HiXMark } from 'react-icons/hi2';
 import dynamic from 'next/dynamic';
-import DiscordProvider from 'next-auth/providers/discord';
 
 const QuillNoSSRWrapper = dynamic(import('react-quill'), {
     ssr: false,
@@ -28,13 +25,21 @@ type LeconWithEtapes = Prisma.LeconGetPayload<{
 }>
 
 export const getServerSideProps: GetServerSideProps<{
-    formation: (Formation & {
-        techs: Technologie[];
-        lecons: LeconWithEtapes[];
-    });
+    lecon: LeconWithEtapes;
 }> = async function (context) {
+
     const session = await getSession(context)
     const admin = session?.user.admin
+
+    const lecon = await prisma.lecon.findUnique({
+        where: {
+            id: context.query.id as string
+        },
+        include: {
+            etapes: true
+        }
+    });
+    const idf = lecon?.idf;
 
     if (!session || !admin) {
         return {
@@ -44,45 +49,25 @@ export const getServerSideProps: GetServerSideProps<{
             },
         }
     }
+    else {
 
-    const formation = await prisma.formation.findUnique({
-        where: {
-            id: context.query.id as string
-        },
-        include: {
-            techs: true,
-            lecons: {
-                include: {
-                    etapes: true
-                }
-            }
-        }
-    });
-    if (!formation) {
         return {
-            redirect: {
-                destination: '/formation',
-                permanent: false,
-            },
-        }
+            props: {
+                lecon: JSON.parse(JSON.stringify(lecon)) as LeconWithEtapes
+            }
+        };
     }
-    return {
-        props: {
-            formation: JSON.parse(JSON.stringify(formation)) as (Formation & {
-                techs: Technologie[];
-                lecons: LeconWithEtapes[];
-            })
-        }
-    };
+
 };
 
-const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ formation }) => {
-    const idf = formation.id //id de la formation
+const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ lecon }) => {
+    const idf = lecon.idf //id de la formation
 
     //UseState
     const [tab, setTab] = useState("normal") //Pop up
     const [type, setType] = useState("texte") //Type de lecon (video ou texte)
     const [haveExo, setHave] = useState(false) //boolean qui regarde si on vaut faire un exercice
+    const [haveVid, setHaveVid] = useState(false) //boolean qui regarde si on vaut faire un exercice
 
     //Liste des urls
     const [vC, setVC] = useState(""); //video cours
@@ -104,9 +89,9 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
     const addLecon = api.lecon.create.useMutation()
     const find = api.lecon.getLast.useMutation()
     const addEtape = api.etape.create.useMutation()
-    const {data: Cours} = api.type.getIdType.useQuery({name:"Cours"})
-    const {data: Exercice} = api.type.getIdType.useQuery({name:"Exercice"})
-    const {data: Soluce} = api.type.getIdType.useQuery({name:"Solution"})
+    const { data: Cours } = api.type.getIdType.useQuery({ name: "Cours" })
+    const { data: Exercice } = api.type.getIdType.useQuery({ name: "Exercice" })
+    const { data: Soluce } = api.type.getIdType.useQuery({ name: "Solution" })
 
     //fonction de création
     async function handleCrea(event: React.SyntheticEvent) {
@@ -117,20 +102,20 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
         const title = target.leconTitle.value;
         await addLecon.mutateAsync({ title: title, idf: idf, description: description })
         const lec = await find.mutateAsync();
-        
-        if(lec && Cours && Exercice && Soluce){
-            await addEtape.mutateAsync({name:"Cours", idt:Cours.id, code: cC, video: vC, idl: lec.id})
-            if(haveExo){
-                await addEtape.mutateAsync({name:"Exercice", idt:Exercice.id, code: cE, video: vE, idl: lec.id})
-                await addEtape.mutateAsync({name:"Solution", idt:Soluce.id, code: cS, video: vS, idl: lec.id})
+
+        /*if (lec && Cours && Exercice && Soluce) {
+            await addEtape.mutateAsync({ name: "Cours", idt: Cours.id, code: cC, video: vC, idl: lec.id })
+            if (haveExo) {
+                await addEtape.mutateAsync({ name: "Exercice", idt: Exercice.id, code: cE, video: vE, idl: lec.id })
+                await addEtape.mutateAsync({ name: "Solution", idt: Soluce.id, code: cS, video: vS, idl: lec.id })
             }
-        }
+        }*/
     }
 
     return (
         <>
             <Head>
-                <title>Nouvelle leçon dans {formation.title}</title>
+                <title>Modifier {lecon.title} de </title>
                 <meta name="description" content="Generated by create-t3-app" />
                 <link rel="icon" href="/okto.png" />
             </Head>
@@ -140,14 +125,22 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                 <div className="flex flex-col gap-5 w-full h-full">
                     <div className="flex flex-row items-center justify-start px-10">
                         <Link href={`/admin/formations/${idf}`}><FaArrowLeft className="h-6 w-6 text-[#0E6073] mr-5" /></Link>
-                        <h1 className="text-3xl font-bold tracking-tight text-[#0E6073]">Nouvelle leçon dans <em>{formation.title}</em></h1>
+                        <h1 className="text-3xl font-bold tracking-tight text-[#0E6073]">Modifier <em>{lecon.title}</em></h1>
                     </div>
                     <form onSubmit={handleCrea} className='flex w-full justify-between h-full'>
                         <fieldset className='w-5/12 flex flex-col justify-between items-center'>
                             <fieldset className='w-full flex flex-col items-center w-full gap-5'>
-                                <input type='text' name="leconTitle" placeholder='Titre de la leçon' className="p-[1rem] rounded-lg bg-none shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)] w-full" autoComplete="off" />
-                                <QuillNoSSRWrapper placeholder='Description' className='h-[250px] w-full mb-2' onChange={setDesc} />
-                                <fieldset className="flex gap-5 w-full justify-center text-[#0E6073]">
+                                <input
+                                type='text'
+                                name="leconTitle"
+                                placeholder='Titre de la leçon'
+                                className="p-[1rem] rounded-lg bg-none shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)] w-full"
+                                autoComplete="off"
+                                defaultValue={lecon.title} />
+
+                                <QuillNoSSRWrapper placeholder='Description' className='h-[250px] w-full mb-2' onChange={setDesc} defaultValue={lecon.description}/>
+
+                                {/*<fieldset className="flex gap-5 w-full justify-center text-[#0E6073]">
                                     <div className="flex flex-col items-center gap-2">
                                         <label htmlFor="1" className="mt-8">Vidéo</label>
                                         <input type="radio" name="type" id="video" value="video" required className="shadow-none" onClick={(e) => { setType("video"); setScript('') }} />
@@ -158,24 +151,26 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                         <input type="radio" name="type" id="texte" value="texte" required className="shadow-none" onClick={(e) => { setType("texte"); setScript('') }} defaultChecked />
                                     </div>
 
-                                </fieldset>
-                                {type === "video" &&
-                                    <input
-                                        type='url'
-                                        name='urlVideoCour'
-                                        placeholder='Url de la vidéo du cours'
-                                        className="p-[1rem] rounded-lg bg-none shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)] w-full"
-                                        onChange={(e) => setVC(e.target.value)}
-                                        autoComplete="off" >
-                                    </input>}
+                                </fieldset>*/}
+                                
+                                <input
+                                    type='url'
+                                    name='urlVideoCour'
+                                    placeholder='Url de la vidéo du cours'
+                                    className="p-[1rem] rounded-lg bg-none shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)] w-full"
+                                    onChange={(e) => setVC(e.target.value)}
+                                    autoComplete="off"
+                                    defaultValue={lecon.etapes[0]?.video}>
+                                </input>
 
                                 <input
                                     type='url'
                                     name="urlCodeCour"
                                     placeholder='Url du code du cours'
-                                    className="p-[1rem] rounded-lg bg-none shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)] w-full"
+                                    className={"p-[1rem] rounded-lg bg-none shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)] w-full"}
                                     onChange={(e) => setCC(e.target.value)}
-                                    autoComplete="off" >
+                                    autoComplete="off"
+                                    defaultValue={lecon.etapes[0]?.code}>
                                 </input>
 
                             </fieldset>
@@ -183,14 +178,8 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                         </fieldset>
 
                         <fieldset className='w-5/12 flex flex-col justify-between items-center'>
-                            {type === "video" &&
 
-                                <QuillNoSSRWrapper placeholder='Transcript de la vidéo' className='w-full max-h-[350px] h-full mb-16' onChange={setScript} />}
-
-                            {type === "texte" &&
-
-                                <QuillNoSSRWrapper placeholder='Texte du cours' className='w-full max-h-[350px] h-full mb-16' onChange={setScript} />}
-
+                            <QuillNoSSRWrapper placeholder={type !== "video" ? 'TexteV' : 'Transcript'} className='w-full max-h-[350px] h-full mb-16' onChange={setScript} />
 
                             <div className='flex flex-col w-full gap-5'>
                                 <div className="flex items-center justify-center h-[5rem] w-full bg-[#2ea3a5] text-white hover:cursor-pointer transition hover:bg-[#0e6073] rounded-3xl" onClick={(e) => setTab("exo")}>+ Ajouter un exercice</div>
@@ -284,7 +273,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                             </div>
 
 
-                            <div className="rounded-full bg-[#0E6073] px-10 py-3 font-semibold text-white no-underline transition hover:bg-[#0E6073]/80 hover:cursor-pointer text-center" onClick={(e) => {setTab("normal"), setHave(true)}}><p>Valider l'exercice</p></div>
+                            <div className="rounded-full bg-[#0E6073] px-10 py-3 font-semibold text-white no-underline transition hover:bg-[#0E6073]/80 hover:cursor-pointer text-center" onClick={(e) => { setTab("normal"), setHave(true) }}><p>Valider l'exercice</p></div>
 
                         </form>
                     </div>}

@@ -29,3 +29,19 @@ async function handleLecon(event: React.SyntheticEvent) {
     const desc = target.description.value;
     await addLecon.mutateAsync({ title: title, idf: idf, description: desc })
 }
+
+https://tenor.com/view/lucifer-lucifer69-luciferauction-gif-21825542
+https://avatars.githubusercontent.com/u/105420069?v=4
+
+<div className='w-full flex flex-col'>
+                                <h1 className="text-xl font-bold tracking-tight text-[#0E6073] self-start mb-3">Prévisualisation</h1>
+                                {type === "video" &&
+                                    <iframe
+                                        src={`https://www.youtube.com/embed/${url.replace("https://www.youtube.com/watch?v=", "")}`}
+                                        title={`${formation.title}`}
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                        allowFullScreen
+                                        className='w-[504px] h-[284px]'>
+                                    </iframe>}
+                                {type === "texte" && <div className="text-sm font-Inter dark:text-[#2EA3A5]" dangerouslySetInnerHTML={{ __html: txtCours }} />}
+                            </div>

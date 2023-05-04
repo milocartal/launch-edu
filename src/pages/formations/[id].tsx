@@ -79,7 +79,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                 <div className="container flex flex-col items-start justify-start gap-12 px-4 py-20">
                     <div className="flex flex-row items-center justify-between px-10 w-9/12">
                         <div className="flex flex-row items-center justify-start">
-                            <button className="mr-5"><Link href={`/formation`}><FaArrowLeft className="h-6 w-6 text-[#0E6073]" /></Link></button>
+                            <button className="mr-5"><Link href={`/formations`}><FaArrowLeft className="h-6 w-6 text-[#0E6073]" /></Link></button>
                             <h1 className="text-3xl font-bold tracking-tight text-[#0E6073]">{formation.title}</h1>
                         </div>
                     </div>

@@ -78,7 +78,7 @@ const user: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                         <div className="bg-[#e6e6e6] flex flex-row justify-center items-center mb-4 w-96 h-40 px-6 w-8/12 rounded-xl">
                             <button className="bg-[#0E6073] w-32 h-32 rounded-full flex justify-center items-center mr-5 text-transparent hover:text-[#fff]">
                                 <FaPenAlt className="absolute h-9 w-9 text-inherit"/>
-                                {sessionData && sessionData.user?.image && <img src={sessionData.user.image} className="w-32 h-32 rounded-full hover:opacity-30"></img>}
+                                {sessionData && sessionData.user?.image && <img src={sessionData.user.image} className="w-32 h-32 rounded-full object-cover hover:opacity-30"></img>}
                                 
                             </button>
                             <div>

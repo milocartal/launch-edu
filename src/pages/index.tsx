@@ -88,7 +88,7 @@ const Home: NextPage = () => {
             {last4 as Formation[] && last4 && last4.length > 0 && last4.map((forma) => {
               if (!forma.hidden || (forma.hidden && admin)) {
                 return (
-                  <Link href={`/components/formations/${forma.id}`} className="flex flex-col items-center bg-white/20 rounded-3xl shadow-lg w-full h-96 mx-2 relative transition hover:scale-[1.05]" key={forma.id}>
+                  <Link href={`/formations/${forma.id}`} className="flex flex-col items-center bg-white/20 rounded-3xl shadow-lg w-full h-96 mx-2 relative transition hover:scale-[1.05]" key={forma.id}>
                     <div className="absolute -top-20 flex items-end justify-end w-[170px] h-[150px]">
                       {forma.techs[0] && forma.techs[0].logo && <img src={forma.techs[0].logo} alt="" />}
                     </div>
