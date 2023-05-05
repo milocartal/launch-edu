@@ -45,6 +45,18 @@ export const leconRouter = createTRPCRouter({
         return prisma.lecon.delete({ where: { id: input.id } })
     }),
 
+    update: protectedProcedure.input(z.object({ id: z.string(), title: z.string(), description: z.string()})).mutation(({ input }) => {
+        return prisma.lecon.update({
+            where: {
+                id: input.id
+            },
+            data: {
+                title: input.title,
+                description: input.description,
+            }
+        })
+    }),
+
     setHidden: protectedProcedure.input(z.object({ id: z.string() })).mutation(({ input }) => {
         return prisma.lecon.update({
             where: {

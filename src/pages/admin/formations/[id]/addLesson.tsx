@@ -165,7 +165,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                         name='urlVideoCour'
                                         placeholder='Url de la vidéo du cours'
                                         className="p-[1rem] rounded-lg bg-none shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)] w-full"
-                                        onChange={(e) => setVC(e.target.value)}
+                                        onChange={(e) => setVC(e.target.value.replace("https://www.youtube.com/watch?v=","https://www.youtube.com/embed/"))}
                                         autoComplete="off" >
                                     </input>}
 

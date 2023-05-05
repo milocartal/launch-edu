@@ -50,6 +50,7 @@ const Admin: NextPage = () => {
     const [hidden, setHide] = useState(true);
     const [tab, setTab] = useState("normal")
     const [selectedTech, setSelectTech] = useState<string>()
+    const [urlLogo, setLogo] = useState("")
 
     const { data: sessionData } = useSession();
 
@@ -80,7 +81,7 @@ const Admin: NextPage = () => {
     }
 
     async function handleFormation(event: React.SyntheticEvent) {
-        event.preventDefault()
+        //event.preventDefault()
         const target = event.target as typeof event.target & {
             formTitle: { value: string };
             description: { value: string };
@@ -120,7 +121,7 @@ const Admin: NextPage = () => {
                     <form onSubmit={handleFormation} className="flex justify-center gap-[15%] item-center w-full h-full text-[#041f25] dark:text-white" method="POST">
                         <fieldset className="flex flex-col max-h-[70%] w-[40%]">
                             <div className="flex gap-4 w-[100%] mb-10">
-                                <Link href="/admin/main"><HiArrowSmLeft className="text-[3rem] text-[#0e6073]" /></Link>
+                                <Link href="/admin"><HiArrowSmLeft className="text-[3rem] text-[#0e6073]" /></Link>
                                 <h1 className="text-5xl font-extrabold tracking-tight  sm:text-[2.5rem] text-[#0e6073]">Créer une formation</h1>
                             </div>
                             <p className="mb-3">Choisir une thématique:</p>
@@ -128,18 +129,18 @@ const Admin: NextPage = () => {
                                 <fieldset className="flex flex-col w-full rounded-t-lg" id="listTech">
                                     {techList as Technologie[] && techList && techList.length > 0 && techList.map((techno) => {
                                         return (
-                                            <label className={`container flex items-center justify-between p-5 ${selectedTech === techno.id ? 'bg-[#0e6073] text-white' : ''}`} key={techno.id}>
+                                            <label className={`container flex items-center justify-between p-5 ${selectedTech === techno.id ? 'bg-[#0e6073] text-white' : 'hover:bg-[#0e6073]/10'}`} key={techno.id}>
                                                 <p className="">{techno.name}</p>
                                                 <div className="flex gap-4">
                                                     <input type="radio" name="techno" value={techno.id} onChange={(e) => setSelectTech(e.target.value)} required className="mt-[7px]" />
-                                                    <button
+                                                    <div
                                                         onClick={() => {
                                                             deltech.mutateAsync({ id: techno.id });
                                                             window.location.reload()
                                                         }}
-                                                        className="rounded-full font-semibold text-red-600 no-underline">
+                                                        className="rounded-full font-semibold text-red-600 no-underline hover:cursor-pointer">
                                                         <HiXMark className="text-[1.5rem] text-black hover:text-red-500" />
-                                                    </button>
+                                                    </div>
                                                 </div>
 
                                             </label>
@@ -185,24 +186,28 @@ const Admin: NextPage = () => {
 
                     </form>
 
-                    {tab === "tech" &&
-                        <div className="fixed w-full h-full bg-[#0E6073]/90 top-0 right-0 left-0 bottom-0 flex justify-center items-center">
-                            <form onSubmit={handlerAddTech} className="relative flex flex-col gap-5 item-center justify-start bg-white rounded-xl p-16 w-[30%]" method="POST">
-                                <button onClick={normal} className="absolute top-3 right-4 rounded-full font-semibold  no-underline transition hover:text-red-500">
-                                    <HiXMark className="text-[2rem] text-[#0e6073] hover:text-red-500" />
-                                </button>
-                                <h1 className="text-xl font-extrabold tracking-tight text-[#0e6073] "><label htmlFor="techName">Nouvelle thématique</label></h1>
-                                <input name="techName" id="techName" type="text" placeholder="Nom de la technologie" required className="inputAddForm" autoComplete="off"></input>
-                                <input name="logoTech" id="logoTech" type="url" placeholder="URL du Logo" required className="inputAddForm" autoComplete="off"></input>
-                                <button className="rounded-full bg-[#0E6073] text-white px-10 py-3 font-semibold  no-underline transition hover:bg-[#0E6073]/20" type="submit">Ajouter</button>
-
-                            </form>
-                        </div>}
+                    
 
 
                 </div>
 
             <Header selected={3}/>
+
+            {tab === "tech" &&
+                        <div className="fixed w-full h-full bg-[#0E6073]/90 top-0 right-0 left-0 bottom-0 flex justify-center items-center">
+                            <form onSubmit={handlerAddTech} className="relative flex flex-col gap-5 justify-center items-center bg-white rounded-xl p-16 w-[30%]" method="POST">
+                                <div onClick={()=> {setTab("normal"); setLogo("")}} className="absolute top-3 right-4 rounded-full font-semibold  no-underline transition hover:text-red-500 hover:cursor-pointer">
+                                    <HiXMark className="text-[2rem] text-[#0e6073] hover:text-red-500" />
+                                </div>
+                                <h1 className="text-xl font-extrabold tracking-tight text-[#0e6073] w-full"><label htmlFor="techName">Nouvelle thématique</label></h1>
+                                <input name="techName" id="techName" type="text" placeholder="Nom de la technologie" required className="inputAddForm w-full" autoComplete="off"></input>
+                                <input name="logoTech" id="logoTech" type="url" placeholder="URL du Logo" required className="inputAddForm w-full" autoComplete="off" onChange={(e)=>setLogo(e.target.value)}></input>
+                                {urlLogo !== "" && urlLogo.length > 8 ? <img src={urlLogo} className="max-w-[6rem] max-h-[6rem] min-x-[0px] min-h-[0px]"/>:<></>}
+                                <button className="rounded-full bg-[#0E6073] text-white px-10 py-3 font-semibold w-full no-underline transition hover:bg-[#0E6073]/20" type="submit">Ajouter</button>
+                                
+
+                            </form>
+                        </div>}
 
             </main> : <img src="https://media.discordapp.net/attachments/688793736620146689/915869475423813662/20210709_215217.gif" alt="Pas Admnin, Ratio"></img>
 

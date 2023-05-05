@@ -30,4 +30,17 @@ export const etapeRouter = createTRPCRouter({
         return prisma.etape.delete({ where: { id: input.id } })
     }),
 
+    update: protectedProcedure.input(z.object({ id: z.string(), code: z.string(), video: z.string(), transcript: z.string() })).mutation(({ input }) => {
+        return prisma.etape.update({
+            where:{
+                id: input.id
+            },
+            data: {
+                transcript: input.transcript,
+                code: input.code,
+                video: input.video,
+            }
+        })
+    }),
+
 });

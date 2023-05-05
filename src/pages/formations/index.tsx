@@ -83,8 +83,8 @@ const Home: NextPage = () => {
                     href={`/formations/${encodeURIComponent(forma.id)}`}
                     key={forma.id}
                   >
-                    <div className="absolute -top-11 flex items-end justify-end w-[100px] h-[100px]">
-                      {forma.techs[0] && forma.techs[0].logo && <img src={forma.techs[0].logo} alt="" />}
+                    <div className="absolute -top-11 flex items-end justify-center w-[100px] h-[100px]">
+                      {forma.techs[0] && forma.techs[0].logo && <img src={forma.techs[0].logo} alt="" className="max-h-[7rem]"/>}
                     </div>
                     <h3 className="text-md font-bold mt-12 text-center">{forma.title}</h3>
 

@@ -30,7 +30,7 @@ async function handleLecon(event: React.SyntheticEvent) {
     await addLecon.mutateAsync({ title: title, idf: idf, description: desc })
 }
 
-https://tenor.com/view/lucifer-lucifer69-luciferauction-gif-21825542
+https://media.tenor.com/ZMMvXoBe8GwAAAAC/lucifer-lucifer69.gif
 https://avatars.githubusercontent.com/u/105420069?v=4
 
 <div className='w-full flex flex-col'>

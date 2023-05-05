@@ -55,7 +55,7 @@ const Home: NextPage = () => {
         <div className="flex flex-row items-start justify-between w-full px-16 z-10 mt-10">
           <Link href={"/"}><Image src="/okto.png" alt="Logo Oktopod" width="64" height="64" /></Link>
           <div className="flex flex-row justify-around items-center gap-1">
-            {admin && <Link href="/admin/main" className="text-white"><RiAdminLine className="text-white text-[2rem]" /></Link>}
+            {admin && <Link href="/admin" className="text-white hover:cursor-pointer"><RiAdminLine className="text-white text-[2rem]" /></Link>}
 
             {user && <Link href={"/dashboard"} className=" px-3 py-3 text-white font-semibold font-Inter rounded-full hover:bg-white/10">MON ESPACE</Link>}
             <button
@@ -123,8 +123,8 @@ const Home: NextPage = () => {
             }).map((tech) => {
               return (
                 <Link href={`/technologies/${tech.id}`} className="flex flex-col items-center bg-white/20 rounded-3xl shadow-lg w-full mx-2 relative transition hover:scale-[1.05]" key={tech.id}>
-                  <div className="absolute -top-20 flex items-end justify-end w-[170px] h-[150px]">
-                    {tech.logo && <img src={tech.logo} alt="" />}
+                  <div className="absolute -top-20 flex items-end justify-center w-[170px] h-[150px]">
+                    {tech.logo && <img src={tech.logo} alt="" className="max-h-[11rem]"/>}
                   </div>
                   <div className="w-full px-4 flex flex-col items-center mt-20">
                     <h3 className="text-3xl mb-3 text-cyan-700 text-[#0E6073] dark:text-[#63AEAB]">{tech.name}</h3>

@@ -123,7 +123,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                 <section className='w-6/12 h-full flex flex-col justify-between items-center'>
                     <div className="flex flex-col gap-5 w-full">
                         <div className="flex flex-row items-center justify-start">
-                            <Link href="/admin/main"><FaArrowLeft className="h-6 w-6 text-[#0E6073] mr-5" /></Link>
+                            <Link href="/admin"><FaArrowLeft className="h-6 w-6 text-[#0E6073] mr-5" /></Link>
                             <h1 className="text-3xl font-bold tracking-tight text-[#0E6073]">{formation.title}</h1>
                         </div>
                         <div className="flex flex-col items-center w-full">

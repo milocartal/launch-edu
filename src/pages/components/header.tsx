@@ -26,8 +26,8 @@ function Header (props:{selected: number}) {
                     }
                     
                     {admin && props.selected === 3 ?
-                            <Link href={`/admin/main`}><button className="px-10 h-full font-semibold border-[#0E6073] border-b-4 text-[#0E6073]" autoFocus>Gérez les cours</button></Link>: admin ?
-                            <Link href={`/admin/main`}><button className="px-10 h-full font-semibold border-[#0E6073] transition hover:border-b-4 hover:text-[#0E6073]" autoFocus>Gérez les cours</button></Link>:<></>}
+                            <Link href={`/admin`}><button className="px-10 h-full font-semibold border-[#0E6073] border-b-4 text-[#0E6073]" autoFocus>Gérez les cours</button></Link>: admin ?
+                            <Link href={`/admin`}><button className="px-10 h-full font-semibold border-[#0E6073] transition hover:border-b-4 hover:text-[#0E6073]" autoFocus>Gérez les cours</button></Link>:<></>}
                 </div>
                 <div className="flex justify-center items-center gap-5 mb-1">
                     <div className="bg-white flex flex-row justify-start items-center width w-96 h-12 px-8 rounded-full shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)]">
