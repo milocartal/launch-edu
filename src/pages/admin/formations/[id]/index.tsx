@@ -85,37 +85,10 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
 
     console.log(formation)
 
-    const [tab, setTab] = useState("normal")
-    const [content, setContent] = useState(formation.description);
-
-    const [dif, setdif]= useState(() => {
-
-    })
-
-
-    const idf = formation.id
-    const updateFormation = api.formation.update.useMutation()
     const delFormation = api.formation.delete.useMutation()
 
-    const addLecon = api.lecon.create.useMutation()
     const delLecon = api.lecon.delete.useMutation()
-    const { data: lecons } = api.lecon.getAll.useQuery({ id: idf })
 
-    const { data: techList } = api.technologie.getAll.useQuery()
-
-    async function handleFormation(event: React.SyntheticEvent) {
-        //event.preventDefault()
-        const target = event.target as typeof event.target & {
-            formTitle: { value: string };
-            description: { value: string };
-            difficulte: { value: string };
-        };
-        const title = target.formTitle.value;
-        const diff: number = +target.difficulte.value;
-
-
-        await updateFormation.mutateAsync({ id: formation.id, title: title, description: content, difficulte: diff })
-    }
 
     return (
         <>
@@ -216,38 +189,6 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
 
                 <Header selected={3} />
 
-                {tab === "modif" &&
-                    <div className="fixed w-full h-full bg-[#0E6073]/90 top-0 right-0 left-0 bottom-0 flex justify-center items-center">
-                        <form onSubmit={handleFormation} className="relative flex flex-col gap-5 item-center justify-start bg-white rounded-xl p-16 w-1/2" method="POST">
-                            <button onClick={(e) => setTab("normal")} className="absolute top-3 right-4 rounded-full font-semibold  no-underline transition hover:text-red-500">
-                                <HiXMark className="text-[2rem] text-[#0e6073] hover:text-red-500" />
-                            </button>
-
-                            <input name="formTitle" id="formTitle" type="text" placeholder="Titre de la formation" required className="inputAddForm" autoComplete="off" defaultValue={formation.title} />
-
-                            <QuillNoSSRWrapper theme="snow" onChange={setContent} placeholder="Description" className="h-[30%] shadow-xl" defaultValue={formation.description} />
-                            <fieldset className="mt-8 flex gap-5 w-full justify-center">
-                                <legend>Difficulté:</legend>
-                                <div className="flex flex-col items-center gap-2">
-                                    <label htmlFor="1" className="mt-8">Débutant</label>
-                                    <input type="radio" name="difficulte" id="1" value="1" required className="shadow-none" />
-                                </div>
-
-                                <div className="flex flex-col items-center gap-2">
-                                    <label htmlFor="2" className="mt-8">Intermédiaire</label>
-                                    <input type="radio" name="difficulte" id="2" value="2" required className="shadow-none" />
-                                </div>
-
-                                <div className="flex flex-col items-center gap-2">
-                                    <label htmlFor="3" className="mt-8">Avancé</label>
-                                    <input type="radio" name="difficulte" id="3" value="3" required className="shadow-none" />
-                                </div>
-                            </fieldset>
-
-                            <button className="rounded-full bg-[#0E6073] px-10 py-3 font-semibold text-white no-underline transition hover:bg-[#0E6073]/80" type="submit" value="submit">Sauvegarder les changements</button>
-
-                        </form>
-                    </div>}
             </main>
         </>
     );
