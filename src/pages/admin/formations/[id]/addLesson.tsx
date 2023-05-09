@@ -17,6 +17,7 @@ import { useState } from 'react';
 import { HiXMark } from 'react-icons/hi2';
 import dynamic from 'next/dynamic';
 import DiscordProvider from 'next-auth/providers/discord';
+import Title from '~/pages/components/title';
 
 const QuillNoSSRWrapper = dynamic(import('react-quill'), {
     ssr: false,
@@ -135,13 +136,10 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                 <link rel="icon" href="/okto.png" />
             </Head>
 
-            <main className="flex min-h-screen h-screen bg-white pl-24 pt-20 pb-10 pr-10 w-full justify-between">
+            <main className="flex min-h-screen h-screen bg-white pl-28 pt-20 pb-10 pr-10 w-full justify-between">
 
                 <div className="flex flex-col gap-5 w-full h-full">
-                    <div className="flex flex-row items-center justify-start px-10">
-                        <Link href={`/admin/formations/${idf}`}><FaArrowLeft className="h-6 w-6 text-[#0E6073] mr-5" /></Link>
-                        <h1 className="text-3xl font-bold tracking-tight text-[#0E6073]">Nouvelle leçon dans <em>{formation.title}</em></h1>
-                    </div>
+                    <Title title={'Nouvelle leçon dans ' + formation.title} link={`/admin/formations/${idf}`} />
                     <form onSubmit={handleCrea} className='flex w-full justify-between h-full'>
                         <fieldset className='w-5/12 flex flex-col justify-between items-center'>
                             <fieldset className='w-full flex flex-col items-center w-full gap-5'>

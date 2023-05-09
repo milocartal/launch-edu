@@ -12,6 +12,7 @@ import { prisma } from '~/server/db';
 import { Etape, EtapeType, Lecon, Formation } from '@prisma/client';
 import Header from '~/pages/components/header';
 import Openable from '~/pages/components/openable';
+import Title from '~/pages/components/title';
 
 export const getServerSideProps: GetServerSideProps<{
     lecon: Lecon;
@@ -77,16 +78,11 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                 <link rel="icon" href="/okto.png" />
             </Head>
 
-            <main className="flex min-h-screen flex-col items-center bg-white">
+            <main className="flex min-h-screen bg-white flex flex-col justify-between pb-20">
 
-                <div className="container flex flex-col items-start justify-start gap-12 px-4 py-20">
-                    <div className="flex flex-row items-center justify-between px-10 w-7/12">
-                        <div className="flex flex-row items-center justify-start">
-                            <button className="mr-5"><Link href={`/formations/${encodeURIComponent(lecon.idf)}`}><FaArrowLeft className="h-6 w-6 text-[#0E6073]" /></Link></button>
-                            <h1 className="text-3xl font-bold tracking-tight text-[#0E6073]">{lecon.title} de {formation.title}</h1>
-                        </div>
-                    </div>
-                    <div className="flex flex-col items-center pr-10 w-7/12">
+                <div className="flex flex-col items-start justify-start pl-28 pt-20 pr-6 w-12/12">
+                    <Title title={lecon.title + " de " + formation.title} link={`/formations/${encodeURIComponent(lecon.idf)}`} />
+                    <div className="flex flex-col items-center pr-10 w-7/12 mt-6">
                             <div className="flex flex-row items-center justify-between w-full">
                                 <h3 className="text-xl font-bold tracking-tight text-[#0E6073]">Description</h3>
                                 <div className="flex flex-row ">

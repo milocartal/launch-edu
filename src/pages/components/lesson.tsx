@@ -13,7 +13,7 @@ const Lesson: React.FC<Props> = ({data}) => {
             href={`/formations/${encodeURIComponent(data.id)}`}
             key={data.id}
             >
-                {data.techs  ?
+                {data.techs ?
                     <>
                         <div className="absolute -top-11 flex items-end justify-end w-[100px] h-[100px]">
                             <img src={data.techs[0].logo} alt="" />

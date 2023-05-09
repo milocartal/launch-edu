@@ -79,9 +79,8 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                 <link rel="icon" href="/okto.png" />
             </Head>
 
-            <main className="flex min-h-screen flex-col items-center bg-white">
-
-                <div className="container flex flex-col items-start justify-start gap-12 px-4 py-20">
+            <main className="flex min-h-screen bg-white flex flex-col items-start pb-20">
+                <div className="flex flex-col items-start justify-start gap-12 pl-28 pt-20 pr-6 w-9/12">
                     <Title title={formation.title} link='formations'/>
 
                     <div className="flex flex-col items-center pr-10 w-9/12">

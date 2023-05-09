@@ -17,6 +17,7 @@ import { useState } from 'react';
 import { HiXMark } from 'react-icons/hi2';
 import dynamic from 'next/dynamic';
 import Openable from '~/pages/components/openable';
+import Title from '~/pages/components/title';
 
 const QuillNoSSRWrapper = dynamic(import('react-quill'), {
     ssr: false,
@@ -119,14 +120,11 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                 <link rel="icon" href="/okto.png" />
             </Head>
 
-            <main className="flex min-h-screen h-screen bg-white pl-24 pt-20 pb-10 w-full justify-between">
+            <main className="flex min-h-screen h-screen bg-white pl-28 pt-20 pb-10 w-full justify-between">
 
                 <section className='w-6/12 h-full flex flex-col justify-between items-center'>
                     <div className="flex flex-col gap-5 w-full">
-                        <div className="flex flex-row items-center justify-start">
-                            <Link href="/admin/main"><FaArrowLeft className="h-6 w-6 text-[#0E6073] mr-5" /></Link>
-                            <h1 className="text-3xl font-bold tracking-tight text-[#0E6073]">{formation.title}</h1>
-                        </div>
+                        <Title title={formation.title} link={'/admin/main'} />
                         <div className="flex flex-col items-center w-full">
                             <div className="flex flex-row items-center justify-between w-full">
                                 <h1 className="text-xl font-bold tracking-tight text-[#0E6073]">Description</h1>
@@ -171,7 +169,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                             })}
                         </div>
                         <Link href={`/admin/formations/${formation.id}/addLesson`} className="flex items-center justify-center min-h-20 w-full bg-[#2ea3a5] text-white hover:cursor-pointer transition hover:bg-[#0e6073] rounded-b-lg p-5">
-                            + Ajouter une lecon
+                            + Ajouter une leçon
                         </Link>
                 </aside>
 

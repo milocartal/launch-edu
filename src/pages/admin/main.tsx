@@ -15,6 +15,7 @@ import { MouseEventHandler, useState } from "react";
 import { HiXMark } from "react-icons/hi2"
 import { HiMagnifyingGlass } from "react-icons/hi2";
 import { BiUserCircle } from "react-icons/bi"
+import Title from "../components/title";
 
 const QuillNoSSRWrapper = dynamic(import('react-quill'), {
     ssr: false,
@@ -65,11 +66,12 @@ const Admin: NextPage = () => {
             {admin ?
 
                 <main className="flex min-h-screen bg-white justify-between dark:bg-[#041F25]">
-                    <div className="flex flex-col items-center justify-between gap-2 min-h-screen pt-16 right-0 bg-[#0E6073] fixed m-w-xs p-2 w-[28rem]">
+                    <div className="w-3/12 bg-[#0E6073] fixed right-0 flex flex-col items-start justify-start h-full pt-24 px-10">
                         <Link href="/admin/addFormation"><button>Créer une formation</button></Link>
                     </div>
 
-                    <div className="flex w-full max-h-screen flex-col items-center ml-[6rem] mt-[6rem] mr-[30rem]">
+                    <div className="flex flex-col items-start justify-start gap-12 pl-28 pt-20 pr-6 w-9/12">
+                        <Title title={"Gérez vos cours"} link={""} />
                         <div className="flex flex-col w-full">
                             {formations as Formation[] && formations && formations.length > 0 && formations.map((forma) => {
                                 let hide: string;
