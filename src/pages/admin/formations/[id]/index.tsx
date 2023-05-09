@@ -16,6 +16,7 @@ import etapes from '../../../etapes/[id]';
 import { useState } from 'react';
 import { HiXMark } from 'react-icons/hi2';
 import dynamic from 'next/dynamic';
+import Openable from '~/pages/components/openable';
 
 const QuillNoSSRWrapper = dynamic(import('react-quill'), {
     ssr: false,
@@ -82,7 +83,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
     const { data: sessionData } = useSession();
     const admin = sessionData?.user.admin
 
-    console.log(formation)
+    const [selected, setSelected] = useState(1)
 
     const [tab, setTab] = useState("normal")
     const [content, setContent] = useState(formation.description);
@@ -160,30 +161,18 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                 </section>
 
 
-                <aside className="w-5/12 right-0 flex flex-col items-center justify-start h-5/6 pt-10 mr-5">
+                <aside className="w-5/12 right-0 flex flex-col items-center justify-start h-full pt-10 mr-5 px-5">
                     <h1 className="text-xl font-bold tracking-tight text-[#0E6073] self-start mb-3">Leçon(s) dans la formation</h1>
-                    <div className="flex flex-col max-h-full w-11/12 shadow-xl shadow-black/30 rounded-lg">
-                        <div className="flex flex-col w-full rounded-t-lg" id="listTech">
+                        <div className="w-full h-5/12 overflow-auto scroll-smooth">
                             {formation.lecons as Lecon[] && formation.lecons.length > 0 && formation.lecons.map((lecon) => {
                                 return (
-                                    <Link href={`/admin/lecons/${lecon.id}`} className="w-full flex flex-row justify-between px-24 py-6 bg-white shadow-md mt-1 transition hover:bg-[#0E6070]/20" key={lecon.id}>
-                                        <p className="text-base font-bold tracking-tight text-[#0E6073] self-start">{lecon.title}</p>
-                                        <p className="ml-2 text-sm font-Inter text-[#989898]">{lecon.etapes.length} étape(s)</p>
-                                        <button
-                                            onClick={() => {
-                                                delLecon.mutateAsync({ id: lecon.id });
-                                                window.location.reload()
-                                            }}
-                                            className="rounded-full font-semibold text-red-600 no-underline">
-                                            <HiXMark className="text-[1.5rem] text-black hover:text-red-500" />
-                                        </button>
-                                    </Link>)
+                                    <Openable data={lecon} setSelected={() => setSelected(lecon.id)} selected={selected} key={lecon.id} nav={"/admin/lecons/"+lecon.id}/>
+                                    )
                             })}
                         </div>
-                        <Link href={`/admin/formations/${formation.id}/addLesson`} className="flex items-center justify-center h-[5rem] w-full bg-[#2ea3a5] text-white hover:cursor-pointer transition hover:bg-[#0e6073] rounded-b-lg">
+                        <Link href={`/admin/formations/${formation.id}/addLesson`} className="flex items-center justify-center min-h-20 w-full bg-[#2ea3a5] text-white hover:cursor-pointer transition hover:bg-[#0e6073] rounded-b-lg p-5">
                             + Ajouter une lecon
                         </Link>
-                    </div>
                 </aside>
 
                 <Header selected={3} />

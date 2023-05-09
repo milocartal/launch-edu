@@ -11,6 +11,7 @@ import { api } from "~/utils/api";
 import { prisma } from '~/server/db';
 import { Etape, EtapeType, Lecon, Formation } from '@prisma/client';
 import Header from '~/pages/components/header';
+import Openable from '~/pages/components/openable';
 
 export const getServerSideProps: GetServerSideProps<{
     lecon: Lecon;
@@ -114,14 +115,8 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                     </div>
                 </div>
                 <div className="w-5/12 fixed right-0 flex flex-col items-center justify-between h-5/6 pt-10 mr-5">
-
-                    <div className="bg-white mt-24 w-4/6 h-52 flex flex-col justify-start shadow-[4px_10px_20px_1px_rgba(0,0,0,0.25)]">
-                        <div className="bg-white w-full h-2/6 mb-4 flex flex-row items-center justify-start px-16 shadow-[4px_10px_20px_1px_rgba(0,0,0,0.25)]">
-                            <p className="font-semibold text-[#0E6073]">{lecon.title}</p>
-                        </div>
-                        <p className="px-20 mt-2 font-semibold text-[#0E6073]">Cours</p>
-                        <p className="px-20 mt-2 font-semibold text-[#0E6073]">Exercice</p>
-                        <p className="px-20 mt-2 font-semibold text-[#0E6073]">Solution</p>
+                    <div className="w-4/6 mt-16">
+                        <Openable data={lecon} setSelected={undefined} selected={lecon.id} nav={''} />
                     </div>
                     <button className="text-white w-4/6 bg-[#0E6073] h-14 rounded-full hover:bg-[#0a4654]">
                         Modifier la leçon

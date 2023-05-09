@@ -12,6 +12,9 @@ import Header from "../components/header";
 import { prisma } from '~/server/db';
 import { Technologie, type Formation, Lecon } from '@prisma/client';
 import { DifficultyText } from '../components/difficulties';
+import Title from '../components/title';
+import Openable from '../components/openable';
+import { useState } from 'react';
 
 export const getServerSideProps: GetServerSideProps<{
     formation: (Formation & {
@@ -50,6 +53,8 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
     const { data: sessionData } = useSession();
     const admin = sessionData?.user.admin
 
+    const [selected, setSelected] = useState(1)
+
     const idf = formation.id
     const addLecon = api.lecon.create.useMutation()
     const { data: lecons } = api.lecon.getAll.useQuery({ id: idf })
@@ -77,12 +82,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
             <main className="flex min-h-screen flex-col items-center bg-white">
 
                 <div className="container flex flex-col items-start justify-start gap-12 px-4 py-20">
-                    <div className="flex flex-row items-center justify-between px-10 w-9/12">
-                        <div className="flex flex-row items-center justify-start">
-                            <button className="mr-5"><Link href={`/formations`}><FaArrowLeft className="h-6 w-6 text-[#0E6073]" /></Link></button>
-                            <h1 className="text-3xl font-bold tracking-tight text-[#0E6073]">{formation.title}</h1>
-                        </div>
-                    </div>
+                    <Title title={formation.title} link='formations'/>
 
                     <div className="flex flex-col items-center pr-10 w-9/12">
                         <div className="flex flex-row items-center justify-between w-full">
@@ -107,12 +107,8 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                         <div className="w-10/12 shadow-lg">
                             {formation.lecons as Lecon[] && formation.lecons.length > 0 && formation.lecons.map((lecon) => {
                                 return (
-                                    <Link href={`/lecons/${lecon.id}`} className="w-full flex flex-row justify-between px-24 py-6 bg-white shadow-md mt-1 transition hover:bg-[#0E6070]/20">
-                                        <p className="text-base font-bold tracking-tight text-[#0E6073] self-start">{lecon.title}</p>
-                                        <button>
-                                            <FaPlay className="h-6 w-6 text-[#0E6073]" />
-                                        </button>
-                                    </Link>)
+                                    <Openable data={lecon} setSelected={() => setSelected(lecon.id)} selected={selected} key={lecon.id} nav={"/admin/lecons/" + lecon.id} description={lecon.description} />
+                                )
                             })}
                         </div>
 
