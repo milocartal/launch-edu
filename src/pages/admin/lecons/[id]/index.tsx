@@ -45,6 +45,15 @@ export const getServerSideProps: GetServerSideProps<{
         }
     });
 
+    if (!lecon) {
+        return {
+            redirect: {
+                destination: '/admin/formations'+idf,
+                permanent: false,
+            },
+        }
+    }
+
     if (!session || !admin) {
         return {
             redirect: {
@@ -71,6 +80,7 @@ const Lecons: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
     const idf = lecon.idf
     const addEtape = api.etape.create.useMutation()
     const { data: etapes } = api.etape.getAll.useQuery({ id: idL })
+    const delLecon = api.lecon.delete.useMutation()
 
     console.log("api ", etapes)
     console.log("props ", lecon.etapes)
@@ -109,7 +119,7 @@ const Lecons: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                         </div>
                         <div className="text-sm font-Inter text-[#222222] self-start mt-3" dangerouslySetInnerHTML={{ __html: lecon.description }} />
                         <div className="self-end flex flex-row items-center justify-end w-8/12">
-                            {lecon.etapes && lecon.etapes.length > 0 && lecon.etapes[0] && lecon.etapes[0].video !== "" ? <Link href={`${lecon.etapes[0].video.replace("embed/","watch?v=")}`} target="_blank" className="text-white flex items-center justify-center w-8/12 bg-[#0E6073] h-14 rounded-full my-3 self-end ml-2 hover:bg-[#0a4654]">
+                            {lecon.etapes && lecon.etapes.length > 0 && lecon.etapes[0] && lecon.etapes[0].video !== "" ? <Link href={`${lecon.etapes[0].video.replace("embed/", "watch?v=")}`} target="_blank" className="text-white flex items-center justify-center w-8/12 bg-[#0E6073] h-14 rounded-full my-3 self-end ml-2 hover:bg-[#0a4654]">
                                 Voir la vidéo du cours
                             </Link> : <></>}
                             <Link href={`${lecon.etapes[0]?.code}`} target="_blank" className="text-white w-3/12 bg-[#2EA3A5] flex flex-row items-center justify-center h-14 rounded-full my-3 ml-2 self-end hover:bg-[#248082] hover:cursor-pointer">
@@ -134,9 +144,15 @@ const Lecons: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                             )
                         })}
                     </div>
-                    <Link href={`/admin/lecons/${lecon.id}/modifier`} className="flex justify-center items-center text-white w-4/6 bg-[#0E6073] h-14 rounded-full hover:bg-[#0a4654]">
-                        Modifier la leçon
-                    </Link>
+                    <div className='flex flex-col gap-4 w-4/6'>
+                        <Link href={`/admin/lecons/${lecon.id}/modifier`} className="flex justify-center items-center text-white w-full bg-[#0E6073] h-14 rounded-full hover:bg-[#0a4654]">
+                            Modifier la leçon
+                        </Link>
+                        <button onClick={(e) => {delLecon.mutateAsync({ id: lecon.id }); window.location.reload()}} className="flex justify-center items-center text-white w-full bg-[#920000] h-14 rounded-full hover:bg-[#6e0000]">
+                            Supprimer la leçon
+                        </button>
+                    </div>
+
 
                 </div>
             </main>

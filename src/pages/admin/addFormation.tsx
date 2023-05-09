@@ -60,14 +60,7 @@ const Admin: NextPage = () => {
     const deltech = api.technologie.delete.useMutation()
     const { data: techList } = api.technologie.getAll.useQuery()
 
-    const addtype = api.type.create.useMutation()
-    const deltype = api.type.delete.useMutation()
-    const { data: typeList } = api.type.getAll.useQuery()
-
     const addFormation = api.formation.create.useMutation()
-    const delFormation = api.formation.delete.useMutation()
-    const { data: formations } = api.formation.getAll.useQuery()
-
 
     async function handlerAddTech(event: React.SyntheticEvent) {
         //event.preventDefault()
@@ -77,7 +70,7 @@ const Admin: NextPage = () => {
         };
         const nameT = target.techName.value;
         const logoUrl = target.logoTech.value;
-        const techno = await addtech.mutateAsync({ name: nameT, url: logoUrl })
+        await addtech.mutateAsync({ name: nameT, url: logoUrl })
     }
 
     async function handleFormation(event: React.SyntheticEvent) {
@@ -95,14 +88,6 @@ const Admin: NextPage = () => {
 
         await addFormation.mutateAsync({ title: title, description: content, difficulte: diff, techno: techno, hide: hidden })
     }
-
-    async function normal(event: React.SyntheticEvent) {
-        setTab('normal')
-    }
-    async function techAdd(event: React.SyntheticEvent) {
-        setTab('tech')
-    }
-
 
     return (
         <>
@@ -178,8 +163,13 @@ const Admin: NextPage = () => {
 
 
                             <div className="flex gap-2">
-                                <input type="checkbox" id="hid" name="hid" className="shadow-none" onClick={() => hidden ? setHide(false) : setHide(true)} /><label htmlFor="hid"> En cochant cette case, vous publiez la formation.</label>
+                                <label className="switch">
+                                    <input type="checkbox" onClick={() => hidden ? setHide(false) : setHide(true)} />
+                                    <span className="slider round"></span>
+                                </label>
+                                <label>Publier</label>
                             </div>
+
                             <button className="rounded-full bg-[#0E6073] px-10 py-3 font-semibold text-white no-underline transition hover:bg-[#0E6073]/80" type="submit" value="submit">Créer la formation</button>
                         </fieldset>
 
