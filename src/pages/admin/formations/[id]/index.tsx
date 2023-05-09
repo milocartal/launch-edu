@@ -10,12 +10,13 @@ import { FaArrowLeft, FaPenAlt, FaPlay } from "react-icons/fa";
 import { api } from "~/utils/api";
 import Header from "../../../components/header";
 import { prisma } from '~/server/db';
-import { Technologie, type Formation, Lecon, Etape, Prisma } from '@prisma/client';
+import { Technologie, Formation, Lecon, Etape, Prisma } from '@prisma/client';
 import { DifficultyText } from '../../../components/difficulties';
 import etapes from '../../../etapes/[id]';
-import { useState } from 'react';
+import { SyntheticEvent, useState } from 'react';
 import { HiXMark } from 'react-icons/hi2';
 import dynamic from 'next/dynamic';
+import { RiAddFill } from 'react-icons/ri'
 
 const QuillNoSSRWrapper = dynamic(import('react-quill'), {
     ssr: false,
@@ -37,14 +38,14 @@ export const getServerSideProps: GetServerSideProps<{
     const admin = session?.user.admin
 
     if (!session || !admin) {
-      return {
-        redirect: {
-          destination: '/',
-          permanent: false,
-        },
-      }
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        }
     }
-    
+
     const formation = await prisma.formation.findUnique({
         where: {
             id: context.query.id as string
@@ -62,7 +63,7 @@ export const getServerSideProps: GetServerSideProps<{
     if (!formation) {
         return {
             redirect: {
-                destination: '/formation',
+                destination: '/admin',
                 permanent: false,
             },
         }
@@ -87,8 +88,14 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
     const [tab, setTab] = useState("normal")
     const [content, setContent] = useState(formation.description);
 
+    const [dif, setdif]= useState(() => {
+
+    })
+
+
     const idf = formation.id
     const updateFormation = api.formation.update.useMutation()
+    const delFormation = api.formation.delete.useMutation()
 
     const addLecon = api.lecon.create.useMutation()
     const delLecon = api.lecon.delete.useMutation()
@@ -105,9 +112,9 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
         };
         const title = target.formTitle.value;
         const diff: number = +target.difficulte.value;
-        
 
-        await updateFormation.mutateAsync({id: formation.id, title: title, description: content, difficulte: diff })
+
+        await updateFormation.mutateAsync({ id: formation.id, title: title, description: content, difficulte: diff })
     }
 
     return (
@@ -131,7 +138,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                 <h1 className="text-xl font-bold tracking-tight text-[#0E6073]">Description</h1>
                                 <div className="flex flex-row ">
                                     <div className="flex flex-row items-center">
-                                        {<DifficultyText level={formation.difficulte}/>}
+                                        {<DifficultyText level={formation.difficulte} />}
                                     </div>
                                     <div className="flex flex-row items-center ml-4">
                                         <FaPenAlt className="h-7 w-7 text-[#989898]" />
@@ -139,9 +146,14 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                     </div>
                                 </div>
                             </div>
+
                             <div className="text-sm font-Inter text-[#222222] self-start mt-6" dangerouslySetInnerHTML={{ __html: formation.description }} />
+
                             <div className="flex flex-col w-full my-10">
-                                <h1 className="text-xl font-bold tracking-tight text-[#0E6073]">Thématique(s)</h1>
+                                <div className='w-full flex justify-between'>
+                                    <h1 className="text-xl font-bold tracking-tight text-[#0E6073]">Thématique(s)</h1>
+                                    <RiAddFill className='text-[#0E6073] text-2xl hover:cursor-pointer hover:text-green-600' />
+                                </div>
 
                                 <div className="w-11/12">
                                     {formation.techs as Technologie[] && formation.techs.length > 0 && formation.techs.map((tech) => {
@@ -152,10 +164,25 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                     })}
                                 </div>
                             </div>
+                            <div className="flex flex-col w-full my-10">
+                                <div className='w-full flex justify-between'>
+                                    <h1 className="text-xl font-bold tracking-tight text-[#0E6073]">Prérequis(s)</h1>
+                                    <RiAddFill className='text-[#0E6073] text-2xl hover:cursor-pointer hover:text-green-600' />
+                                </div>
+
+                                <div className="w-11/12">
+                                    {formation.Prerequis as Formation[] && formation.Prerequis.length > 0 && formation.Prerequis.map((requis) => {
+                                        return (
+                                            <div className="w-1/3 flex justify-center py-5 shadow-md mt-1 bg-[#0E6070] text-white rounded-lg" key={requis.id}>
+                                                <p className="text-base font-bold tracking-tight">{requis.title}</p>
+                                            </div>)
+                                    })}
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <button className="h-[5rem] w-5/6 text-white bg-[#0e6073] rounded-lg hover:cursor-pointer transition hover:bg-[#0E6073]/80" onClick={(e) => setTab("modif")}>Modifier le formation</button>
+                    <Link href={`/admin/formations/${formation.id}/modifier`} className="h-[5rem] w-5/6 text-white bg-[#0e6073] rounded-lg flex items-center justify-center hover:cursor-pointer transition hover:bg-[#0E6073]/80">Modifier la formation</Link>
 
                 </section>
 
@@ -163,7 +190,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                 <aside className="w-5/12 right-0 flex flex-col items-center justify-start h-5/6 pt-10 mr-5">
                     <h1 className="text-xl font-bold tracking-tight text-[#0E6073] self-start mb-3">Leçon(s) dans la formation</h1>
                     <div className="flex flex-col max-h-full w-11/12 shadow-xl shadow-black/30 rounded-lg">
-                        <div className="flex flex-col w-full rounded-t-lg" id="listTech">
+                        <div className="flex flex-col w-full rounded-t-lg max-h-[50rem] overflow-y-scroll" id="listTech">
                             {formation.lecons as Lecon[] && formation.lecons.length > 0 && formation.lecons.map((lecon) => {
                                 return (
                                     <Link href={`/admin/lecons/${lecon.id}`} className="w-full flex flex-row justify-between px-24 py-6 bg-white shadow-md mt-1 transition hover:bg-[#0E6070]/20" key={lecon.id}>
@@ -184,6 +211,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                             + Ajouter une lecon
                         </Link>
                     </div>
+                    <button onClick={() =>{delFormation.mutateAsync({ id: formation.id }); window.location.reload()}} className='mt-6 text-red-600 hover:text-red-800'>Supprimer la Formation</button>
                 </aside>
 
                 <Header selected={3} />
