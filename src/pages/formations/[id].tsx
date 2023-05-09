@@ -80,7 +80,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
             </Head>
 
             <main className="flex min-h-screen bg-white flex flex-col items-start pb-20">
-                <div className="flex flex-col items-start justify-start gap-12 pl-28 pt-20 pr-6 w-9/12">
+                <div className="flex flex-col items-start justify-start gap-12 pl-28 pt-20 pr-6 w-11/12">
                     <Title title={formation.title} link='formations'/>
 
                     <div className="flex flex-col items-center pr-10 w-9/12">
@@ -103,7 +103,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
 
                         <h1 className="text-xl font-bold tracking-tight text-[#0E6073] self-start mb-3">Vue d'ensemble</h1>
 
-                        <div className="w-10/12 shadow-lg">
+                        <div className="w-full shadow-lg">
                             {formation.lecons as Lecon[] && formation.lecons.length > 0 && formation.lecons.map((lecon) => {
                                 return (
                                     <Openable data={lecon} setSelected={() => setSelected(lecon.id)} selected={selected} key={lecon.id} nav={"/admin/lecons/" + lecon.id} description={lecon.description} />

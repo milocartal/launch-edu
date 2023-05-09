@@ -1,11 +1,12 @@
 import React from "react";
 import { FaPlay } from "react-icons/fa";
 import Link from "next/link";
+import { Lecon } from "@prisma/client";
 
 interface Props {
-    data: any
+    data: Lecon
     setSelected: any
-    selected: any
+    selected: string
     nav: string
     description: string
   }
