@@ -9,11 +9,13 @@ import { IoCheckmarkCircle } from "react-icons/io5";
 
 import { api } from "~/utils/api";
 import { Difficulty } from "~/pages/components/difficulties";
-import { Formation } from "@prisma/client";
+import { Formation, Technologie } from "@prisma/client";
+import Lesson from "../components/lesson";
 
 const Home: NextPage = () => {
   const { data: sessionData } = useSession();
   const { data: formations } = api.formation.getAll.useQuery()
+  const { data: technologies } = api.technologie.getAll.useQuery()
   const admin = sessionData?.user.admin
   const [filterType, setFilterType] = useState("alphabetique")
 
@@ -21,7 +23,7 @@ const Home: NextPage = () => {
     setFilterType(type)
   }
 
-  formations as Formation[] && formations && formations.length > 0 && filterType == "alphabetique" ? formations.sort(function (a, b) {
+  technologies as Technologie[] && technologies && technologies.length > 0 && filterType == "alphabetique" ? technologies.sort(function (a, b) {
     if (a.title < b.title) {
       return -1;
     }
@@ -75,27 +77,18 @@ const Home: NextPage = () => {
           </div>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-5 md:gap-8 w-full">
-            {formations as Formation[] && formations && formations.length > 0 && formations.map((forma) => {
-              if (!forma.hidden || forma.hidden && admin)
+            {filterType === "alphabetique" ? 
+              technologies as Technologie[] && technologies && technologies.length > 0 && technologies.map((techno) => {
                 return (
-                  <Link
-                    className="flex flex-col items-center min-w-[50px] max-w-2xl gap-4 rounded-xl bg-[#0E6070]/10 p-4 hover:bg-[#0E6070]/20 relative mt-6"
-                    href={`/formations/${encodeURIComponent(forma.id)}`}
-                    key={forma.id}
-                  >
-                    <div className="absolute -top-11 flex items-end justify-end w-[100px] h-[100px]">
-                      {forma.techs[0] && forma.techs[0].logo && <img src={forma.techs[0].logo} alt="" />}
-                    </div>
-                    <h3 className="text-md font-bold mt-12 text-center">{forma.title}</h3>
-
-                    <span className="absolute right-5">
-                      <Difficulty level={forma.difficulte}/>
-                    </span>
-                    <p className="h-7 w-7 text-[#0E6073] absolute left-5">10%</p>
-                    {/* <IoCheckmarkCircle className="h-7 w-7 text-[#0E6073] absolute left-5"/> */}
-                  </Link>
+                  <Lesson data={techno} key={techno.id} />
                 )
-            })}
+              }) : formations as Formation[] && formations && formations.length > 0 && formations.map((forma) => {
+                if (!forma.hidden || forma.hidden && admin)
+                  return (
+                    <Lesson data={forma} />
+                  )
+              })
+            }
           </div>
         </div>
         <Header selected={2}/>
