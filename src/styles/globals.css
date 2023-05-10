@@ -13,6 +13,16 @@
     }
 }
 
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* For IE, Edge and Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
 textarea:focus, input:focus{
     outline: none;
 }
@@ -47,6 +57,7 @@ select {
 
 #listTech {
     overflow-y:auto;
+    max-height: 26rem;
 }
 
 #listTech::-webkit-scrollbar {
@@ -152,8 +163,6 @@ input[type="radio"]:checked::before {
     -webkit-transform: translateX(26px);
     -ms-transform: translateX(26px);
     transform: translateX(26px);
-    background: url(/public/test.png) center;
-    background-size: cover;
   }
   
   /* Rounded sliders */

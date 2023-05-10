@@ -4,6 +4,8 @@ import Link from "next/link";
 import { getSession, signIn, signOut, useSession } from "next-auth/react";
 import { type Session as SessionAuth } from 'next-auth'
 
+import Router from "next/router";
+
 import { api } from "../../../../utils/api";
 import { EtapeType, Session, Technologie, User, Formation, Prisma } from '@prisma/client';
 
@@ -82,8 +84,10 @@ export const getServerSideProps: GetServerSideProps<{
 
 const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ formation }) => {
     //document.getElementById("defaultOpen").click();
+    const [modif, setModif] = useState(false)
 
-    const [content, setContent] = useState('');
+    const [content, setContent] = useState(formation.description);
+    const [tech, setTechs] = useState<string[]>([])
     const [hidden, setHide] = useState(() => {
         if (formation.hidden == true) {
             return true
@@ -91,8 +95,6 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
         else
             return false
     });
-
-    console.log("publier ? ", hidden)
 
     const [dif, setdif] = useState(() => {
         let difi;
@@ -120,15 +122,15 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
     const updateFormation = api.formation.update.useMutation()
 
     async function handleFormation(event: React.SyntheticEvent) {
-        //event.preventDefault()
+        event.preventDefault()
         const target = event.target as typeof event.target & {
             formTitle: { value: string };
             difficulte: { value: string };
         };
         const title = target.formTitle.value;
         const diff: number = +target.difficulte.value;
-
         await updateFormation.mutateAsync({ id: formation.id, title: title, description: content, difficulte: diff, hide: hidden });
+        Router.push(`/admin/formations/${formation.id}`)
     }
 
 

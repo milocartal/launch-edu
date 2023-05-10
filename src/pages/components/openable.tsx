@@ -1,38 +1,49 @@
-import Image from "next/image";
-import { DifficultyText } from "./difficulties";
-import { FaCheck, FaPenAlt, FaPlay } from "react-icons/fa";
+import React from "react";
+import { FaPlay } from "react-icons/fa";
+import Link from "next/link";
 
-
-function Openable (props: data, selected) {
+interface Props {
+    data: any
+    setSelected: any
+    selected: any
+    nav: string
+    description: string
+  }
+const Openable: React.FC<Props> = ({data, setSelected, selected, nav, description}) => {
     return (
-        <div className="flex flex-row items-center w-full gap-3 rounded-xl bg-white py-7 pr-10 mt-6 shadow-[0px_10px_30px_0px_rgba(0,0,0,0.25)] relative" onClick={props.selected} key={props.data.id}>
-            <div className="flex flex-col justify-end max-w-20 max-h-20 -top-4 -left-5 absolute">
-                <Image src="/Expressjs.png" width="100" height="100" alt=""/>
-            </div>
-            <div className="ml-20 flex flex-col justify-start items-start">
-                <h3 className="font-bold text-[#0E6073] mb-3 text-lg">{props.data.title}</h3>
-                <p className="text-sm font-Inter text-[#989898] text-left">{props.data.description}</p>
-                {props.data.lessons?.map((lesson)=>
-                <div key={lesson.id} className="w-full flex flex-col items-center justify-center">
-                    <div className="flex flex-row justify-between items-center py-4 w-11/12">
-                        <h3 className="font-bold text-[#0E6073] text-sm">{lesson.title}</h3>
-                        <button>{lesson.status === "finished" ? <FaCheck className="h-6 w-6 text-[#0E6073]" /> : <FaPlay className="h-6 w-6 text-[#0E6073]" />}</button>
+        <div className="bg-white w-full mt-1 h-fit flex flex-col justify-start shadow-[4px_10px_20px_1px_rgba(0,0,0,0.25)]">
+            {selected === data.id ?
+            <>
+                <div className="bg-white w-full h-fit flex flex-col items-center justify-center px-16 py-8 shadow-[4px_10px_20px_1px_rgba(0,0,0,0.25)]" onClick={setSelected}>
+                    <div className="w-full flex flex-row items-center justify-between">
+                        <p className="font-semibold text-[#0E6073]">{data.title}</p>
+                        { nav &&
+                        <Link href={`${nav}`}>
+                            <FaPlay className="h-5 w-5 text-[#0E6073]"/>
+                        </Link>
+                        }
                     </div>
-                    <div className="w-11/12 h-0.5 bg-[#989898] self-center"></div>
+                   {description && <div className="text-sm font-Inter text-[#989898] text-left" dangerouslySetInnerHTML={{ __html: description }} />}
                 </div>
-                )}
-            </div>
-            <div className="flex flex-col justify-start h-full">
-                <DifficultyText level={props.data.diff}/>
-                <div className="flex flex-row justify-start items-center mt-5">
-                    <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]" />
-                    <p className="text-sm ml-3 font-Inter text-[#989898] dark:text-[#2EA3A5]">3 leçons</p>
+
+                <div className="w-full mt-2 mb-4">
+                    <p className="px-20 mt-2 font-semibold text-[#0E6073]">Cours</p>
+                    <p className="px-20 mt-2 font-semibold text-[#0E6073]">Exercice</p>
+                    <p className="px-20 mt-2 font-semibold text-[#0E6073]">Solution</p>
                 </div>
+            </>
+            :
+            <div className="bg-white w-full h-fit flex flex-row items-center justify-between px-16 py-8 shadow-[4px_10px_20px_1px_rgba(0,0,0,0.25)]" onClick={setSelected}>
+                <p className="font-semibold text-[#0E6073]">{data.title}</p>
+                { nav &&
+                <Link href={`/admin/lecons/${data.id}`}>
+                    <FaPlay className="h-5 w-5 text-[#0E6073]"/>
+                </Link>
+                }
             </div>
+        }
         </div>
     );
 }
 
 export default Openable;
-
-

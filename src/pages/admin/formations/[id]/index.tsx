@@ -17,22 +17,35 @@ import { SyntheticEvent, useState } from 'react';
 import { HiXMark } from 'react-icons/hi2';
 import dynamic from 'next/dynamic';
 import { RiAddFill } from 'react-icons/ri'
+import Lesson from '~/pages/components/lesson';
 
 const QuillNoSSRWrapper = dynamic(import('react-quill'), {
     ssr: false,
     loading: () => <p>Loading ...</p>,
 })
 
+type FormationWithAll = Prisma.FormationGetPayload<{
+    include: {
+        techs: true,
+        lecons: {
+            include: {
+                etapes: true
+            }
+        },
+        Prerequis: {
+            include: {
+                techs: true
+            }
+        }
+    }
+}>
+
 type LeconWithEtapes = Prisma.LeconGetPayload<{
     include: { etapes: true }
 }>
 
 export const getServerSideProps: GetServerSideProps<{
-    formation: (Formation & {
-        techs: Technologie[];
-        lecons: LeconWithEtapes[];
-        Prerequis: Formation[]
-    });
+    formation: FormationWithAll;
 }> = async function (context) {
     const session = await getSession(context)
     const admin = session?.user.admin
@@ -57,7 +70,11 @@ export const getServerSideProps: GetServerSideProps<{
                     etapes: true
                 }
             },
-            Prerequis: true
+            Prerequis: {
+                include: {
+                    techs: true
+                }
+            }
         }
     });
     if (!formation) {
@@ -70,52 +87,60 @@ export const getServerSideProps: GetServerSideProps<{
     }
     return {
         props: {
-            formation: JSON.parse(JSON.stringify(formation)) as (Formation & {
-                techs: Technologie[];
-                lecons: LeconWithEtapes[];
-                Prerequis: Formation[]
-            })
+            formation: JSON.parse(JSON.stringify(formation)) as FormationWithAll
         }
     };
 };
 
 const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ formation }) => {
-    const { data: sessionData } = useSession();
-    const admin = sessionData?.user.admin
 
-    console.log(formation)
-
-    const [tab, setTab] = useState("normal")
-    const [content, setContent] = useState(formation.description);
-
-    const [dif, setdif]= useState(() => {
-
-    })
-
-
-    const idf = formation.id
-    const updateFormation = api.formation.update.useMutation()
     const delFormation = api.formation.delete.useMutation()
 
-    const addLecon = api.lecon.create.useMutation()
     const delLecon = api.lecon.delete.useMutation()
-    const { data: lecons } = api.lecon.getAll.useQuery({ id: idf })
 
+    const addTag = api.formation.addTag.useMutation()
+    const delTag = api.formation.removeTag.useMutation()
+
+    const addPre = api.formation.addPrerequis.useMutation()
+    const delPre = api.formation.removePrerequis.useMutation()
+
+    const [selectedTech, setSelectTech] = useState<string>()
     const { data: techList } = api.technologie.getAll.useQuery()
+    const { data: formaList } = api.formation.getAll.useQuery()
 
-    async function handleFormation(event: React.SyntheticEvent) {
+    const [tab, setTab] = useState("normal")
+    const [SearchTag, setSearchTag] = useState('');
+    const [SearchForma, setSearchForma] = useState('');
+
+    async function handleTag(event: React.SyntheticEvent) {
         //event.preventDefault()
         const target = event.target as typeof event.target & {
-            formTitle: { value: string };
-            description: { value: string };
-            difficulte: { value: string };
+            techno: { value: string };
         };
-        const title = target.formTitle.value;
-        const diff: number = +target.difficulte.value;
+        const idT = target.techno.value;
 
-
-        await updateFormation.mutateAsync({ id: formation.id, title: title, description: content, difficulte: diff })
+        await addTag.mutateAsync({ id: formation.id, idT: idT })
     }
+
+    async function handlePrerequis(event: React.SyntheticEvent) {
+        //event.preventDefault()
+        const target = event.target as typeof event.target & {
+            prerequis: { value: string };
+        };
+        const idP = target.prerequis.value;
+
+        await addPre.mutateAsync({ id: formation.id, idP: idP })
+    }
+
+    const handleSearchTag = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let value = e.target.value;
+        setSearchTag(value);
+    };
+
+    const handleSearchForm = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let value = e.target.value;
+        setSearchForma(value);
+    };
 
     return (
         <>
@@ -133,7 +158,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                             <Link href="/admin"><FaArrowLeft className="h-6 w-6 text-[#0E6073] mr-5" /></Link>
                             <h1 className="text-3xl font-bold tracking-tight text-[#0E6073]">{formation.title}</h1>
                         </div>
-                        <div className="flex flex-col items-center w-full">
+                        <div className="flex flex-col items-center w-full overflow-y-auto max-h-[33rem] scrollbar-hide">
                             <div className="flex flex-row items-center justify-between w-full">
                                 <h1 className="text-xl font-bold tracking-tight text-[#0E6073]">Description</h1>
                                 <div className="flex flex-row ">
@@ -152,30 +177,34 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                             <div className="flex flex-col w-full my-10">
                                 <div className='w-full flex justify-between'>
                                     <h1 className="text-xl font-bold tracking-tight text-[#0E6073]">Thématique(s)</h1>
-                                    <RiAddFill className='text-[#0E6073] text-2xl hover:cursor-pointer hover:text-green-600' />
+                                    <RiAddFill className='text-[#0E6073] text-2xl hover:cursor-pointer hover:text-green-600' onClick={() => setTab("tag")} />
                                 </div>
 
-                                <div className="w-11/12">
+                                <div className="w-11/12 grid grid-cols-1 gap-4 sm:grid-cols-4 w-full max-h-[7rem] pt-2 scrollbar-hide">
                                     {formation.techs as Technologie[] && formation.techs.length > 0 && formation.techs.map((tech) => {
                                         return (
-                                            <div className="w-1/3 flex justify-center py-5 shadow-md mt-1 bg-[#0E6070] text-white rounded-lg" key={tech.id}>
-                                                <p className="text-base font-bold tracking-tight">{tech.name}</p>
-                                            </div>)
+                                            <button
+                                                className="w-full flex justify-center py-5 shadow-md mt-1 bg-[#0E6070] text-white font-bold tracking-tight rounded-lg hover:text-red-600"
+                                                onClick={() => {
+                                                    delTag.mutateAsync({ id: formation.id, idT: tech.id });
+                                                    window.location.reload()
+                                                }}
+                                                key={tech.id}>
+                                                {tech.name}
+                                            </button>)
                                     })}
                                 </div>
                             </div>
                             <div className="flex flex-col w-full my-10">
-                                <div className='w-full flex justify-between'>
+                                <div className='w-full flex justify-between pb-4'>
                                     <h1 className="text-xl font-bold tracking-tight text-[#0E6073]">Prérequis(s)</h1>
-                                    <RiAddFill className='text-[#0E6073] text-2xl hover:cursor-pointer hover:text-green-600' />
+                                    <RiAddFill className='text-[#0E6073] text-2xl hover:cursor-pointer hover:text-green-600' onClick={() => setTab("Prerequis")} />
                                 </div>
 
-                                <div className="w-11/12">
-                                    {formation.Prerequis as Formation[] && formation.Prerequis.length > 0 && formation.Prerequis.map((requis) => {
+                                <div className="w-11/12 grid grid-cols-1 gap-10 sm:grid-cols-2 w-full max-h-[12rem] pt-7">
+                                    {formation.Prerequis as FormationWithAll[] && formation.Prerequis.length > 0 && formation.Prerequis.map((requis) => {
                                         return (
-                                            <div className="w-1/3 flex justify-center py-5 shadow-md mt-1 bg-[#0E6070] text-white rounded-lg" key={requis.id}>
-                                                <p className="text-base font-bold tracking-tight">{requis.title}</p>
-                                            </div>)
+                                            <Lesson data={requis as FormationWithAll} />)
                                     })}
                                 </div>
                             </div>
@@ -191,7 +220,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                     <h1 className="text-xl font-bold tracking-tight text-[#0E6073] self-start mb-3">Leçon(s) dans la formation</h1>
                     <div className="flex flex-col max-h-full w-11/12 shadow-xl shadow-black/30 rounded-lg">
                         <div className="flex flex-col w-full rounded-t-lg max-h-[50rem] overflow-y-scroll" id="listTech">
-                            {formation.lecons as Lecon[] && formation.lecons.length > 0 && formation.lecons.map((lecon) => {
+                            {formation.lecons as LeconWithEtapes[] && formation.lecons.length > 0 && formation.lecons.map((lecon) => {
                                 return (
                                     <Link href={`/admin/lecons/${lecon.id}`} className="w-full flex flex-row justify-between px-24 py-6 bg-white shadow-md mt-1 transition hover:bg-[#0E6070]/20" key={lecon.id}>
                                         <p className="text-base font-bold tracking-tight text-[#0E6073] self-start">{lecon.title}</p>
@@ -211,44 +240,74 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                             + Ajouter une lecon
                         </Link>
                     </div>
-                    <button onClick={() =>{delFormation.mutateAsync({ id: formation.id }); window.location.reload()}} className='mt-6 text-red-600 hover:text-red-800'>Supprimer la Formation</button>
+                    <button onClick={() => { delFormation.mutateAsync({ id: formation.id }); window.location.reload() }} className='mt-6 text-red-600 hover:text-red-800'>Supprimer la Formation</button>
                 </aside>
 
                 <Header selected={3} />
 
-                {tab === "modif" &&
-                    <div className="fixed w-full h-full bg-[#0E6073]/90 top-0 right-0 left-0 bottom-0 flex justify-center items-center">
-                        <form onSubmit={handleFormation} className="relative flex flex-col gap-5 item-center justify-start bg-white rounded-xl p-16 w-1/2" method="POST">
-                            <button onClick={(e) => setTab("normal")} className="absolute top-3 right-4 rounded-full font-semibold  no-underline transition hover:text-red-500">
-                                <HiXMark className="text-[2rem] text-[#0e6073] hover:text-red-500" />
-                            </button>
-
-                            <input name="formTitle" id="formTitle" type="text" placeholder="Titre de la formation" required className="inputAddForm" autoComplete="off" defaultValue={formation.title} />
-
-                            <QuillNoSSRWrapper theme="snow" onChange={setContent} placeholder="Description" className="h-[30%] shadow-xl" defaultValue={formation.description} />
-                            <fieldset className="mt-8 flex gap-5 w-full justify-center">
-                                <legend>Difficulté:</legend>
-                                <div className="flex flex-col items-center gap-2">
-                                    <label htmlFor="1" className="mt-8">Débutant</label>
-                                    <input type="radio" name="difficulte" id="1" value="1" required className="shadow-none" />
-                                </div>
-
-                                <div className="flex flex-col items-center gap-2">
-                                    <label htmlFor="2" className="mt-8">Intermédiaire</label>
-                                    <input type="radio" name="difficulte" id="2" value="2" required className="shadow-none" />
-                                </div>
-
-                                <div className="flex flex-col items-center gap-2">
-                                    <label htmlFor="3" className="mt-8">Avancé</label>
-                                    <input type="radio" name="difficulte" id="3" value="3" required className="shadow-none" />
-                                </div>
-                            </fieldset>
-
-                            <button className="rounded-full bg-[#0E6073] px-10 py-3 font-semibold text-white no-underline transition hover:bg-[#0E6073]/80" type="submit" value="submit">Sauvegarder les changements</button>
-
-                        </form>
-                    </div>}
             </main>
+
+            {tab === "tag" &&
+                <div className="fixed w-full h-full bg-[#0E6073]/90 top-0 right-0 left-0 bottom-0 flex justify-center items-center">
+                    <form onSubmit={handleTag} className="relative flex flex-col gap-5 justify-center items-center bg-white rounded-xl p-16 w-[30%]" method="POST">
+                        <div onClick={() => setTab("normal")} className="absolute top-3 right-4 rounded-full font-semibold  no-underline transition hover:text-red-500 hover:cursor-pointer">
+                            <HiXMark className="text-[2rem] text-[#0e6073] hover:text-red-500" />
+                        </div>
+                        <h1 className="text-xl font-extrabold tracking-tight text-[#0e6073] w-full"><label htmlFor="techName">Nouveau Tag</label></h1>
+                        <input type='text' name="lecon tag" placeholder='Rechercher un tag' className="p-[1rem] rounded-lg bg-none shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)] w-full" autoComplete="off" onChange={handleSearchTag} />
+                        <fieldset className="flex flex-col w-full max-h-[30rem] rounded-t-lg" id="listTech">
+                            {techList as Technologie[] && techList && techList.length > 0 && techList.filter((tech) => {
+                                return !formation.techs.find(( item => {
+                                    return item.name === tech.name
+                                } ))
+                            }).filter((tech) => {
+                                return tech.name.toLowerCase().includes(SearchTag.toLowerCase())
+                            }).map((techno) => {
+                                return (
+                                    <label className={`container flex items-center justify-between p-5 ${selectedTech === techno.id ? 'bg-[#0e6073] text-white' : 'hover:bg-[#0e6073]/10'}`} key={techno.id}>
+                                        <p className="">{techno.name}</p>
+                                        <div className="flex gap-4">
+                                            <input type="radio" name="techno" value={techno.id} onChange={(e) => setSelectTech(e.target.value)} required className="mt-[7px]" />
+                                        </div>
+
+                                    </label>
+                                )
+                            })}
+                        </fieldset>
+                        <button className="rounded-full bg-[#0E6073] text-white px-10 py-3 font-semibold w-full no-underline transition hover:bg-[#0E6073]/20" type="submit">Ajouter</button>
+
+
+                    </form>
+                </div>}
+
+
+            {tab === "Prerequis" &&
+                <div className="fixed w-full h-full bg-[#0E6073]/90 top-0 right-0 left-0 bottom-0 flex justify-center items-center">
+                    <form onSubmit={handlePrerequis} className="relative flex flex-col gap-5 justify-center items-center bg-white rounded-xl p-16 w-[30%]" method="POST">
+                        <div onClick={() => setTab("normal")} className="absolute top-3 right-4 rounded-full font-semibold  no-underline transition hover:text-red-500 hover:cursor-pointer">
+                            <HiXMark className="text-[2rem] text-[#0e6073] hover:text-red-500" />
+                        </div>
+                        <h1 className="text-xl font-extrabold tracking-tight text-[#0e6073] w-full"><label htmlFor="techName">Nouveau Prérequis</label></h1>
+                        <fieldset className="flex flex-col w-full max-h-[30rem] rounded-t-lg" id="listTech">
+                            {formaList as Formation[] && formaList && formaList.length > 0 && formaList.map((forma) => {
+                                return (
+                                    <label className={`container flex items-center justify-between p-5 ${selectedTech === forma.id ? 'bg-[#0e6073] text-white' : 'hover:bg-[#0e6073]/10'}`} key={forma.id}>
+                                        <p className="">{forma.title}</p>
+                                        <div className="flex gap-4">
+                                            <input type="radio" name="prerequis" value={forma.id} onChange={(e) => setSelectTech(e.target.value)} required className="mt-[7px]" />
+                                        </div>
+
+                                    </label>
+                                )
+                            })}
+                        </fieldset>
+                        <button className="rounded-full bg-[#0E6073] text-white px-10 py-3 font-semibold w-full no-underline transition hover:bg-[#0E6073]/20" type="submit">Ajouter</button>
+
+
+                    </form>
+                </div>}
+
+
         </>
     );
 };
