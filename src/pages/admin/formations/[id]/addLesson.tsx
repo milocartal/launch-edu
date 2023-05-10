@@ -18,6 +18,7 @@ import { HiXMark } from 'react-icons/hi2';
 import dynamic from 'next/dynamic';
 import DiscordProvider from 'next-auth/providers/discord';
 import Title from '~/pages/components/title';
+import Router from 'next/router';
 
 const QuillNoSSRWrapper = dynamic(import('react-quill'), {
     ssr: false,
@@ -111,7 +112,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
 
     //fonction de création
     async function handleCrea(event: React.SyntheticEvent) {
-        //event.preventDefault()
+        event.preventDefault()
         const target = event.target as typeof event.target & {
             leconTitle: { value: string };
         };
@@ -126,6 +127,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                 await addEtape.mutateAsync({ name: "Solution", idt: Soluce.id, code: cS, video: vS, transcript: txtSoluce, idl: lec.id })
             }
         }
+        Router.push(`/admin/formations/${idf}`)
     }
 
     return (
@@ -206,7 +208,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                     <div className="fixed w-full h-full bg-[#0E6073]/90 top-0 right-0 left-0 bottom-0 flex justify-center items-center">
                         <form className="relative flex flex-col gap-5 item-center justify-start bg-white rounded-xl p-16 w-8/12 text-[#041f25]">
 
-                            <button
+                            <div
                                 onClick={(e) => {
                                     setTab('normal');
                                     setVE("");
@@ -219,7 +221,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                 }}
                                 className="absolute top-3 right-4 rounded-full font-semibold  no-underline transition hover:text-red-500">
                                 <HiXMark className="text-[2rem] text-[#0e6073] hover:text-red-500" />
-                            </button>
+                            </div>
 
                             <div className='flex w-full gap-5 justify-center mb-10'>
                                 <fieldset className='flex flex-col gap-3'>

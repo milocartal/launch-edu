@@ -15,6 +15,8 @@ import { useState } from 'react';
 import { HiXMark } from 'react-icons/hi2';
 import dynamic from 'next/dynamic';
 
+import Router from 'next/router'
+
 const QuillNoSSRWrapper = dynamic(import('react-quill'), {
     ssr: false,
     loading: () => <p>Loading ...</p>,
@@ -70,20 +72,20 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
     const [haveVid, setHaveVid] = useState(false) //boolean qui regarde si on vaut faire un exercice
 
     //Liste des urls
-    const [vC, setVC] = useState(""); //video cours
-    const [cC, setCC] = useState(""); //code cours
+    const [vC, setVC] = useState(lecon.etapes[0]?.video || ""); //video cours
+    const [cC, setCC] = useState(lecon.etapes[0]?.code || ""); //code cours
 
-    const [vE, setVE] = useState(""); //video exo
-    const [cE, setCE] = useState(""); //code exo
+    const [vE, setVE] = useState(lecon.etapes[1]?.video || ""); //video exo
+    const [cE, setCE] = useState(lecon.etapes[1]?.code || ""); //code exo
 
-    const [vS, setVS] = useState(""); //video soluce
-    const [cS, setCS] = useState(""); //code soluce
+    const [vS, setVS] = useState(lecon.etapes[2]?.video || ""); //video soluce
+    const [cS, setCS] = useState(lecon.etapes[2]?.code || ""); //code soluce
 
     //List des textarea
     const [description, setDesc] = useState(lecon.description); //description de la leçon
-    const [txtCours, setScript] = useState(""); //transcript/text du cours
-    const [txtExo, setTxtExo] = useState(""); //texte de l'exo
-    const [txtSoluce, setTxtSoluce] = useState(""); //texte solution
+    const [txtCours, setScript] = useState(lecon.etapes[0]?.transcript || ""); //transcript/text du cours
+    const [txtExo, setTxtExo] = useState(lecon.etapes[1]?.transcript || ""); //texte de l'exo
+    const [txtSoluce, setTxtSoluce] = useState(lecon.etapes[2]?.transcript || ""); //texte solution
 
     //API
     const updateLecon = api.lecon.update.useMutation()
@@ -96,7 +98,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
 
     //fonction de création
     async function handleCrea(event: React.SyntheticEvent) {
-        //event.preventDefault()
+        event.preventDefault()
         const target = event.target as typeof event.target & {
             leconTitle: { value: string };
         };
@@ -109,13 +111,14 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                 await updateEtape.mutateAsync({ id: lecon.etapes[1].id, code: cE, video: vE, transcript: txtExo })
                 await updateEtape.mutateAsync({ id: lecon.etapes[2].id, code: cS, video: vS, transcript: txtSoluce })
             }
-            if ((txtExo && txtSoluce && cE && cS) !== "" && haveExo) {
+            else if ((txtExo && txtSoluce && cE && cS) !== "" && haveExo) {
                 if (Exercice && Soluce) {
                     await addEtape.mutateAsync({ name: "Exercice", idt: Exercice.id, code: cE, video: vE, transcript: txtExo, idl: lecon.id })
                     await addEtape.mutateAsync({ name: "Solution", idt: Soluce.id, code: cS, video: vS, transcript: txtSoluce, idl: lecon.id })
                 }
             }
         }
+        Router.push(`/admin/lecons/${lecon.id}`)
     }
 
     return (
@@ -166,7 +169,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                     className="p-[1rem] rounded-lg bg-none shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)] w-full"
                                     onChange={(e) => setVC(e.target.value)}
                                     autoComplete="off"
-                                    defaultValue={lecon.etapes[0]?.video}>
+                                    defaultValue={vC}>
                                 </input>
 
                                 <input
@@ -176,7 +179,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                     className={"p-[1rem] rounded-lg bg-none shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)] w-full"}
                                     onChange={(e) => setCC(e.target.value)}
                                     autoComplete="off"
-                                    defaultValue={lecon.etapes[0]?.code}>
+                                    defaultValue={cC}>
                                 </input>
 
                             </fieldset>
@@ -204,16 +207,9 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                         <form className="relative flex flex-col gap-5 item-center justify-start bg-white rounded-xl p-16 w-8/12 text-[#041f25]">
 
                             <button
-                                onClick={(e) => {
-                                    setTab('normal');
-                                    /*setVE("");
-                                    setCE("");
-                                    setCS("");
-                                    setVS("");
-                                    setTxtExo("");
-                                    setTxtSoluce("");
-                                    setHave(false)*/
-                                }}
+                                onClick={(e) => 
+                                    setTab('normal')
+                                }
                                 className="absolute top-3 right-4 rounded-full font-semibold  no-underline transition hover:text-red-500">
                                 <HiXMark className="text-[2rem] text-[#0e6073] hover:text-red-500" />
                             </button>
@@ -229,7 +225,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                         className="p-[1rem] rounded-lg bg-none shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)] w-full"
                                         onChange={(e) => setVE(e.target.value)}
                                         autoComplete="off"
-                                        defaultValue={lecon.etapes[1]?.video} />
+                                        defaultValue={vE} />
 
                                     <input
                                         type='url'
@@ -238,14 +234,14 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                         className="p-[1rem] rounded-lg bg-none shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)] w-full"
                                         onChange={(e) => setCE(e.target.value)}
                                         autoComplete="off"
-                                        defaultValue={lecon.etapes[1]?.code}
+                                        defaultValue={cE}
                                         required />
 
                                     <QuillNoSSRWrapper
                                         className='h-[150px]'
                                         placeholder="Transcript de la vidéo de l'exercice"
                                         onChange={setTxtExo}
-                                        defaultValue={lecon.etapes[1]?.transcript} />
+                                        defaultValue={txtExo} />
                                 </fieldset>
 
                                 <fieldset className='flex flex-col gap-3'>
@@ -258,7 +254,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                         className="p-[1rem] rounded-lg bg-none shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)] w-full"
                                         onChange={(e) => setVS(e.target.value)}
                                         autoComplete="off"
-                                        defaultValue={lecon.etapes[2]?.video} />
+                                        defaultValue={vS} />
 
                                     <input
                                         type='url'
@@ -267,14 +263,14 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                         className="p-[1rem] rounded-lg bg-none shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)] w-full"
                                         onChange={(e) => setCS(e.target.value)}
                                         autoComplete="off"
-                                        defaultValue={lecon.etapes[2]?.code}
+                                        defaultValue={cS}
                                         required />
 
                                     <QuillNoSSRWrapper
                                         className='h-[150px]'
                                         placeholder="Transcript de la vidéo de la solution"
                                         onChange={setTxtSoluce}
-                                        defaultValue={lecon.etapes[2]?.transcript} />
+                                        defaultValue={txtSoluce} />
                                 </fieldset>
                             </div>
 

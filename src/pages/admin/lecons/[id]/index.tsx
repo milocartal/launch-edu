@@ -34,6 +34,15 @@ export const getServerSideProps: GetServerSideProps<{
             etapes: true
         }
     });
+
+    if (!lecon) {
+        return {
+            redirect: {
+                destination: '/admin',
+                permanent: false,
+            },
+        }
+    }
     const idf = lecon?.idf;
 
     const formation = await prisma.formation.findUnique({
@@ -45,15 +54,6 @@ export const getServerSideProps: GetServerSideProps<{
             lecons: true
         }
     });
-
-    if (!lecon) {
-        return {
-            redirect: {
-                destination: '/admin/formations'+idf,
-                permanent: false,
-            },
-        }
-    }
 
     if (!session || !admin) {
         return {
