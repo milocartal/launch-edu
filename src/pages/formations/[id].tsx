@@ -12,6 +12,7 @@ import Header from "../components/header";
 import { prisma } from '~/server/db';
 import { Technologie, type Formation, Lecon } from '@prisma/client';
 import { DifficultyText } from '../components/difficulties';
+import Title from '../components/title';
 
 export const getServerSideProps: GetServerSideProps<{
     formation: (Formation & {
@@ -77,12 +78,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
             <main className="flex min-h-screen flex-col items-center bg-white">
 
                 <div className="container flex flex-col items-start justify-start gap-12 px-4 py-20">
-                    <div className="flex flex-row items-center justify-between px-10 w-9/12">
-                        <div className="flex flex-row items-center justify-start">
-                            <button className="mr-5"><Link href={`/formations`}><FaArrowLeft className="h-6 w-6 text-[#0E6073]" /></Link></button>
-                            <h1 className="text-3xl font-bold tracking-tight text-[#0E6073]">{formation.title}</h1>
-                        </div>
-                    </div>
+                    <Title title={formation.title} link='/formations'/>
 
                     <div className="flex flex-col items-center pr-10 w-9/12">
                         <div className="flex flex-row items-center justify-between w-full">

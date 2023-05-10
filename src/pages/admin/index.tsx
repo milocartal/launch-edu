@@ -15,6 +15,8 @@ import { MouseEventHandler, useState } from "react";
 import { HiXMark } from "react-icons/hi2"
 import { HiMagnifyingGlass } from "react-icons/hi2";
 import { BiUserCircle } from "react-icons/bi"
+import { FaPenAlt } from "react-icons/fa";
+import Title from "../components/title";
 
 const QuillNoSSRWrapper = dynamic(import('react-quill'), {
     ssr: false,
@@ -65,11 +67,12 @@ const Admin: NextPage = () => {
             {admin ?
 
                 <main className="flex min-h-screen bg-white justify-between dark:bg-[#041F25]">
-                    <div className="flex flex-col items-center justify-between gap-2 min-h-screen pt-16 right-0 bg-[#0E6073] fixed m-w-xs p-2 w-[28rem]">
+                    <div className="w-3/12 bg-[#0E6073] fixed right-0 flex flex-col items-start justify-start h-full pt-24 px-10">
                         <Link href="/admin/addFormation"><button>Créer une formation</button></Link>
                     </div>
 
-                    <div className="flex w-full max-h-screen flex-col items-center ml-[6rem] mt-[6rem] mr-[30rem]">
+                    <div className="flex flex-col items-start justify-start gap-12 pl-28 pt-20 pr-6 w-9/12">
+                        <Title title={"Gérez vos cours"} link={""} />
                         <div className="flex flex-col w-full">
                             {formations as Formation[] && formations && formations.length > 0 && formations.map((forma) => {
                                 let hide: string;
@@ -79,26 +82,20 @@ const Admin: NextPage = () => {
                                     hide = "Postée"
                                 return (
                                     <Link
-                                        className="flex w-full gap-4 rounded-xl bg-[#0E6070]/10 p-4 justify-between hover:bg-[#0E6070]/20"
+                                        className="flex flex-row justify-between items-center mb-1 w-full bg-white shadow-[4px_5px_12px_6px_rgba(0,0,0,0.25)] py-2 pl-16 pr-6 justify-between hover:bg-[#ebebeb]/20 h-[5rem]"
                                         href={`/admin/formations/${encodeURIComponent(forma.id)}`}
                                         key={forma.id}
                                     >
-                                        <h3 className="text-md font-bold">{forma.title}</h3>
+                                        <h3 className="text-md font-bold text-[#0E6073]">{forma.title}</h3>
 
-                                        <span className="text-lg">
-                                            {<DifficultyText level={forma.difficulte} />}
+                                        <span className="flex flex-row items-center justify-between w-5/12">
+                                            <DifficultyText level={forma.difficulte} />
+                                            <span className="flex flex-row items-center">
+                                                <FaPenAlt className="h-6 w-6 text-[#989898]" />
+                                                <p className="ml-2 text-sm font-Inter text-[#989898]">{forma.lecons.length} leçon(s)</p>
+                                            </span>
+                                            {forma.techs && forma.techs[0] && forma.techs[0].logo &&<img src={forma.techs[0].logo} alt="" className="max-h-[4rem] max-w-[4rem]"/>}
                                         </span>
-                                        <span className="text-lg">
-                                            {hide}
-                                        </span>
-                                        <button
-                                            onClick={() => {
-                                                delFormation.mutateAsync({ id: forma.id });
-                                                window.location.reload()
-                                            }}
-                                            className="rounded-full px-3 py-1 font-semibold no-underline">
-                                            <HiXMark className="text-[2rem] text-[#0e6073] hover:text-red-500" />
-                                        </button>
                                     </Link>
                                 )
                             })}
@@ -115,20 +112,3 @@ const Admin: NextPage = () => {
 };
 
 export default Admin;
-
-const AuthShowcase: React.FC = () => {
-    const { data: sessionData } = useSession();
-
-    return (
-        <div>
-            {sessionData ?
-                <button className="rounded-full px-3 py-3 font-semibold  no-underline transition hover:bg-white/10" onClick={() => void signOut()}>
-                    <img src="/arrow.png" className="max-w-[1.5rem]"></img>
-                </button> :
-                <button className="rounded-full px-2 py-3 font-semibold  no-underline transition hover:bg-white/10" onClick={() => void signIn()}>
-                    <BiUserCircle className="text-[2rem] text-white" />
-                </button>}
-        </div>
-
-    );
-};

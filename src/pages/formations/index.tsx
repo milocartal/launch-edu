@@ -10,6 +10,7 @@ import { IoCheckmarkCircle } from "react-icons/io5";
 import { api } from "~/utils/api";
 import { Difficulty } from "~/pages/components/difficulties";
 import { Formation } from "@prisma/client";
+import Title from "../components/title";
 
 const Home: NextPage = () => {
   const { data: sessionData } = useSession();
@@ -45,32 +46,30 @@ const Home: NextPage = () => {
 
         <div className="flex flex-col items-start justify-start gap-12 pl-24 pt-20 pr-6">
           <div className="flex flex-row items-center justify-between w-full px-10">
-            <h1 className="text-3xl font-bold tracking-tight text-[#0E6073]">
-              Trouvez le cours parfait
-            </h1>
+            <Title title={"Trouvez le cours parfait"} link={""} />
             <div className="flex flex-row items-center justify-evenly">
               <p className="mr-2">Trier par : </p>
-              
+
               {filterType === "alphabetique" ? <button className="px-4 py-1 bg-[#0E6073] rounded-full mx-1" onClick={() => changeFilterType("alphabetique")}>
                 <p className="text-[#fff]">Thématique</p>
               </button> :
-              <button className="px-4 py-1 bg-[#D9D9D9] rounded-full mx-1" onClick={() => changeFilterType("alphabetique")}>
-                <p className="text-[#0E6073]">Thématique</p>
-              </button>
+                <button className="px-4 py-1 bg-[#D9D9D9] rounded-full mx-1" onClick={() => changeFilterType("alphabetique")}>
+                  <p className="text-[#0E6073]">Thématique</p>
+                </button>
               }
               {filterType === "progress" ? <button className="px-4 py-1 bg-[#0E6073] rounded-full mx-1" onClick={() => changeFilterType("progress")}>
                 <p className="text-[#fff]">Progression</p>
               </button> :
-              <button className="px-4 py-1 bg-[#D9D9D9] rounded-full mx-1" onClick={() => changeFilterType("progress")}>
-                <p className="text-[#0E6073]">Progression</p>
-              </button>
+                <button className="px-4 py-1 bg-[#D9D9D9] rounded-full mx-1" onClick={() => changeFilterType("progress")}>
+                  <p className="text-[#0E6073]">Progression</p>
+                </button>
               }
               {filterType === "diff" ? <button className="px-4 py-1 bg-[#0E6073] rounded-full mx-1" onClick={() => changeFilterType("diff")}>
                 <p className="text-[#fff]">Niveau</p>
               </button> :
-              <button className="px-4 py-1 bg-[#D9D9D9] rounded-full mx-1" onClick={() => changeFilterType("diff")}>
-              <p className="text-[#0E6073]">Niveau</p>
-            </button>}
+                <button className="px-4 py-1 bg-[#D9D9D9] rounded-full mx-1" onClick={() => changeFilterType("diff")}>
+                  <p className="text-[#0E6073]">Niveau</p>
+                </button>}
             </div>
           </div>
 
@@ -84,12 +83,12 @@ const Home: NextPage = () => {
                     key={forma.id}
                   >
                     <div className="absolute -top-11 flex items-end justify-center w-[100px] h-[100px]">
-                      {forma.techs[0] && forma.techs[0].logo && <img src={forma.techs[0].logo} alt="" className="max-h-[7rem]"/>}
+                      {forma.techs[0] && forma.techs[0].logo && <img src={forma.techs[0].logo} alt="" className="max-h-[7rem]" />}
                     </div>
                     <h3 className="text-md font-bold mt-12 text-center">{forma.title}</h3>
 
                     <span className="absolute right-5">
-                      <Difficulty level={forma.difficulte}/>
+                      <Difficulty level={forma.difficulte} />
                     </span>
                     <p className="h-7 w-7 text-[#0E6073] absolute left-5">10%</p>
                     {/* <IoCheckmarkCircle className="h-7 w-7 text-[#0E6073] absolute left-5"/> */}
@@ -98,7 +97,7 @@ const Home: NextPage = () => {
             })}
           </div>
         </div>
-        <Header selected={2}/>
+        <Header selected={2} />
       </main>
     </>
   );

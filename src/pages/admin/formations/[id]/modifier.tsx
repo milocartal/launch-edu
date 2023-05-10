@@ -178,12 +178,15 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                             </fieldset>
 
 
-                            <div className="flex gap-2">
+                            <div className="w-full flex gap-4 justify-center">
                                 <label className="switch">
-                                    <input type="checkbox" onClick={() => hidden ? setHide(false) : setHide(true)} defaultChecked={hidden === false} />
-                                    <span className="slider round"></span>
+                                    <input type="checkbox" className="chk" onClick={() => hidden ? setHide(false) : setHide(true)} defaultChecked={hidden === false}/>
+                                    <span className="slider"></span>
                                 </label>
-                                <label>Publier</label>
+                                <div className="flex flex-col h-full justify-between">
+                                    <label>Private</label>
+                                    <label>Publier</label>
+                                </div>
                             </div>
 
                             <button className="rounded-full bg-[#0E6073] px-10 py-3 font-semibold text-white no-underline transition hover:bg-[#0E6073]/80" type="submit" value="submit">Enregistrer les modifications</button>

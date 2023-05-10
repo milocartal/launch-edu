@@ -18,6 +18,7 @@ import { HiXMark } from 'react-icons/hi2';
 import dynamic from 'next/dynamic';
 import { RiAddFill } from 'react-icons/ri'
 import Lesson from '~/pages/components/lesson';
+import Title from '~/pages/components/title';
 
 const QuillNoSSRWrapper = dynamic(import('react-quill'), {
     ssr: false,
@@ -154,10 +155,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
 
                 <section className='w-6/12 h-full flex flex-col justify-between items-center'>
                     <div className="flex flex-col gap-5 w-full">
-                        <div className="flex flex-row items-center justify-start">
-                            <Link href="/admin"><FaArrowLeft className="h-6 w-6 text-[#0E6073] mr-5" /></Link>
-                            <h1 className="text-3xl font-bold tracking-tight text-[#0E6073]">{formation.title}</h1>
-                        </div>
+                        <Title title={formation.title} link={'/admin'} />
                         <div className="flex flex-col items-center w-full overflow-y-auto max-h-[33rem] scrollbar-hide">
                             <div className="flex flex-row items-center justify-between w-full">
                                 <h1 className="text-xl font-bold tracking-tight text-[#0E6073]">Description</h1>
@@ -240,7 +238,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                             + Ajouter une lecon
                         </Link>
                     </div>
-                    <button onClick={() => { delFormation.mutateAsync({ id: formation.id }); window.location.reload() }} className='mt-6 text-red-600 hover:text-red-800'>Supprimer la Formation</button>
+                    <button onClick={() => { delFormation.mutateAsync({ id: formation.id }); window.location.reload() }} className='mt-6 text-red-600 hover:text-red-800'>Supprimer cette formation</button>
                 </aside>
 
                 <Header selected={3} />

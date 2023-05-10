@@ -6,6 +6,7 @@ import { FaPenAlt, FaCheck, FaPlay } from "react-icons/fa";
 
 import Header from './components/header';
 import { useState } from 'react';
+import Title from './components/title';
 
 const Dashboard: NextPage = () => {
 
@@ -68,7 +69,7 @@ const Dashboard: NextPage = () => {
 
             <main className="flex min-h-screen bg-white flex flex-row justify-between pb-20">
                 <div className="flex flex-col items-start justify-start gap-12 pl-24 pt-20 pr-6 w-9/12">
-                    <h1 className="text-3xl font-bold tracking-tight text-[#0E6073] mx-10">Reprendre où vous en étiez</h1>
+                    <Title title={'Reprendre où vous en étiez'} link={''} />
 
                     {DATA.map((item) =>
                         selected === item.id ?
