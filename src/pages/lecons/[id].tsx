@@ -12,7 +12,7 @@ import { FaArrowLeft, FaGithub, FaVideo} from "react-icons/fa";
 import { Etape, EtapeType, Lecon, Formation, Prisma } from '@prisma/client';
 import Header from '../components/header';
 import Title from '../components/title';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type LeconWithEtapes = Prisma.LeconGetPayload<{
     include: { etapes: true }
@@ -102,13 +102,12 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
     console.log("api ", etapes)
     console.log("props ", lecon.etapes)
 
-    const [current, setCurrent] = useState(0);
+    const [current, setCurrent] = useState(lecon.id);
     const [currentEtape, setCurrentEtape] = useState(0);
 
-    function resetSelected(id: number){
-        setCurrent(id);
-        setCurrentEtape(0)
-    }
+    useEffect(() => {
+        setCurrent(lecon.id)
+      });
 
     return (
         <>
@@ -122,14 +121,14 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
 
                 <section className='w-10/12 h-full flex flex-col justify-between items-center pt-10 mb-10'>
                     <div className="flex flex-col w-full items-start">
-                        <Title title={formation.lecons[current].etapes[currentEtape] ? formation.lecons[current].etapes[currentEtape].name : formation.lecons[current]?.title } link={`/formations/${encodeURIComponent(lecon.idf)}`} />
+                        <Title title={lecon.etapes[currentEtape] ? lecon.etapes[currentEtape].name : lecon?.title } link={`/formations/${encodeURIComponent(lecon.idf)}`} />
 
-                        {formation.lecons[current].etapes[currentEtape]?.video && <iframe className="w-11/12 h-[9/16] mt-5" width="560" height="315" src={formation.lecons[current].etapes[currentEtape]?.video} title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>}
+                        {lecon.etapes[currentEtape]?.video && <iframe className="w-11/12 h-[9/16] mt-5" width="560" height="315" src={lecon.etapes[currentEtape]?.video} title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>}
                     
                         <div className="flex flex-col items-center pr-10 w-10/12">
                             <div className="flex flex-col items-start w-full mt-5">
-                                {formation.lecons[current].etapes[currentEtape]?.video && <h3 className="text-xl font-bold tracking-tight text-[#0E6073]">Transcript</h3>}
-                                {formation.lecons[current].etapes[currentEtape]?.transcript ? <div className="text-sm font-Inter text-[#222222] self-start mt-3" dangerouslySetInnerHTML={{ __html: formation.lecons[current].etapes[currentEtape]?.transcript }} /> : <p className="text-sm font-Inter text-[#222222] self-start mt-3">Pas de transcript disponible</p>}
+                                {lecon.etapes[currentEtape]?.video && <h3 className="text-xl font-bold tracking-tight text-[#0E6073]">Transcript</h3>}
+                                {lecon.etapes[currentEtape]?.transcript ? <div className="text-sm font-Inter text-[#222222] self-start mt-3" dangerouslySetInnerHTML={{ __html: lecon.etapes[currentEtape]?.transcript }} /> : <p className="text-sm font-Inter text-[#222222] self-start mt-3">Pas de transcript disponible</p>}
                             </div>
                         </div>
                     </div>
@@ -137,7 +136,7 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                 <div className="w-2/12 fixed right-0 flex bg-[#0E6073] flex-col items-center h-full pt-6">
                 {formation.lecons as Lecon[] && formation.lecons.length > 0 && formation.lecons.map((lecon, index) => {
                     return (
-                        current === index ?
+                        current === lecon.id ?
                             <div className="w-full bg-[#1A808C] flex flex-col items-start">
                                 <div className="w-full py-3 flex flex-row items-center px-8">
                                     <p className="text-sm font-Inter text-[#63AEAB] mr-3">{index+1}</p>
@@ -157,10 +156,10 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                                 })}
                             </div>
                         :
-                            <button className="w-full py-3 flex flex-row items-center px-8" onClick={() => resetSelected(index)}>
+                            <Link href={`/lecons/${lecon.id}`} className="w-full py-3 flex flex-row items-center px-8">
                                 <p className="text-sm font-Inter text-[#63AEAB] mr-3">{index+1}</p>
                                 <p className="text-sm font-Inter text-white">{lecon.title}</p>
-                            </button>
+                            </Link>
                     )})}
                 </div>
             </main>
