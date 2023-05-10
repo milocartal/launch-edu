@@ -124,12 +124,12 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                     <div className="flex flex-col w-full items-start">
                         <Title title={formation.lecons[current].etapes[currentEtape] ? formation.lecons[current].etapes[currentEtape].name : formation.lecons[current]?.title } link={`/formations/${encodeURIComponent(lecon.idf)}`} />
 
-                        <iframe className="w-11/12 h-[9/16]" width="560" height="315" src={formation.lecons[current].etapes[currentEtape]?.video} title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
+                        {formation.lecons[current].etapes[currentEtape]?.video && <iframe className="w-11/12 h-[9/16] mt-5" width="560" height="315" src={formation.lecons[current].etapes[currentEtape]?.video} title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>}
                     
                         <div className="flex flex-col items-center pr-10 w-10/12">
                             <div className="flex flex-col items-start w-full mt-5">
-                                <h3 className="text-xl font-bold tracking-tight text-[#0E6073]">Transcript</h3>
-                                {lecon.etapes && lecon.etapes[0] ? <div className="text-sm font-Inter text-[#222222] self-start mt-3" dangerouslySetInnerHTML={{ __html: formation.lecons[current].etapes[currentEtape]?.transcript }} /> : <p className="text-sm font-Inter text-[#222222] self-start mt-3">Pas de transcript disponible</p>}
+                                {formation.lecons[current].etapes[currentEtape]?.video && <h3 className="text-xl font-bold tracking-tight text-[#0E6073]">Transcript</h3>}
+                                {formation.lecons[current].etapes[currentEtape]?.transcript ? <div className="text-sm font-Inter text-[#222222] self-start mt-3" dangerouslySetInnerHTML={{ __html: formation.lecons[current].etapes[currentEtape]?.transcript }} /> : <p className="text-sm font-Inter text-[#222222] self-start mt-3">Pas de transcript disponible</p>}
                             </div>
                         </div>
                     </div>
