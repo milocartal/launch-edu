@@ -32,7 +32,7 @@ export const getServerSideProps: GetServerSideProps<{
     if (!formation) {
         return {
             redirect: {
-                destination: '/formation',
+                destination: '/formations',
                 permanent: false,
             },
         }
