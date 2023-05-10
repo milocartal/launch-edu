@@ -7,14 +7,17 @@ import { api } from "~/utils/api";
 
 import "~/styles/globals.css";
 import 'react-quill/dist/quill.snow.css'
+import Head from "next/head";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
   return (
+    
     <SessionProvider session={session}>
       <ThemeProvider attribute="class">
+        <Head><link rel="icon" href="/okto.png" /></Head>
         <Component {...pageProps} />
       </ThemeProvider>
     </SessionProvider>
