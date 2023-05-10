@@ -78,7 +78,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
             <main className="flex min-h-screen flex-col items-center bg-white">
 
                 <div className="container flex flex-col items-start justify-start gap-12 px-4 py-20">
-                    <Title title={formation.title} link='/formations'/>
+                    <Title title={formation.title} link='formations'/>
 
                     <div className="flex flex-col items-center pr-10 w-9/12">
                         <div className="flex flex-row items-center justify-between w-full">
