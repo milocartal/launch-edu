@@ -95,7 +95,7 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                             <h1 className="text-3xl font-bold tracking-tight text-[#0E6073]">{formation.title}</h1>
                         </div>
 
-                        <iframe className="w-11/12 h-[9/16]" width="560" height="315" src="https://www.youtube.com/embed/jfKfPfyJRdk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        <iframe className="w-11/12 h-[9/16]" width="560" height="315" src="https://www.youtube.com/embed/jfKfPfyJRdk" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
                     
                         <div className="flex flex-col items-center pr-10 w-10/12">
                             <div className="flex flex-col items-start w-full mt-5">
