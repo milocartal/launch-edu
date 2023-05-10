@@ -51,6 +51,7 @@ const Admin: NextPage = () => {
     const [tab, setTab] = useState("normal")
     const [selectedTech, setSelectTech] = useState<string>()
     const [urlLogo, setLogo] = useState("")
+    const [SearchTag, setSearchTag] = useState('');
 
     const { data: sessionData } = useSession();
 
@@ -89,6 +90,11 @@ const Admin: NextPage = () => {
         await addFormation.mutateAsync({ title: title, description: content, difficulte: diff, techno: techno, hide: hidden })
     }
 
+    const handleSearchTag = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let value = e.target.value;
+        setSearchTag(value);
+    };
+
     return (
         <>
             <Head>
@@ -110,7 +116,8 @@ const Admin: NextPage = () => {
                                 <h1 className="text-5xl font-extrabold tracking-tight  sm:text-[2.5rem] text-[#0e6073]">Créer une formation</h1>
                             </div>
                             <p className="mb-3">Choisir une thématique:</p>
-                            <fieldset className="flex flex-col justify-between h-full w-full shadow-xl shadow-black/30 rounded-lg">
+                            <input type='text' name="lecon tag" placeholder='Rechercher un tag' className="p-[1rem] rounded-t-lg bg-none shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)] w-full" autoComplete="off" onChange={handleSearchTag} />
+                            <fieldset className="flex flex-col justify-between h-full w-full shadow-xl shadow-black/30 rounded-b-lg">
                                 <fieldset className="flex flex-col w-full rounded-t-lg" id="listTech">
                                     {techList as Technologie[] && techList && techList.length > 0 && techList.map((techno) => {
                                         return (

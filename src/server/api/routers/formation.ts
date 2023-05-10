@@ -62,7 +62,7 @@ export const formationRouter = createTRPCRouter({
         return prisma.formation.delete({ where: { id: input.id } })
     }),
 
-    update: protectedProcedure.input(z.object({ id: z.string(), title: z.string(), description: z.string(), difficulte: z.number(), hide: z.boolean()})).mutation(({ input }) => {
+    update: protectedProcedure.input(z.object({ id: z.string(), title: z.string(), description: z.string(), difficulte: z.number(), hide: z.boolean() })).mutation(({ input }) => {
         return prisma.formation.update({
             where: {
                 id: input.id
@@ -72,14 +72,6 @@ export const formationRouter = createTRPCRouter({
                 description: input.description,
                 difficulte: input.difficulte,
                 hidden: input.hide
-            }
-        })
-    }),
-
-    getLecons: publicProcedure.input(z.object({ id: z.string() })).mutation(({ input }) => {
-        return prisma.lecon.findMany({
-            where: {
-                idf: input.id
             }
         })
     }),
@@ -102,6 +94,66 @@ export const formationRouter = createTRPCRouter({
             },
             data: {
                 hidden: false,
+            }
+        })
+    }),
+
+    addPrerequis: protectedProcedure.input(z.object({ id: z.string(), idP: z.string() })).mutation(({ input }) => {
+        return prisma.formation.update({
+            where: {
+                id: input.id,
+            },
+            data:{
+                Prerequis:{
+                    connect:{
+                        id: input.idP
+                    }
+                }
+            }
+        })
+    }),
+
+    removePrerequis: protectedProcedure.input(z.object({ id: z.string(), idP: z.string() })).mutation(({ input }) => {
+        return prisma.formation.update({
+            where: {
+                id: input.id,
+            },
+            data:{
+                Prerequis:{
+                    disconnect:{
+                        id: input.idP
+                    }
+                }
+            }
+        })
+    }),
+
+    addTag: protectedProcedure.input(z.object({ id: z.string(), idT: z.string() })).mutation(({ input }) => {
+        return prisma.formation.update({
+            where: {
+                id: input.id,
+            },
+            data:{
+                techs:{
+                    connect:{
+                        id: input.idT
+                    }
+                }
+            }
+        })
+    }),
+
+    removeTag: protectedProcedure.input(z.object({ id: z.string(), idT: z.string() })).mutation(({ input }) => {
+        return prisma.formation.update({
+            where: {
+                id: input.id,
+            },
+            data:{
+                techs:{
+                    disconnect:{
+                        id: input.idT
+                    }
+                }
             }
         })
     }),
