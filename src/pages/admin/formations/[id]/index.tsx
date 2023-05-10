@@ -211,7 +211,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                             + Ajouter une lecon
                         </Link>
                     </div>
-                    <button onClick={() =>{delFormation.mutateAsync({ id: formation.id }); window.location.reload()}} className='mt-6 text-red-600 hover:text-red-800'>Supprimer la Formation</button>
+                    <button onClick={() =>{delFormation.mutateAsync({ id: formation.id }); window.location.reload()}} className='mt-6 text-red-600 hover:text-red-800'>Supprimer cette formation</button>
                 </aside>
 
                 <Header selected={3} />

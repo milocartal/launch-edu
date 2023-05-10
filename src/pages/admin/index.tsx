@@ -85,27 +85,19 @@ const Admin: NextPage = () => {
                                     hide = "Postée"
                                 return (
                                     <Link
-                                        className="flex flex-row justify-between items-center mb-1 w-full bg-white shadow-[4px_5px_12px_6px_rgba(0,0,0,0.25)] py-2 pl-16 pr-6 justify-between hover:bg-[#0E6070]/20 h-[5rem]"
+                                        className="flex flex-row justify-between items-center mb-1 w-full bg-white shadow-[4px_5px_12px_6px_rgba(0,0,0,0.25)] py-2 pl-16 pr-6 justify-between hover:bg-[#ebebeb]/20 h-[5rem]"
                                         href={`/admin/formations/${encodeURIComponent(forma.id)}`}
                                         key={forma.id}
                                     >
                                         <h3 className="text-md font-bold text-[#0E6073]">{forma.title}</h3>
 
-                                        <span className="flex flex-row items-center justify-evenly w-6/12">
+                                        <span className="flex flex-row items-center justify-between w-5/12">
                                             <DifficultyText level={forma.difficulte} />
                                             <span className="flex flex-row items-center">
                                                 <FaPenAlt className="h-6 w-6 text-[#989898]" />
                                                 <p className="ml-2 text-sm font-Inter text-[#989898]">{forma.lecons.length} leçon(s)</p>
                                             </span>
                                             <img src={forma.techs[0].logo} alt="" className="max-h-[4rem]"/>
-                                            <button
-                                            onClick={() => {
-                                                delFormation.mutateAsync({ id: forma.id });
-                                                window.location.reload()
-                                            }}
-                                                className="rounded-full px-3 py-1 font-semibold no-underline">
-                                                <HiXMark className="text-[2rem] text-[#0e6073] hover:text-red-500" />
-                                            </button>
                                         </span>
                                     </Link>
                                 )
