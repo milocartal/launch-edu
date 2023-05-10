@@ -17,6 +17,7 @@ import { HiMagnifyingGlass } from "react-icons/hi2";
 import { BiUserCircle } from "react-icons/bi"
 
 import Header from "../components/header"
+import Title from "../components/title";
 
 const QuillNoSSRWrapper = dynamic(import('react-quill'), {
     ssr: false,
@@ -117,12 +118,9 @@ const Admin: NextPage = () => {
                 <div className="flex w-full max-h-screen ml-[6rem] gap-10 mt-24 mr-10">
 
 
-                    <form onSubmit={handleFormation} className="flex justify-center gap-[15%] item-center w-full h-full text-[#041f25] dark:text-white" method="POST">
+                    <form onSubmit={handleFormation} className="flex justify-center gap-[15%] item-center w-full h-full text-[#041f25] dark:text-white pl-5" method="POST">
                         <fieldset className="flex flex-col max-h-[70%] w-[40%]">
-                            <div className="flex gap-4 w-[100%] mb-10">
-                                <Link href="/admin/main"><HiArrowSmLeft className="text-[3rem] text-[#0e6073]" /></Link>
-                                <h1 className="text-5xl font-extrabold tracking-tight  sm:text-[2.5rem] text-[#0e6073]">Créer une formation</h1>
-                            </div>
+                            <Title title={"Créer une formation"} link={"/admin/main"} />
                             <p className="mb-3">Choisir une thématique:</p>
                             <fieldset className="flex flex-col justify-between h-full w-full shadow-xl shadow-black/30 rounded-lg">
                                 <fieldset className="flex flex-col w-full rounded-t-lg" id="listTech">
