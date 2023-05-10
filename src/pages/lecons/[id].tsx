@@ -9,12 +9,26 @@ import { getSession, signIn, signOut, useSession } from "next-auth/react";
 import { api } from "~/utils/api";
 import { prisma } from '~/server/db';
 import { FaArrowLeft, FaGithub, FaVideo} from "react-icons/fa";
-import { Etape, EtapeType, Lecon, Formation } from '@prisma/client';
+import { Etape, EtapeType, Lecon, Formation, Prisma } from '@prisma/client';
 import Header from '../components/header';
+import Title from '../components/title';
+import { useState } from 'react';
+
+type LeconWithEtapes = Prisma.LeconGetPayload<{
+    include: { etapes: true }
+}>
+
+type FormationWithLecon = Prisma.FormationGetPayload<{
+    include: { lecons: {
+        include: {
+            etapes: true
+        }
+    } }
+}>
 
 export const getServerSideProps: GetServerSideProps<{
-    lecon: Lecon;
-    formation: Formation;
+    lecon: LeconWithEtapes;
+    formation: FormationWithLecon
 }> = async function (context) {
 
     const session = await getSession(context)
@@ -23,6 +37,9 @@ export const getServerSideProps: GetServerSideProps<{
         where: {
             id: context.query.id as string
         },
+        include: {
+            etapes: true
+        }
     });
     const idf = lecon?.idf;
 
@@ -30,52 +47,67 @@ export const getServerSideProps: GetServerSideProps<{
         where: {
             id: lecon?.idf as string
         },
+        include: {
+            techs: true,
+            lecons: {
+                include: {
+                    etapes: true
+                }
+            }
+
+        }
     });
 
+    if (!lecon) {
+        return {
+            redirect: {
+                destination: '/formation/'+idf,
+                permanent: false,
+            },
+        }
+    }
+
     if (!session) {
-      return {
-        redirect: {
-          destination: '/formations/'+idf,
-          permanent: false,
-        },
-      }
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        }
     }
     else {
-        
+
         return {
             props: {
-                lecon: JSON.parse(JSON.stringify(lecon)) as Lecon,
-                formation: JSON.parse(JSON.stringify(formation)) as Formation
+                lecon: JSON.parse(JSON.stringify(lecon)) as LeconWithEtapes,
+                formation: JSON.parse(JSON.stringify(formation)) as FormationWithLecon
             }
         };
     }
-    
+
 };
 
 const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ lecon, formation }) => {
     const { data: sessionData } = useSession();
-    const admin = sessionData?.user.admin
 
     const { data: typeList } = api.type.getAll.useQuery()
+    const { data: lecons } = api.lecon.getAll.useQuery({ id: formation.id })
 
     const idL = lecon.id
     const idf = lecon.idf
     const addEtape = api.etape.create.useMutation()
     const { data: etapes } = api.etape.getAll.useQuery({ id: idL })
+    const delLecon = api.lecon.delete.useMutation()
 
-    async function handleEtape(event: React.SyntheticEvent) {
-        //event.preventDefault()
-        const target = event.target as typeof event.target & {
-            etapeName: { value: string };
-            idt: { value: string };
-            description: { value: string };
-            code: { value: string };
-        };
-        const name = target.etapeName.value;
-        const idt = target.idt.value;
-        const desc = target.description.value;
-        const code = target.code.value;
-        //await addEtape.mutateAsync({ name: name, idt: idt, description: desc, code: code, idl: idL })
+    console.log("api ", etapes)
+    console.log("props ", lecon.etapes)
+
+    const [current, setCurrent] = useState(0);
+    const [currentEtape, setCurrentEtape] = useState(0);
+
+    function resetSelected(id: number){
+        setCurrent(id);
+        setCurrentEtape(0)
     }
 
     return (
@@ -86,146 +118,56 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                 <link rel="icon" href="/okto.png" />
             </Head>
 
-            <main className="flex min-h-screen bg-white pl-24 pt-10 w-full justify-between ">
+            <main className="flex min-h-screen bg-white pl-28 pt-10 w-full justify-between">
 
                 <section className='w-10/12 h-full flex flex-col justify-between items-center pt-10 mb-10'>
-                    <div className="flex flex-col gap-5 w-full">
-                        <div className="flex flex-row items-center justify-start">
-                            <Link href={`/formations/${encodeURIComponent(lecon.idf)}`}><FaArrowLeft className="h-6 w-6 text-[#0E6073] mr-5" /></Link>
-                            <h1 className="text-3xl font-bold tracking-tight text-[#0E6073]">{formation.title}</h1>
-                        </div>
+                    <div className="flex flex-col w-full items-start">
+                        <Title title={formation.lecons[current].etapes[currentEtape] ? formation.lecons[current].etapes[currentEtape].name : formation.lecons[current]?.title } link={`/formations/${encodeURIComponent(lecon.idf)}`} />
 
-                        <iframe className="w-11/12 h-[9/16]" width="560" height="315" src="https://www.youtube.com/embed/jfKfPfyJRdk" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
+                        <iframe className="w-11/12 h-[9/16]" width="560" height="315" src={formation.lecons[current].etapes[currentEtape]?.video} title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
                     
                         <div className="flex flex-col items-center pr-10 w-10/12">
                             <div className="flex flex-col items-start w-full mt-5">
                                 <h3 className="text-xl font-bold tracking-tight text-[#0E6073]">Transcript</h3>
-                                <p className="text-sm font-Inter text-[#222222] self-start mt-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus interdum hendrerit metus, non pretium libero. Nullam pulvinar, velit vel varius congue, eros libero varius est, nec semper tortor ligula quis sem. Nam blandit id turpis sed feugiat. Maecenas tincidunt aliquet tempor. Nam hendrerit ex laoreet sapien bibendum gravida. Donec ornare lorem vitae arcu fermentum, ac consectetur est accumsan. Sed elementum urna id odio auctor, nec tincidunt nibh sagittis. Aenean sodales leo eu metus bibendum laoreet at vel ex. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam sollicitudin augue massa, vel pretium metus sollicitudin eu.</p>
-                                <p className="text-sm font-Inter text-[#222222] self-start mt-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus interdum hendrerit metus, non pretium libero. Nullam pulvinar, velit vel varius congue, eros libero varius est, nec semper tortor ligula quis sem. Nam blandit id turpis sed feugiat. Maecenas tincidunt aliquet tempor. Nam hendrerit ex laoreet sapien bibendum gravida. Donec ornare lorem vitae arcu fermentum, ac consectetur est accumsan. Sed elementum urna id odio auctor, nec tincidunt nibh sagittis. Aenean sodales leo eu metus bibendum laoreet at vel ex. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam sollicitudin augue massa, vel pretium metus sollicitudin eu.</p>
-                                <p className="text-sm font-Inter text-[#222222] self-start mt-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus interdum hendrerit metus, non pretium libero. Nullam pulvinar, velit vel varius congue, eros libero varius est, nec semper tortor ligula quis sem. Nam blandit id turpis sed feugiat. Maecenas tincidunt aliquet tempor. Nam hendrerit ex laoreet sapien bibendum gravida. Donec ornare lorem vitae arcu fermentum, ac consectetur est accumsan. Sed elementum urna id odio auctor, nec tincidunt nibh sagittis. Aenean sodales leo eu metus bibendum laoreet at vel ex. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam sollicitudin augue massa, vel pretium metus sollicitudin eu.</p>
-                                <p className="text-sm font-Inter text-[#222222] self-start mt-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus interdum hendrerit metus, non pretium libero. Nullam pulvinar, velit vel varius congue, eros libero varius est, nec semper tortor ligula quis sem. Nam blandit id turpis sed feugiat. Maecenas tincidunt aliquet tempor. Nam hendrerit ex laoreet sapien bibendum gravida. Donec ornare lorem vitae arcu fermentum, ac consectetur est accumsan. Sed elementum urna id odio auctor, nec tincidunt nibh sagittis. Aenean sodales leo eu metus bibendum laoreet at vel ex. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam sollicitudin augue massa, vel pretium metus sollicitudin eu.</p>
-                                <p className="text-sm font-Inter text-[#222222] self-start mt-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus interdum hendrerit metus, non pretium libero. Nullam pulvinar, velit vel varius congue, eros libero varius est, nec semper tortor ligula quis sem. Nam blandit id turpis sed feugiat. Maecenas tincidunt aliquet tempor. Nam hendrerit ex laoreet sapien bibendum gravida. Donec ornare lorem vitae arcu fermentum, ac consectetur est accumsan. Sed elementum urna id odio auctor, nec tincidunt nibh sagittis. Aenean sodales leo eu metus bibendum laoreet at vel ex. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam sollicitudin augue massa, vel pretium metus sollicitudin eu.</p>
-                                <p className="text-sm font-Inter text-[#222222] self-start mt-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus interdum hendrerit metus, non pretium libero. Nullam pulvinar, velit vel varius congue, eros libero varius est, nec semper tortor ligula quis sem. Nam blandit id turpis sed feugiat. Maecenas tincidunt aliquet tempor. Nam hendrerit ex laoreet sapien bibendum gravida. Donec ornare lorem vitae arcu fermentum, ac consectetur est accumsan. Sed elementum urna id odio auctor, nec tincidunt nibh sagittis. Aenean sodales leo eu metus bibendum laoreet at vel ex. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam sollicitudin augue massa, vel pretium metus sollicitudin eu.</p>
-                                <p className="text-sm font-Inter text-[#222222] self-start mt-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus interdum hendrerit metus, non pretium libero. Nullam pulvinar, velit vel varius congue, eros libero varius est, nec semper tortor ligula quis sem. Nam blandit id turpis sed feugiat. Maecenas tincidunt aliquet tempor. Nam hendrerit ex laoreet sapien bibendum gravida. Donec ornare lorem vitae arcu fermentum, ac consectetur est accumsan. Sed elementum urna id odio auctor, nec tincidunt nibh sagittis. Aenean sodales leo eu metus bibendum laoreet at vel ex. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam sollicitudin augue massa, vel pretium metus sollicitudin eu.</p>
-                                <p className="text-sm font-Inter text-[#222222] self-start mt-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus interdum hendrerit metus, non pretium libero. Nullam pulvinar, velit vel varius congue, eros libero varius est, nec semper tortor ligula quis sem. Nam blandit id turpis sed feugiat. Maecenas tincidunt aliquet tempor. Nam hendrerit ex laoreet sapien bibendum gravida. Donec ornare lorem vitae arcu fermentum, ac consectetur est accumsan. Sed elementum urna id odio auctor, nec tincidunt nibh sagittis. Aenean sodales leo eu metus bibendum laoreet at vel ex. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam sollicitudin augue massa, vel pretium metus sollicitudin eu.</p>
+                                {lecon.etapes && lecon.etapes[0] ? <div className="text-sm font-Inter text-[#222222] self-start mt-3" dangerouslySetInnerHTML={{ __html: formation.lecons[current].etapes[currentEtape]?.transcript }} /> : <p className="text-sm font-Inter text-[#222222] self-start mt-3">Pas de transcript disponible</p>}
                             </div>
                         </div>
                     </div>
                 </section>
                 <div className="w-2/12 fixed right-0 flex bg-[#0E6073] flex-col items-center h-full pt-6">
-                    <div className="w-full bg-[#1A808C] h-40 flex flex-col items-start pt-2">
-                        <div className="w-full h-10 flex flex-row items-center px-8">
-                            <p className="text-sm font-Inter text-[#63AEAB] mr-3">1</p>
-                            <p className="text-sm font-Inter text-white">Leçon 1</p>
-                        </div>
-                        <div className="bg-[#2EA3A5] w-full px-8 py-1 mb-2">
-                            <button>
-                                <p className="ml-8 text-sm font-Inter text-white">Leçon</p>
+                {formation.lecons as Lecon[] && formation.lecons.length > 0 && formation.lecons.map((lecon, index) => {
+                    return (
+                        current === index ?
+                            <div className="w-full bg-[#1A808C] flex flex-col items-start">
+                                <div className="w-full py-3 flex flex-row items-center px-8">
+                                    <p className="text-sm font-Inter text-[#63AEAB] mr-3">{index+1}</p>
+                                    <p className="text-sm font-Inter text-white">{lecon.title}</p>
+                                </div>
+                                {lecon.etapes && lecon.etapes.length > 0 && lecon.etapes.map((etape, indexetape) => {
+                                    return (
+                                    currentEtape === indexetape ?
+                                        <button className="bg-[#2EA3A5] w-full px-8 flex flex-row justify-start">
+                                            <p className="px-8 py-2 text-sm font-Inter text-white">{etape.name}</p>
+                                        </button>
+                                    :
+                                    <button onClick={() => setCurrentEtape(indexetape)} className="w-full px-8 flex flex-row justify-start">
+                                        <p className="px-8 py-2 text-sm font-Inter text-white">{etape.name}</p>
+                                    </button>
+                                    )
+                                })}
+                            </div>
+                        :
+                            <button className="w-full py-3 flex flex-row items-center px-8" onClick={() => resetSelected(index)}>
+                                <p className="text-sm font-Inter text-[#63AEAB] mr-3">{index+1}</p>
+                                <p className="text-sm font-Inter text-white">{lecon.title}</p>
                             </button>
-                        </div>
-                        <button>
-                            <p className="ml-8 mb-3 px-8 text-sm font-Inter text-white">Exercice</p>
-                        </button>
-                        <button>
-                            <p className="ml-8 mb-3 px-8 text-sm font-Inter text-white">Solution</p>
-                        </button>
-                    </div>
-                    <button className="w-full h-10 flex flex-row items-center px-8">
-                        <p className="text-sm font-Inter text-[#63AEAB] mr-3">2</p>
-                        <p className="text-sm font-Inter text-white">Leçon 2</p>
-                    </button>
+                    )})}
                 </div>
             </main>
 
             <Header selected={2}/>
-            {/* <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-                {lecon &&
-                    <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-                        <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-                            <span className="text-[hsl(280,100%,70%)]">{lecon.title}</span> lecon
-                        </h1>
-
-                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 md:gap-8">
-                            {etapes as Etape[] && etapes && etapes.length > 0 && etapes.map((etape) => {
-
-                                return (
-                                    <Link
-                                        className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-                                        href={`/components/etapes/${etape.id}`}
-                                        key={etape.id}
-                                    >
-                                        <h3 className="text-2xl font-bold">{etape.name}</h3>
-                                        
-
-                                        <div className="text-lg">
-                                            <p>{etape.updatedAt.getDate()}/{etape.updatedAt.getMonth()}/{etape.updatedAt.getFullYear()} at {etape.updatedAt.getHours()}:{etape.updatedAt.getMinutes()}</p>
-                                        </div>
-                                    </Link>
-                                )
-                            })}
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                            <AuthShowcase />
-                            <Link href="/"><button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">Home</button></Link>
-                            <Link href={`/components/formations/${idf}`}><button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">Liste Lecon</button></Link>
-                        </div>
-
-
-                        {admin ?
-                            <form onSubmit={handleEtape} className="flex flex-col gap-5 item-center justify-center" method="POST">
-                                <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[3rem]">Etape</h1>
-
-                                <label htmlFor="etapeName" className="text-white">Titre</label>
-                                <input name="etapeName" id="etapeName" type="text" placeholder="Title of the etape" required></input>
-
-                                <label htmlFor='idt' className='text-white'>Type</label>
-                                <select id="idt" name="idt" required>
-                                    {typeList as EtapeType[] && typeList && typeList.length > 0 && typeList.map((type) => {
-
-                                        return (
-                                            <option value={type.id} key={type.id}>{type.name}</option>
-                                        )
-                                    })}
-                                </select>
-
-                                <label htmlFor="description" className="text-white">Description</label>
-                                <textarea name="description" id="description" placeholder="Description de l'etape" required></textarea>
-
-                                <label htmlFor="code" className="text-white">Titre</label>
-                                <input name="code" id="code" type="url" placeholder="url du code" required></input>
-
-                                <button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20" type="submit" value="submit">Ajouter</button>
-                            </form> :
-                            <p></p>
-                        }
-
-
-
-                    </div>
-                }
-            </main> */}
         </>
     );
 };
 
 export default etapes;
-
-const AuthShowcase: React.FC = () => {
-    const { data: sessionData } = useSession();
-
-    return (
-        <div className="flex flex-col items-center justify-center gap-4">
-            <p className="text-center text-2xl text-white">
-                {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
-            </p>
-            {sessionData?.user.admin && <Link href="/components/admin"><button className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">Admin</button></Link>}
-            <button
-                className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-                onClick={sessionData ? () => void signOut() : () => void signIn()}
-            >
-                {sessionData ? "Sign out" : "Sign in"}
-            </button>
-        </div>
-    );
-};
