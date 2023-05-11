@@ -18,7 +18,7 @@ export default function Custom404() {
     return (
       <>
       <Head>
-        <title>ERROR 404</title>
+        <title>Erreur 404</title>
       </Head>
       <main className="flex flex-col min-h-screen w-full items-center justify-center bg-[#1A808C] ">
 
