@@ -18,11 +18,6 @@ import { BiUserCircle } from "react-icons/bi"
 import { FaPenAlt } from "react-icons/fa";
 import Title from "../components/title";
 
-const QuillNoSSRWrapper = dynamic(import('react-quill'), {
-    ssr: false,
-    loading: () => <p>Loading ...</p>,
-})
-
 export const getServerSideProps: GetServerSideProps<{
     session: SessionAuth;
 }> = async function (context) {
@@ -44,18 +39,12 @@ export const getServerSideProps: GetServerSideProps<{
 };
 
 const Admin: NextPage = () => {
-    //document.getElementById("defaultOpen").click();
-
-    const [content, setContent] = useState('');
-    const [tab, setTab] = useState("tech")
-
     const { data: sessionData } = useSession();
 
     const admin = sessionData?.user.admin
 
-    const addFormation = api.formation.create.useMutation()
-    const delFormation = api.formation.delete.useMutation()
     const { data: formations } = api.formation.getAll.useQuery()
+    const { data: technologies } = api.technologie.getAll.useQuery()
 
     return (
         <>
@@ -66,9 +55,26 @@ const Admin: NextPage = () => {
             </Head>
             {admin ?
 
-                <main className="flex min-h-screen bg-white justify-between dark:bg-[#041F25] pb-10">
-                    <div className="w-3/12 bg-[#0E6073] fixed right-0 flex flex-col items-start justify-start h-full pt-24 px-10">
-                        <Link href="/admin/addFormation"><button>Créer une formation</button></Link>
+                <main className="flex min-h-screen bg-white justify-between dark:bg-[#041F25]">
+                    <div className="w-3/12 bg-[#0E6073] fixed right-0 flex flex-col items-center justify-between h-full pt-36 pb-14 px-5">
+                        <div>
+                            <div className="flex flex-row justify-center items-center">
+                                <h3 className="text-[130px] font-Inter text-[#63AEAB]/30 leading-none">{formations?.length}</h3>
+                                <p className="text-2xl font-Inter text-white absolute">Cours créés</p>
+                            </div>
+                            <div className="flex flex-row justify-center items-center">
+                                <h3 className="text-[130px] font-Inter text-[#63AEAB]/30 leading-none">{technologies?.length}</h3>
+                                <p className="text-2xl font-Inter text-white absolute">Thématiques</p>
+                            </div>
+                        </div>
+                        <div className="w-full">
+                            <Link href={"/admin/gestion"} className="flex justify-center items-center text-white bg-[#2EA3A5] h-14 rounded-full hover:bg-[#1e818c] mb-3">
+                                Gestion technique
+                            </Link>
+                            <Link href={"/admin/addFormation"} className="flex justify-center items-center text-white bg-[#2EA3A5] h-14 rounded-full hover:bg-[#1e818c]">
+                                Créer une formation
+                            </Link>
+                        </div>
                     </div>
 
                     <div className="flex flex-col items-start justify-start gap-12 pl-28 pt-20 pr-6 w-9/12">
@@ -94,7 +100,7 @@ const Admin: NextPage = () => {
                                                 <FaPenAlt className="h-6 w-6 text-[#989898]" />
                                                 <p className="ml-2 text-sm font-Inter text-[#989898]">{forma.lecons.length} leçon(s)</p>
                                             </span>
-                                            {forma.techs && forma.techs[0] && forma.techs[0].logo &&<img src={forma.techs[0].logo} alt="" className="max-h-[4rem] max-w-[4rem]"/>}
+                                            {forma.techs && forma.techs[0] && forma.techs[0].logo && <img src={forma.techs[0].logo} alt="" className="max-h-[4rem] max-w-[4rem]" />}
                                         </span>
                                     </Link>
                                 )
