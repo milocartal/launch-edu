@@ -179,7 +179,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                     {formation.techs as Technologie[] && formation.techs.length > 0 && formation.techs.map((tech) => {
                                         return (
                                             <button
-                                                className="w-full flex justify-center py-5 shadow-md mt-1 bg-[#0E6070] text-white font-bold tracking-tight rounded-lg hover:text-red-600"
+                                                className="w-full flex justify-center py-5 shadow-md mt-1 bg-[#2ea3a5] text-white font-bold tracking-tight rounded-lg hover:bg-[#0e6073]"
                                                 onClick={() => {
                                                     delTag.mutateAsync({ id: formation.id, idT: tech.id });
                                                     window.location.reload()
@@ -231,8 +231,8 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                     </Link>)
                             })}
                         </div>
-                        <Link href={`/admin/formations/${formation.id}/addLesson`} className="flex items-center justify-center h-[5rem] w-full bg-[#2ea3a5] text-white hover:cursor-pointer transition hover:bg-[#0e6073] rounded-b-lg">
-                            + Ajouter une lecon
+                        <Link href={`/admin/formations/${formation.id}/addLesson`} className="flex items-center justify-center h-[8rem] w-full bg-[#2ea3a5] text-white hover:cursor-pointer transition hover:bg-[#0e6073] rounded-b-lg">
+                            + Ajouter une leçon
                         </Link>
                     </div>
                     <button onClick={() => { delFormation.mutateAsync({ id: formation.id }); window.location.reload() }} className='mt-6 text-red-600 hover:text-red-800'>Supprimer cette formation</button>

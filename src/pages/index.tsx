@@ -17,6 +17,7 @@ import dynamic from "next/dynamic";
 import { useTheme } from "next-themes";
 import { prisma } from "~/server/db";
 import { useState } from "react";
+import Techno from "./components/techno";
 
 const Home: NextPage = () => {
   const { systemTheme, theme, setTheme } = useTheme();
@@ -116,24 +117,17 @@ const Home: NextPage = () => {
           </div>
 
           <h1 className="text-4xl self-start mb-11 mt-12 text-[#0E6073] dark:text-white">Trouvez le bon cours pour vous</h1>
-          <div className="bg-white width mb-24 w-8/12 h-16 flex flex-row items-center px-8 rounded-full shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)]">
+          <div className="bg-white width mb-14 w-8/12 h-16 flex flex-row items-center px-8 rounded-full shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)]">
             <HiMagnifyingGlass className="h-9 w-9 text-[#989898]" />
             <input className=" h-16 w-40 shadow-none w-full bg-transparent dark:text-[#041f25]" type="text" name="searchValue" id="searchValue" onChange={handleSearchTerm} />
           </div>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-4 w-full items-center gap-y-32 mt-10">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-5 w-full items-center gap-y-14 mt-10">
             {techs as Technologie[] && techs && techs.length > 0 && techs.filter((tech) => {
               return tech.name.toLowerCase().includes(SearchTerm.toLowerCase())
             }).map((tech) => {
               return (
-                <Link href={`/technologies/${tech.id}`} className="flex flex-col items-center bg-white/20 rounded-3xl shadow-lg w-full mx-2 relative transition hover:scale-[1.05]" key={tech.id}>
-                  <div className="absolute -top-20 flex items-end justify-center w-[170px] h-[150px]">
-                    {tech.logo && <img src={tech.logo} alt="" className="max-h-[11rem]"/>}
-                  </div>
-                  <div className="w-full px-4 flex flex-col items-center mt-20">
-                    <h3 className="text-3xl mb-3 text-cyan-700 text-[#0E6073] dark:text-[#63AEAB]">{tech.name}</h3>
-                  </div>
-                </Link>
+                <Techno data={tech} key={tech.id} />
               )
               
             })}

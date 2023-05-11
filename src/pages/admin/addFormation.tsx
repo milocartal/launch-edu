@@ -161,7 +161,7 @@ const Admin: NextPage = () => {
                                     <span className="slider"></span>
                                 </label>
                                 <div className="flex flex-col h-full justify-between">
-                                    <label>Private</label>
+                                    <label>Privé</label>
                                     <label>Public</label>
                                 </div>
                             </div>
