@@ -66,9 +66,26 @@ const Admin: NextPage = () => {
             </Head>
             {admin ?
 
-                <main className="flex min-h-screen bg-white justify-between dark:bg-[#041F25] pb-10">
-                    <div className="w-3/12 bg-[#0E6073] fixed right-0 flex flex-col items-start justify-start h-full pt-24 px-10">
-                        <Link href="/admin/addFormation"><button>Créer une formation</button></Link>
+                <main className="flex min-h-screen bg-white justify-between dark:bg-[#041F25]">
+                    <div className="w-3/12 bg-[#0E6073] fixed right-0 flex flex-col items-center justify-between h-full pt-36 pb-14 px-5">
+                        <div>
+                            <div className="flex flex-row justify-center items-center">
+                                <h3 className="text-[130px] font-Inter text-[#63AEAB]/30 leading-none">13</h3>
+                                <p className="text-2xl font-Inter text-white absolute">Cours créés</p>
+                            </div>
+                            <div className="flex flex-row justify-center items-center">
+                                <h3 className="text-[130px] font-Inter text-[#63AEAB]/30 leading-none">25</h3>
+                                <p className="text-2xl font-Inter text-white absolute">Thématiques</p>
+                            </div>
+                        </div>
+                        <div className="w-full">
+                            <Link href={"/admin/addFormation"} className="flex justify-center items-center text-white bg-[#2EA3A5] h-14 rounded-full hover:bg-[#1e818c] mb-3">
+                                Gestion technique
+                            </Link>
+                            <Link href={"/admin/addFormation"} className="flex justify-center items-center text-white bg-[#2EA3A5] h-14 rounded-full hover:bg-[#1e818c]">
+                                Créer une formation
+                            </Link>
+                        </div>
                     </div>
 
                     <div className="flex flex-col items-start justify-start gap-12 pl-28 pt-20 pr-6 w-9/12">
