@@ -10,14 +10,19 @@ import { FaArrowLeft, FaPenAlt, FaPlay } from "react-icons/fa";
 import { api } from "~/utils/api";
 import Header from "../components/header";
 import { prisma } from '~/server/db';
-import { Technologie, type Formation, Lecon } from '@prisma/client';
+import { Technologie, type Formation, Lecon, Prisma } from '@prisma/client';
 import { DifficultyText } from '../components/difficulties';
 import Title from '../components/title';
+import Openable from '../components/openable';
+
+type LeconWithEtapes = Prisma.LeconGetPayload<{
+    include: { etapes: true }
+}>
 
 export const getServerSideProps: GetServerSideProps<{
     formation: (Formation & {
         techs: Technologie[];
-        lecons: Lecon[];
+        lecons: LeconWithEtapes[];
     });
 }> = async function (context) {
     const formation = await prisma.formation.findUnique({
@@ -26,7 +31,11 @@ export const getServerSideProps: GetServerSideProps<{
         },
         include: {
             techs: true,
-            lecons: true
+            lecons: {
+                include: {
+                    etapes: true
+                }
+            }
         }
     });
     if (!formation) {
@@ -41,7 +50,7 @@ export const getServerSideProps: GetServerSideProps<{
         props: {
             formation: JSON.parse(JSON.stringify(formation)) as (Formation & {
                 techs: Technologie[];
-                lecons: Lecon[];
+                lecons: LeconWithEtapes[];
             })
         }
     };
@@ -78,7 +87,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
             <main className="flex min-h-screen flex-col items-center bg-white">
 
                 <div className="container flex flex-col items-start justify-start gap-12 px-4 py-20">
-                    <Title title={formation.title} link='formations'/>
+                    <Title title={formation.title} link='formations' />
 
                     <div className="flex flex-col items-center pr-10 w-9/12">
                         <div className="flex flex-row items-center justify-between w-full">
@@ -103,12 +112,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                         <div className="w-10/12 shadow-lg">
                             {formation.lecons as Lecon[] && formation.lecons.length > 0 && formation.lecons.map((lecon) => {
                                 return (
-                                    <Link href={`/lecons/${lecon.id}`} className="w-full flex flex-row justify-between px-24 py-6 bg-white shadow-md mt-1 transition hover:bg-[#0E6070]/20">
-                                        <p className="text-base font-bold tracking-tight text-[#0E6073] self-start">{lecon.title}</p>
-                                        <button>
-                                            <FaPlay className="h-6 w-6 text-[#0E6073]" />
-                                        </button>
-                                    </Link>)
+                                    <Openable data={lecon} nav description/>)
                             })}
                         </div>
 

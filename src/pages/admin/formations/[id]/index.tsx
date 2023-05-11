@@ -252,12 +252,12 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                             <HiXMark className="text-[2rem] text-[#0e6073] hover:text-red-500" />
                         </div>
                         <h1 className="text-xl font-extrabold tracking-tight text-[#0e6073] w-full"><label htmlFor="techName">Nouveau Tag</label></h1>
-                        <input type='text' name="lecon tag" placeholder='Rechercher un tag' className="p-[1rem] rounded-lg bg-none shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)] w-full" autoComplete="off" onChange={handleSearchTag} />
+                        <input type='text' name="formationTag" placeholder='Rechercher un tag' className="p-[1rem] rounded-lg bg-none shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)] w-full" autoComplete="off" onChange={handleSearchTag} />
                         <fieldset className="flex flex-col w-full max-h-[30rem] rounded-t-lg" id="listTech">
                             {techList as Technologie[] && techList && techList.length > 0 && techList.filter((tech) => {
-                                return !formation.techs.find(( item => {
+                                return !formation.techs.find((item => {
                                     return item.name === tech.name
-                                } ))
+                                }))
                             }).filter((tech) => {
                                 return tech.name.toLowerCase().includes(SearchTag.toLowerCase())
                             }).map((techno) => {
@@ -281,13 +281,20 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
 
             {tab === "Prerequis" &&
                 <div className="fixed w-full h-full bg-[#0E6073]/90 top-0 right-0 left-0 bottom-0 flex justify-center items-center">
-                    <form onSubmit={handlePrerequis} className="relative flex flex-col gap-5 justify-center items-center bg-white rounded-xl p-16 w-[30%]" method="POST">
+                    <form onSubmit={handlePrerequis} className="relative flex flex-col gap-5 justify-center items-center bg-white rounded-xl p-16 w-[40%]" method="POST">
                         <div onClick={() => setTab("normal")} className="absolute top-3 right-4 rounded-full font-semibold  no-underline transition hover:text-red-500 hover:cursor-pointer">
                             <HiXMark className="text-[2rem] text-[#0e6073] hover:text-red-500" />
                         </div>
                         <h1 className="text-xl font-extrabold tracking-tight text-[#0e6073] w-full"><label htmlFor="techName">Nouveau Prérequis</label></h1>
+                        <input type='text' name="prerequis" placeholder='Rechercher une formation' className="p-[1rem] rounded-lg bg-none shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)] w-full" autoComplete="off" onChange={handleSearchForm} />
                         <fieldset className="flex flex-col w-full max-h-[30rem] rounded-t-lg" id="listTech">
-                            {formaList as Formation[] && formaList && formaList.length > 0 && formaList.map((forma) => {
+                            {formaList as Formation[] && formaList && formaList.length > 0 && formaList.filter((forma) => {
+                                return !formation.Prerequis.find((item => {
+                                    return item.title === forma.title
+                                }))
+                            }).filter((forma) => { return forma.title !== formation.title }).filter((forma) => {
+                                return forma.title.toLowerCase().includes(SearchTag.toLowerCase())
+                            }).map((forma) => {
                                 return (
                                     <label className={`container flex items-center justify-between p-5 ${selectedTech === forma.id ? 'bg-[#0e6073] text-white' : 'hover:bg-[#0e6073]/10'}`} key={forma.id}>
                                         <p className="">{forma.title}</p>

@@ -17,7 +17,7 @@ datasource db {
 model Technologie {
     id         String      @id @default(cuid())
     name       String
-    logo       String?
+    logo       String
     lien_doc   String?
     formations Formation[]
 }
@@ -29,28 +29,29 @@ model EtapeType {
 }
 
 model Etape {
-    id          String    @id @default(cuid())
-    idt         String
-    type        EtapeType @relation(fields: [idt], references: [id], onDelete: Cascade)
-    name        String
-    transcript  String
-    updatedAt   DateTime  @updatedAt
-    video       String
-    code        String
-    idl         String
-    lecon       Lecon     @relation(fields: [idl], references: [id], onDelete: Cascade)
+    id         String    @id @default(cuid())
+    idt        String
+    type       EtapeType @relation(fields: [idt], references: [id], onDelete: Cascade)
+    name       String
+    transcript String
+    updatedAt  DateTime  @updatedAt
+    video      String
+    code       String
+    idl        String
+    lecon      Lecon     @relation(fields: [idl], references: [id], onDelete: Cascade)
 }
 
 model Lecon {
-    id          String             @id @default(cuid())
-    title       String
-    idf         String
-    description String
-    updatedAt   DateTime           @updatedAt
-    hidden      Boolean            @default(false)
-    etapes      Etape[]
-    formation   Formation          @relation(fields: [idf], references: [id], onDelete: Cascade)
-    Progression ProgressionLecon[]
+    id               String             @id @default(cuid())
+    title            String
+    idf              String
+    description      String
+    updatedAt        DateTime           @updatedAt
+    hidden           Boolean            @default(false)
+    etapes           Etape[]
+    formation        Formation          @relation(fields: [idf], references: [id], onDelete: Cascade)
+    Progression      ProgressionLecon[]
+    ProgressionEtape ProgressionEtape[]
 }
 
 model Formation {
@@ -74,6 +75,8 @@ model ProgressionFormation {
     user        User      @relation(fields: [idU], references: [id], onDelete: Cascade)
     idF         String
     formation   Formation @relation(fields: [idF], references: [id], onDelete: Cascade)
+    started     Boolean
+    finish      Boolean
     pourcentage Decimal
 
     @@unique([idU, idF])
@@ -84,7 +87,20 @@ model ProgressionLecon {
     user        User    @relation(fields: [idU], references: [id], onDelete: Cascade)
     idL         String
     lecon       Lecon   @relation(fields: [idL], references: [id], onDelete: Cascade)
+    started     Boolean
+    finish      Boolean
     pourcentage Decimal
+
+    @@unique([idU, idL])
+}
+
+model ProgressionEtape {
+    idU         String
+    user        User    @relation(fields: [idU], references: [id], onDelete: Cascade)
+    idL         String
+    lecon       Lecon   @relation(fields: [idL], references: [id], onDelete: Cascade)
+    started     Boolean
+    finish      Boolean
 
     @@unique([idU, idL])
 }
@@ -127,6 +143,7 @@ model User {
     sessions             Session[]
     ProgressionFormation ProgressionFormation[]
     ProgressionLecon     ProgressionLecon[]
+    ProgressionEtape     ProgressionEtape[]
 }
 
 model VerificationToken {

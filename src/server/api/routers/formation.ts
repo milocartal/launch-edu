@@ -25,6 +25,9 @@ export const formationRouter = createTRPCRouter({
 
     getLast4: publicProcedure.query(() => {
         return prisma.formation.findMany({
+            where:{
+                hidden:false
+            },
             include: {
                 techs: true,
                 lecons: true,

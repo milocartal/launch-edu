@@ -100,9 +100,6 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
     const { data: etapes } = api.etape.getAll.useQuery({ id: idL })
     const delLecon = api.lecon.delete.useMutation()
 
-    console.log("api ", etapes)
-    console.log("props ", lecon.etapes)
-
     const [current, setCurrent] = useState(lecon.id);
     const [currentEtape, setCurrentEtape] = useState(0);
 
@@ -129,7 +126,7 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                         <div className="flex flex-col items-center pr-10 w-10/12">
                             <div className="flex flex-col items-start w-full mt-5">
                                 {lecon.etapes[currentEtape]?.video && <h3 className="text-xl font-bold tracking-tight text-[#0E6073]">Transcript</h3>}
-                                {lecon.etapes && lecon.etapes[currentEtape] && lecon.etapes[currentEtape]?.transcript ? <div className="text-sm font-Inter text-[#222222] self-start mt-3" dangerouslySetInnerHTML={{ __html: lecon.etapes[currentEtape]?.transcript }} /> : <p className="text-sm font-Inter text-[#222222] self-start mt-3">Pas de transcript disponible</p>}
+                                {lecon.etapes && lecon.etapes[currentEtape] ? <div className="text-sm font-Inter text-[#222222] self-start mt-3" dangerouslySetInnerHTML={{ __html: lecon.etapes[currentEtape]!.transcript }} /> : <p className="text-sm font-Inter text-[#222222] self-start mt-3">Pas de transcript disponible</p>}
                             </div>
                         </div>
                     </div>

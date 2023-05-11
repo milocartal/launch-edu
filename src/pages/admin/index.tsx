@@ -66,7 +66,7 @@ const Admin: NextPage = () => {
             </Head>
             {admin ?
 
-                <main className="flex min-h-screen bg-white justify-between dark:bg-[#041F25]">
+                <main className="flex min-h-screen bg-white justify-between dark:bg-[#041F25] pb-10">
                     <div className="w-3/12 bg-[#0E6073] fixed right-0 flex flex-col items-start justify-start h-full pt-24 px-10">
                         <Link href="/admin/addFormation"><button>Créer une formation</button></Link>
                     </div>
