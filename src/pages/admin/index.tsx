@@ -10,12 +10,12 @@ import { DifficultyText } from "~/pages/components/difficulties"
 import Header from "../components/header"
 
 import dynamic from "next/dynamic";
-import { MouseEventHandler, useState } from "react";
+import { MouseEventHandler, useEffect, useState } from "react";
 
 import { HiXMark } from "react-icons/hi2"
 import { HiMagnifyingGlass } from "react-icons/hi2";
 import { BiUserCircle } from "react-icons/bi"
-import { FaPenAlt } from "react-icons/fa";
+import { FaLock, FaLockOpen, FaPenAlt } from "react-icons/fa";
 import Title from "../components/title";
 
 export const getServerSideProps: GetServerSideProps<{
@@ -45,6 +45,26 @@ const Admin: NextPage = () => {
 
     const { data: formations } = api.formation.getAll.useQuery()
     const { data: technologies } = api.technologie.getAll.useQuery()
+
+    const [filterType, setFilterType] = useState("")
+
+    formations as Formation[] && formations && formations.length > 0 && filterType == "theme" ? formations?.sort(function (a, b) {
+    if (a.techs[0]?.name < b.techs[0]?.name) {
+        return -1;
+    }
+    if (a.techs > b.techs) {
+        return 1;
+    }
+    return 0;
+    }) : formations as Formation[] && formations && formations.length > 0 && filterType == "sanslecon" ? formations?.sort(function (a, b) {
+    return a.lecons.length - b.lecons.length;
+    }) : formations as Formation[] && formations && formations.length > 0 && filterType == "private" && formations?.sort(function (a, b) {
+    return b.hidden - a.hidden;
+    })
+
+    function changeFilterType(type: string) {
+        setFilterType(type)
+    }
 
     return (
         <>
@@ -77,21 +97,49 @@ const Admin: NextPage = () => {
                     </div>
 
                     <div className="flex flex-col items-start justify-start gap-12 pl-28 pt-20 pr-6 w-9/12">
-                        <Title title={"Gérez vos cours"} link={""} />
+                        <div className="flex flex-row items-center justify-between w-full">
+                            <Title title={"Gérez vos cours"} link={""} />
+                            <div className="flex flex-row items-center justify-evenly">
+                                <p className="mr-2">Trier par : </p>
+                                {filterType === "theme" ? <button className="px-4 py-1 bg-[#0E6073] rounded-full mx-1" onClick={() => changeFilterType("theme")}>
+                                    <p className="text-[#fff]">Thématique</p>
+                                </button> :
+                                <button className="px-4 py-1 bg-[#D9D9D9] rounded-full mx-1" onClick={() => changeFilterType("theme")}>
+                                    <p className="text-[#0E6073]">Thématique</p>
+                                </button>
+                                }
+                                {filterType === "sanslecon" ? <button className="px-4 py-1 bg-[#0E6073] rounded-full mx-1" onClick={() => changeFilterType("sanslecon")}>
+                                    <p className="text-[#fff]">Sans leçons</p>
+                                </button> :
+                                <button className="px-4 py-1 bg-[#D9D9D9] rounded-full mx-1" onClick={() => changeFilterType("sanslecon")}>
+                                    <p className="text-[#0E6073]">Sans leçons</p>
+                                </button>
+                                }
+                                {filterType === "private" ? <button className="px-4 py-1 bg-[#0E6073] rounded-full mx-1" onClick={() => changeFilterType("private")}>
+                                    <p className="text-[#fff]">Privées</p>
+                                </button> :
+                                <button className="px-4 py-1 bg-[#D9D9D9] rounded-full mx-1" onClick={() => changeFilterType("private")}>
+                                <p className="text-[#0E6073]">Privées</p>
+                                </button>}
+                            </div>
+                        </div>
                         <div className="flex flex-col w-full">
                             {formations as Formation[] && formations && formations.length > 0 && formations.map((forma) => {
                                 let hide: string;
                                 if (forma.hidden)
-                                    hide = "Non postée"
+                                    hide = "Non publiée"
                                 else
-                                    hide = "Postée"
+                                    hide = "Publiée"
                                 return (
                                     <Link
                                         className="flex flex-row justify-between items-center mb-1 w-full bg-white shadow-[4px_5px_12px_6px_rgba(0,0,0,0.25)] py-2 pl-16 pr-6 justify-between hover:bg-[#ebebeb]/20 h-[5rem]"
                                         href={`/admin/formations/${encodeURIComponent(forma.id)}`}
                                         key={forma.id}
                                     >
-                                        <h3 className="text-md font-bold text-[#0E6073]">{forma.title}</h3>
+                                        <span className="flex flex-row items-center justify-between">
+                                            {forma.hidden ? <FaLock className="h-4 w-4 text-[#0E6073]" /> : <FaLockOpen className="h-4 w-4 text-[#989898]" />}
+                                            <p className="text-base ml-3 font-bold text-[#0E6073]">{forma.title}</p>
+                                        </span>
 
                                         <span className="flex flex-row items-center justify-between w-5/12">
                                             <DifficultyText level={forma.difficulte} />

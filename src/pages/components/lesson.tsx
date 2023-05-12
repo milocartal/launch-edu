@@ -23,10 +23,10 @@ function Lesson (props: {data : FormationWithAll}) {
             key={props.data.id}
         >
 
-            <div className="absolute -top-11 flex items-end justify-end w-[100px] h-[100px]">
-                {props.data.techs && props.data.techs[0] && props.data.techs[0].logo && <img src={props.data.techs[0].logo} alt="" />}
+            <div className="absolute -top-11 flex items-center justify-center w-[100px] h-[100px]">
+                {props.data.techs && props.data.techs[0] && props.data.techs[0].logo && <img src={props.data.techs[0].logo} className="max-h-24" alt=""/>}
             </div>
-            <h3 className="text-md font-bold mt-12 text-center">{props.data.title}</h3>
+            <h3 className="text-base font-bold mt-12 text-center">{props.data.title}</h3>
             <span className="absolute right-5">
                 <Difficulty level={props.data.difficulte} />
             </span>

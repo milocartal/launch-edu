@@ -20,19 +20,19 @@ function Header (props:{selected: number}) {
                         <Link href={`/dashboard`}><button className="px-10 h-full font-semibold border-[#0E6073] border-b-4 text-[#0E6073]">Vos cours</button></Link> :
                         props.selected === 404 ?
                             <Link href={`/dashboard`}><button className="px-10 h-full font-semibold border-[#fff] border-b-4 text-[#fff]">Vos cours</button></Link> :
-                            <Link href={`/dashboard`}><button className="px-10 h-full font-semibold border-[#0E6073] transition hover:border-b-4 hover:text-[#0E6073]">Vos cours</button></Link>
+                            <Link href={`/dashboard`}><button className="px-10 h-full font-semibold border-transparent border-b-4 hover:text-[#0E6073] hover:border-[#0E6073]">Vos cours</button></Link>
                     }
                     {props.selected === 2 ?
                         <Link href={`/formations`}><button className="px-10 h-full font-semibold border-[#0E6073] border-b-4 text-[#0E6073]">Explorer</button></Link> :
                         props.selected === 404 ?
                             <Link href={`/formations`}><button className="px-10 h-full font-semibold border-[#fff] border-b-4 text-[#fff]">Explorer</button></Link> :
-                            <Link href={`/formations`}><button className="px-10 h-full font-semibold border-[#0E6073] transition hover:border-b-4 hover:text-[#0E6073]">Explorer</button></Link>
+                            <Link href={`/formations`}><button className="px-10 h-full font-semibold border-transparent border-b-4 hover:text-[#0E6073] hover:border-[#0E6073]">Explorer</button></Link>
                     }
                     {admin && props.selected === 3 ?
                         <Link href={`/admin`}><button className="px-10 h-full font-semibold border-[#0E6073] border-b-4 text-[#0E6073]" autoFocus>Gérez les cours</button></Link> :
                         admin && props.selected === 404 ?
                             <Link href={`/admin`}><button className="px-10 h-full font-semibold border-[#fff] border-b-4 text-[#fff]" autoFocus>Gérez les cours</button></Link> :
-                            admin ? <Link href={`/admin`}><button className="px-10 h-full font-semibold border-[#0E6073] transition hover:border-b-4 hover:text-[#0E6073]" autoFocus>Gérez les cours</button></Link>:<></>
+                            admin ? <Link href={`/admin`}><button className="px-10 h-full font-semibold border-transparent border-b-4 hover:text-[#0E6073] hover:border-[#0E6073]" autoFocus>Gérez les cours</button></Link>:<></>
                     }
                 </div>
                 <div className="flex justify-center items-center gap-5 mb-1">

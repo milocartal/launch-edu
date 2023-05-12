@@ -83,9 +83,6 @@ const Lecons: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
     const { data: etapes } = api.etape.getAll.useQuery({ id: idL })
     const delLecon = api.lecon.delete.useMutation()
 
-    console.log("api ", etapes)
-    console.log("props ", lecon.etapes)
-
     return (
         <>
             <Head>

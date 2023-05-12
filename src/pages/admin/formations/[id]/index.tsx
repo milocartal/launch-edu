@@ -236,20 +236,19 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                     </div>
                     <button onClick={() => { delFormation.mutateAsync({ id: formation.id }); window.location.reload() }} className='mt-6 text-red-600 hover:text-red-800'>Supprimer cette formation</button>
                 </aside>
-
                 <Header selected={3} />
 
             </main>
 
             {tab === "tag" &&
                 <div className="fixed w-full h-full bg-[#0E6073]/90 top-0 right-0 left-0 bottom-0 flex justify-center items-center">
-                    <form onSubmit={handleTag} className="relative flex flex-col gap-5 justify-center items-center bg-white rounded-xl p-16 w-[30%]" method="POST">
+                    <form onSubmit={handleTag} className="relative flex flex-col gap-5 justify-center items-center bg-white rounded-xl p-16 max-h-[90%] w-[30%]" method="POST">
                         <div onClick={() => setTab("normal")} className="absolute top-3 right-4 rounded-full font-semibold  no-underline transition hover:text-red-500 hover:cursor-pointer">
                             <HiXMark className="text-[2rem] text-[#0e6073] hover:text-red-500" />
                         </div>
                         <h1 className="text-xl font-extrabold tracking-tight text-[#0e6073] w-full"><label htmlFor="techName">Nouveau Tag</label></h1>
                         <input type='text' name="formationTag" placeholder='Rechercher un tag' className="p-[1rem] rounded-lg bg-none shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)] w-full" autoComplete="off" onChange={handleSearchTag} />
-                        <fieldset className="flex flex-col w-full max-h-[30rem] rounded-t-lg" id="listTech">
+                        <fieldset className="flex flex-col w-full h-96 rounded-t-lg overflow-hidden" id="listTech">
                             {techList as Technologie[] && techList && techList.length > 0 && techList.filter((tech) => {
                                 return !formation.techs.find((item => {
                                     return item.name === tech.name
@@ -277,13 +276,13 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
 
             {tab === "Prerequis" &&
                 <div className="fixed w-full h-full bg-[#0E6073]/90 top-0 right-0 left-0 bottom-0 flex justify-center items-center">
-                    <form onSubmit={handlePrerequis} className="relative flex flex-col gap-5 justify-center items-center bg-white rounded-xl p-16 w-[40%]" method="POST">
+                    <form onSubmit={handlePrerequis} className="relative flex flex-col gap-5 justify-center items-center bg-white rounded-xl p-16 max-h-[90%] w-[40%]" method="POST">
                         <div onClick={() => setTab("normal")} className="absolute top-3 right-4 rounded-full font-semibold  no-underline transition hover:text-red-500 hover:cursor-pointer">
                             <HiXMark className="text-[2rem] text-[#0e6073] hover:text-red-500" />
                         </div>
                         <h1 className="text-xl font-extrabold tracking-tight text-[#0e6073] w-full"><label htmlFor="techName">Nouveau Prérequis</label></h1>
                         <input type='text' name="prerequis" placeholder='Rechercher une formation' className="p-[1rem] rounded-lg bg-none shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)] w-full" autoComplete="off" onChange={handleSearchForm} />
-                        <fieldset className="flex flex-col w-full max-h-[30rem] rounded-t-lg" id="listTech">
+                        <fieldset className="flex flex-col w-full max-h-[30rem] h-96 rounded-t-lg" id="listTech">
                             {formaList as Formation[] && formaList && formaList.length > 0 && formaList.filter((forma) => {
                                 return !formation.Prerequis.find((item => {
                                     return item.title === forma.title
