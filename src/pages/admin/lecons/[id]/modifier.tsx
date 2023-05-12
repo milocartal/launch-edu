@@ -146,7 +146,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                     autoComplete="off"
                                     defaultValue={lecon.title} />
 
-                                <QuillNoSSRWrapper placeholder='Description' className='h-[250px] w-full mb-10' onChange={setDesc} defaultValue={lecon.description} />
+                                <QuillNoSSRWrapper placeholder='Description' className='h-64 w-full mb-10' onChange={setDesc} defaultValue={lecon.description} />
 
                                 {/*<fieldset className="flex gap-5 w-full justify-center text-[#0E6073]">
                                     <div className="flex flex-col items-center gap-2">
@@ -185,9 +185,9 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
 
                         </fieldset>
 
-                        <fieldset className='w-5/12 flex flex-col justify-between items-center'>
+                        <fieldset className='w-5/12 max-w-5/12 flex flex-col justify-between items-center'>
 
-                            <QuillNoSSRWrapper placeholder={type !== "video" ? 'TexteV' : 'Transcript'} className='w-full max-h-[350px] h-full mb-16' onChange={setScript} defaultValue={lecon.etapes[0]?.transcript} />
+                            <QuillNoSSRWrapper placeholder={type !== "video" ? 'TexteV' : 'Transcript'} className='w-full max-h-64 h-64 mb-16' onChange={setScript} defaultValue={lecon.etapes[0]?.transcript} />
 
                             <div className='flex flex-col w-full gap-5'>
                                 <div className="flex items-center justify-center h-[5rem] w-full bg-[#2ea3a5] text-white hover:cursor-pointer transition hover:bg-[#0e6073] rounded-3xl" onClick={(e) => setTab("exo")}>Modifier l'exercice</div>
@@ -214,7 +214,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                             </button>
 
                             <div className='flex w-full gap-5 justify-center mb-10'>
-                                <fieldset className='flex flex-col gap-3'>
+                                <fieldset className='flex flex-col gap-3 w-[45%] max-w-[45%]'>
                                     <legend className="text-xl font-bold tracking-tight text-[#0E6073] mb-2">Exercice</legend>
 
                                     <input
@@ -243,7 +243,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                         defaultValue={txtExo} />
                                 </fieldset>
 
-                                <fieldset className='flex flex-col gap-3'>
+                                <fieldset className='flex flex-col gap-3 w-[45%] max-w-[45%]'>
                                     <legend className="text-xl font-bold tracking-tight text-[#0E6073] mb-2">Solution</legend>
 
                                     <input
