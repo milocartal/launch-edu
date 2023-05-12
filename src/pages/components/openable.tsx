@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import { FaPlay } from "react-icons/fa";
 import Link from "next/link";
-import { Etape, Prisma } from "@prisma/client";
+import { Etape, Prisma, Progression, User } from "@prisma/client";
+import Router from 'next/router';
 
 type LeconWithEtapes = Prisma.LeconGetPayload<{
     include: { etapes: true }
 }>
 
-function Openable(props: { data: LeconWithEtapes, nav: boolean, description: boolean }) {
-    const [select, setSelected] = useState(false)
+function Openable(props: { data: LeconWithEtapes, nav?: boolean, description?: boolean, progression?: Progression[], user?: User}) {
+    const [select, setSelected] = useState(false)  
+
     return (
         <div className="bg-white w-full mt-1 h-fit flex flex-col justify-start shadow-[4px_10px_20px_1px_rgba(0,0,0,0.25)]">
             {select ?
@@ -17,9 +19,11 @@ function Openable(props: { data: LeconWithEtapes, nav: boolean, description: boo
                         <div className="w-full flex flex-row items-center justify-between">
                             <p className="font-semibold text-[#0E6073]">{props.data.title}</p>
                             {props.nav &&
-                                <Link href={`/lecons/${props.data.id}`}>
+                                <div onClick={()=>
+                                    
+                                    Router.push(`/lecons/${props.data.id}`)}>
                                     <FaPlay className="h-5 w-5 text-[#0E6073]" />
-                                </Link>
+                                </div>
                             }
                         </div>
                         {props.description && select && <div className="text-sm font-Inter text-[#989898] text-left w-full" dangerouslySetInnerHTML={{ __html: props.data.description }} />}

@@ -23,7 +23,7 @@ export default function Custom404() {
             <main className="flex flex-col min-h-screen w-full items-center justify-center bg-[#1A808C] ">
 
                 <h4 className="text-[200px] font-Inter text-[#63AEAB]">404</h4>
-                <p className="text-[36px] font-Inter text-white -mt-10">Aïe, tu t'es perdu :(</p>
+                <p className="text-[36px] font-Inter text-white -mt-10">Aïe, il semblerait que vous vous soyez perdu :(</p>
                 <p className="text-base font-Inter text-white mb-16">Quelques thématiques qui pourraient vous intéresser</p>
 
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-3 items-center justify-center w-full gap-y-20 px-52 mb-16">

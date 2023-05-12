@@ -28,6 +28,6 @@
     "**/*.tsx",
     "**/*.cjs",
     "**/*.mjs"
-, "src/pages/404.js"  ],
+, "src/pages/404.jsx"  ],
   "exclude": ["node_modules"]
 }

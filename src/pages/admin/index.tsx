@@ -55,7 +55,7 @@ const Admin: NextPage = () => {
             </Head>
             {admin ?
 
-                <main className="flex min-h-screen bg-white justify-between dark:bg-[#041F25]">
+                <main className="flex min-h-screen bg-white justify-between dark:bg-[#041F25] pb-12">
                     <div className="w-3/12 bg-[#0E6073] fixed right-0 flex flex-col items-center justify-between h-full pt-36 pb-14 px-5">
                         <div>
                             <div className="flex flex-row justify-center items-center">

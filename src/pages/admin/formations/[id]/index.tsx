@@ -12,18 +12,11 @@ import Header from "../../../components/header";
 import { prisma } from '~/server/db';
 import { Technologie, Formation, Lecon, Etape, Prisma } from '@prisma/client';
 import { DifficultyText } from '../../../components/difficulties';
-import etapes from '../../../etapes/[id]';
 import { SyntheticEvent, useState } from 'react';
 import { HiXMark } from 'react-icons/hi2';
-import dynamic from 'next/dynamic';
 import { RiAddFill } from 'react-icons/ri'
 import Lesson from '~/pages/components/lesson';
 import Title from '~/pages/components/title';
-
-const QuillNoSSRWrapper = dynamic(import('react-quill'), {
-    ssr: false,
-    loading: () => <p>Loading ...</p>,
-})
 
 type FormationWithAll = Prisma.FormationGetPayload<{
     include: {
@@ -142,6 +135,10 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
         let value = e.target.value;
         setSearchForma(value);
     };
+
+    async function handleProg(e: React.SyntheticEvent){
+        e.preventDefault()
+    }
 
     return (
         <>
@@ -293,7 +290,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                     return item.title === forma.title
                                 }))
                             }).filter((forma) => { return forma.title !== formation.title }).filter((forma) => {
-                                return forma.title.toLowerCase().includes(SearchTag.toLowerCase())
+                                return forma.title.toLowerCase().includes(SearchForma.toLowerCase())
                             }).map((forma) => {
                                 return (
                                     <label className={`container flex items-center justify-between p-5 ${selectedTech === forma.id ? 'bg-[#0e6073] text-white' : 'hover:bg-[#0e6073]/10'}`} key={forma.id}>

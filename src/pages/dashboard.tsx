@@ -1,6 +1,5 @@
-import { type NextPage } from 'next';
+import { GetServerSideProps, InferGetServerSidePropsType, type NextPage } from 'next';
 import Head from "next/head";
-import Image from 'next/image'
 import { Difficulty, DifficultyText } from "~/pages/components/difficulties"
 import { FaPenAlt, FaCheck, FaPlay } from "react-icons/fa";
 
@@ -8,57 +7,83 @@ import Header from './components/header';
 import { useState } from 'react';
 import Title from './components/title';
 import { api } from '~/utils/api';
+import { Formation, Technologie, Progression, Prisma } from '@prisma/client';
+import { getSession } from 'next-auth/react';
+import { prisma } from '~/server/db';
+import { type Session as SessionAuth } from 'next-auth';
 
-const Dashboard: NextPage = () => {
+type ProgressionWithFormation = Prisma.ProgressionGetPayload<{
+    include: {
+        formation: {
+            include: {
+                lecons: true,
+                techs: true
+            }
+        },
+        lecon: true
+    }
+}>
 
-    const [selected, setSelected] = useState(1)
-    const {data : formations}=api.formation.getAll.useQuery()
-    const DATA = [{
-        id: 1,
-        title: "Initiation JS",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nulla nisl, placerat sid sed mauris vitae, alea sit vestibulum sollicitudin set libero onec nulla nisl, placerat.",
-        lessons: [
-            {
-                id: 1,
-                title: "Leçon 1",
-                status: "finished"
+export const getServerSideProps: GetServerSideProps<{
+    session: SessionAuth | undefined
+    progression: ProgressionWithFormation[] | undefined
+    nb: (Prisma.PickArray<Prisma.ProgressionGroupByOutputType, "idF"[]> & {
+        _count: number;
+    })[] | undefined
+}> = async function (context) {
+
+    const session = await getSession(context)
+
+    if (session) {
+        const progression = await prisma.progression.findMany({
+            where: {
+                idU: session.user.id
             },
-            {
-                id: 2,
-                title: "Exercice 1",
-                status: "finished"
+            include: {
+                formation: {
+                    include: {
+                        lecons: true,
+                        techs: true
+                    }
+                },
             },
-            {
-                id: 3,
-                title: "Exercice 2",
-                status: "notStarted"
+            distinct: ['idF'],
+        })
+
+        const nb = await prisma.progression.groupBy({
+            where: {
+                idU: session.user.id,
+                finish: true,
+            },
+            by: ['idF'],
+            _count: true,
+        })
+        return {
+            props: {
+                session: JSON.parse(JSON.stringify(session)) as SessionAuth,
+                progression: JSON.parse(JSON.stringify(progression)) as ProgressionWithFormation[],
+                nb: JSON.parse(JSON.stringify(nb)) as (Prisma.PickArray<Prisma.ProgressionGroupByOutputType, "idF"[]> & {
+                    _count: number;
+                })[]
             }
-        ],
-        diff: 1
-    }, {
-        id: 2,
-        title: "JS intermédiaire",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nulla nisl, placerat sid sed mauris vitae, alea sit vestibulum sollicitudin set libero onec nulla nisl, placerat.",
-        lessons: [
-            {
-                id: 1,
-                title: "Leçon 1",
-                status: "finished"
-            },
-            {
-                id: 2,
-                title: "Exercice 1",
-                status: "finished"
-            },
-            {
-                id: 3,
-                title: "Exercice 2",
-                status: "notStarted"
+        }
+    }
+    else {
+        return {
+            props: {
+                session: undefined,
+                progression: undefined,
+                nb: undefined
             }
-        ],
-        diff: 2
-    },
-    ]
+        };
+    }
+};
+
+const Dashboard: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ session, progression, nb }) => {
+    const prog = progression
+
+    const [selected, setSelected] = useState("")
+    const { data: formations } = api.formation.getAll.useQuery()
 
     return (
         <>
@@ -72,46 +97,47 @@ const Dashboard: NextPage = () => {
                 <div className="flex flex-col items-start justify-start pl-28 pt-20 pr-6 w-9/12">
                     <Title title={'Reprendre où vous en étiez'} link={''} />
 
-                    {DATA.map((item) =>
-                        selected === item.id ?
-                            <div className="flex flex-row items-center w-full gap-3 rounded-xl bg-white py-7 pr-10 mt-6 shadow-[0px_10px_30px_0px_rgba(0,0,0,0.25)] relative" onClick={() => setSelected(item.id)} key={item.id}>
+                    {prog && prog.map((item) =>
+                        selected === item.idF ?
+                            <div className="flex flex-row items-center w-full gap-3 rounded-xl bg-white py-7 pr-10 mt-6 shadow-[0px_10px_30px_0px_rgba(0,0,0,0.25)] relative" onClick={() => setSelected(item.idF)} key={item.idF}>
                                 <div className="flex flex-col justify-end max-w-20 max-h-20 -top-4 -left-5 absolute">
-                                    <Image src="/Expressjs.png" width="100" height="100" alt="" />
+                                    {item.formation.techs && item.formation.techs[0] && <img src={item.formation.techs[0].logo} width="100" height="100" alt="" />}
                                 </div>
                                 <div className="ml-20 flex flex-col justify-start items-start">
-                                    <h3 className="font-bold text-[#0E6073] mb-3 text-lg">{item.title}</h3>
-                                    <p className="text-sm font-Inter text-[#989898] text-left">{item.description}</p>
-                                    {item.lessons?.map((lesson) =>
+                                    <h3 className="font-bold text-[#0E6073] mb-3 text-lg">{item.formation.title}</h3>
+                                    
+                                    <div className="text-sm font-Inter text-[#989898] text-left w-full" dangerouslySetInnerHTML={{ __html: item.formation.description }} />
+                                    {item.formation.lecons?.map((lesson) =>
                                         <div key={lesson.id} className="w-full flex flex-col items-center justify-center">
                                             <div className="flex flex-row justify-between items-center py-4 w-11/12">
                                                 <h3 className="font-bold text-[#0E6073] text-sm">{lesson.title}</h3>
-                                                <button>{lesson.status === "finished" ? <FaCheck className="h-6 w-6 text-[#0E6073]" /> : <FaPlay className="h-6 w-6 text-[#0E6073]" />}</button>
+                                                <button>{/*lesson.status === "finished" ? <FaCheck className="h-6 w-6 text-[#0E6073]" /> :*/ <FaPlay className="h-6 w-6 text-[#0E6073]" />}</button>
                                             </div>
                                             <div className="w-11/12 h-0.5 bg-[#989898] self-center"></div>
                                         </div>
                                     )}
                                 </div>
                                 <div className="flex flex-col justify-start h-full">
-                                    <DifficultyText level={item.diff} />
+                                    <DifficultyText level={item.formation.difficulte} />
                                     <div className="flex flex-row justify-start items-center mt-5">
                                         <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]" />
-                                        <p className="text-sm ml-3 font-Inter text-[#989898] dark:text-[#2EA3A5]">3 leçons</p>
+                                        <p className="text-sm ml-3 font-Inter text-[#989898] dark:text-[#2EA3A5]">{item.formation.lecons.length} leçons</p>
                                     </div>
                                 </div>
                             </div> :
-                            <div className="flex flex-row items-center w-full gap-3 rounded-xl bg-white py-7 pr-10 mt-6 shadow-[0px_10px_30px_0px_rgba(0,0,0,0.25)] relative" onClick={() => setSelected(item.id)} key={item.id}>
+                            <div className="flex flex-row items-center w-full gap-3 rounded-xl bg-white py-7 pr-10 mt-6 shadow-[0px_10px_30px_0px_rgba(0,0,0,0.25)] relative" onClick={() => setSelected(item.idF)} key={item.idF}>
                                 <div className="flex flex-col justify-end max-w-20 max-h-20 -top-4 -left-5 absolute">
-                                    <Image src="/python.png" width="100" height="100" alt="" />
+                                    {item.formation.techs && item.formation.techs[0] && <img src={item.formation.techs[0].logo} width="100" height="100" alt="" />}
                                 </div>
                                 <div className="ml-20 flex flex-col justify-start items-start">
-                                    <h3 className="font-bold text-[#0E6073] mb-3 text-lg">{item.title}</h3>
-                                    <p className="text-sm font-Inter text-[#989898] text-left">{item.description}</p>
+                                    <h3 className="font-bold text-[#0E6073] mb-3 text-lg">{item.formation.title}</h3>
+                                    <div className="text-sm font-Inter text-[#989898] text-left w-full" dangerouslySetInnerHTML={{ __html: item.formation.description }} />
                                 </div>
                                 <div className="flex flex-col justify-start h-full">
-                                    <DifficultyText level={item.diff} />
+                                    <DifficultyText level={item.formation.difficulte} />
                                     <div className="flex flex-row justify-start items-center mt-5">
                                         <FaPenAlt className="h-7 w-7 text-[#989898] dark:text-[#2EA3A5]" />
-                                        <p className="text-sm ml-3 font-Inter text-[#989898] dark:text-[#2EA3A5]">3 leçons</p>
+                                        <p className="text-sm ml-3 font-Inter text-[#989898] dark:text-[#2EA3A5]">{item.formation.lecons.length} leçons</p>
                                     </div>
                                 </div>
                             </div>
@@ -120,20 +146,23 @@ const Dashboard: NextPage = () => {
 
                 <div className="w-3/12 bg-[#0E6073] fixed right-0 flex flex-col items-start justify-start h-full pt-24 px-10">
                     <h3 className="font-bold text-white mb-8 w-full">Cours terminés</h3>
-                    <div className="bg-white w-full h-14 rounded-xl flex flex-row justify-between items-center pr-5 mb-3">
-                        <div className="flex flex-row justify-start items-center relative">
-                            <Image src="/python.png" width="60" height="60" className="top-0" alt="" />
-                            <h3 className="font-bold text-[#0E6073]">Initiation JS</h3>
-                        </div>
-                        <Difficulty level={1} />
-                    </div>
-                    <div className="bg-white w-full h-14 rounded-xl flex flex-row justify-between items-center pr-5 mb-3">
-                        <div className="flex flex-row justify-start items-center relative">
-                            <Image src="/python.png" width="60" height="60" className="top-0" alt="" />
-                            <h3 className="font-bold text-[#0E6073]">Initiation JS</h3>
-                        </div>
-                        <Difficulty level={1} />
-                    </div>
+                    {prog && prog.map((forma) => {
+                        let test = nb?.find((item => {
+                            if (item.idF === forma.idF)
+                                return item._count
+                        }))
+                        if (test?._count === forma.formation.lecons.length)
+                            return (
+                                <div className="bg-white w-full h-14 rounded-xl flex flex-row justify-between items-center pr-5 mb-3" key={forma.formation.id}>
+                                    <div className="flex flex-row justify-start items-center relative">
+                                        {forma.formation.techs && forma.formation.techs[0] && <img src={forma.formation.techs[0].logo} width="60" height="60" className="top-0" alt="" />}
+                                        <h3 className="font-bold text-[#0E6073]">{forma.formation.title}</h3>
+                                    </div>
+                                    <Difficulty level={forma.formation.difficulte} />
+                                </div>
+                            )
+                    })}
+
                 </div>
                 <Header selected={1} />
             </main>

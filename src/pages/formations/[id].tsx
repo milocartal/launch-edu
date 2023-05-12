@@ -4,27 +4,34 @@ import { type InferGetServerSidePropsType } from 'next'
 import Head from "next/head";
 import Link from "next/link";
 import Image from 'next/image'
-import { signIn, signOut, useSession } from "next-auth/react";
+import { getSession, signIn, signOut, useSession } from "next-auth/react";
 import { FaArrowLeft, FaPenAlt, FaPlay } from "react-icons/fa";
 
 import { api } from "~/utils/api";
 import Header from "../components/header";
 import { prisma } from '~/server/db';
-import { Technologie, type Formation, Lecon, Prisma } from '@prisma/client';
+import { Technologie, type Formation, Lecon, Prisma, Progression, Session, Etape } from '@prisma/client';
 import { DifficultyText } from '../components/difficulties';
 import Title from '../components/title';
 import Openable from '../components/openable';
+import { type Session as SessionAuth } from 'next-auth';
+import { useState } from 'react';
+import Router from 'next/router';
 
 type LeconWithEtapes = Prisma.LeconGetPayload<{
     include: { etapes: true }
 }>
 
 export const getServerSideProps: GetServerSideProps<{
+    session: SessionAuth | undefined
     formation: (Formation & {
         techs: Technologie[];
         lecons: LeconWithEtapes[];
     });
+    progression: Progression[] | undefined
 }> = async function (context) {
+
+
     const formation = await prisma.formation.findUnique({
         where: {
             id: context.query.id as string
@@ -46,36 +53,63 @@ export const getServerSideProps: GetServerSideProps<{
             },
         }
     }
-    return {
-        props: {
-            formation: JSON.parse(JSON.stringify(formation)) as (Formation & {
-                techs: Technologie[];
-                lecons: LeconWithEtapes[];
-            })
+
+    const session = await getSession(context)
+
+    if (session) {
+        const progression = await prisma.progression.findMany({
+            where: {
+                idF: formation.id,
+                idU: session.user.id
+            }
+        })
+        return {
+            props: {
+                session: JSON.parse(JSON.stringify(session)) as SessionAuth,
+                formation: JSON.parse(JSON.stringify(formation)) as (Formation & {
+                    techs: Technologie[];
+                    lecons: LeconWithEtapes[];
+                }),
+                progression: JSON.parse(JSON.stringify(progression)) as Progression[]
+            }
         }
-    };
+    }
+    else {
+        return {
+            props: {
+                session: undefined,
+                formation: JSON.parse(JSON.stringify(formation)) as (Formation & {
+                    techs: Technologie[];
+                    lecons: LeconWithEtapes[];
+                }),
+                progression: undefined
+            }
+        };
+    }
 };
 
-const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ formation }) => {
-    const { data: sessionData } = useSession();
-    const admin = sessionData?.user.admin
+const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ formation, progression }) => {
+    const{data: session}= useSession()
+    const admin = session?.user.admin
+
+    const addProgression = api.progression.create.useMutation()
 
     const idf = formation.id
-    const addLecon = api.lecon.create.useMutation()
-    const { data: lecons } = api.lecon.getAll.useQuery({ id: idf })
+
+    const [select, setSelected] = useState("")
 
     const delFormation = api.formation.delete.useMutation()
+    const one = api.progression.getOne.useMutation()
 
-    async function handleLecon(event: React.SyntheticEvent) {
-        //event.preventDefault()
-        const target = event.target as typeof event.target & {
-            leconTitle: { value: string };
-            description: { value: string };
-        };
-        const title = target.leconTitle.value;
-        const desc = target.description.value;
-        await addLecon.mutateAsync({ title: title, idf: idf, description: desc })
+    async function handleProgression(idl: string) {
+        if (formation && session) {
+            const test = await one.mutateAsync({idu: session.user.id, idL: idl, idF: formation.id})
+            if(!test){
+                await addProgression.mutateAsync({ idu: session.user.id, idL: idl, idF: formation.id })
+            }
+        }
     }
+
     return (
         <>
             <Head>
@@ -112,7 +146,40 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                         <div className="w-10/12 shadow-lg">
                             {formation.lecons as Lecon[] && formation.lecons.length > 0 && formation.lecons.map((lecon) => {
                                 return (
-                                    <Openable data={lecon} nav description/>)
+                                    <div className="bg-white w-full mt-1 h-fit flex flex-col justify-start shadow-[4px_10px_20px_1px_rgba(0,0,0,0.25)]" key={lecon.id}>
+                                        {select === lecon.id ?
+                                            <>
+                                                <div className="bg-white w-full h-fit flex flex-col items-center justify-center px-16 py-8 shadow-[4px_10px_20px_1px_rgba(0,0,0,0.25)]" onClick={(e) => setSelected("")}>
+                                                    <div className="w-full flex flex-row items-center justify-between">
+                                                        <p className="font-semibold text-[#0E6073]">{lecon.title}</p>
+                                                        <div className="hover:cursor-pointer" onClick={() => {
+                                                            handleProgression(lecon.id);
+                                                            Router.push(`/lecons/${lecon.id}`)
+                                                        }}>
+                                                            <FaPlay className="h-5 w-5 text-[#0E6073]" />
+                                                        </div>
+                                                    </div>
+                                                    {lecon.description && select && <div className="text-sm font-Inter text-[#989898] text-left w-full" dangerouslySetInnerHTML={{ __html: lecon.description }} />}
+                                                </div>
+
+                                                <div className="w-full mt-2 mb-4">
+                                                    {lecon.etapes as Etape[] && lecon.etapes.length > 0 && lecon.etapes.map((etape) => {
+                                                        return (<p className="px-20 mt-2 font-semibold text-[#0E6073]">{etape.name}</p>)
+                                                    })}
+                                                </div>
+                                            </>
+                                            :
+                                            <div className="bg-white w-full h-fit flex flex-row items-center justify-between px-16 py-8 shadow-[4px_10px_20px_1px_rgba(0,0,0,0.25)] hover:cursor-pointer" onClick={() => setSelected(lecon.id)}>
+                                                <p className="font-semibold text-[#0E6073]">{lecon.title}</p>
+                                                <div className="hover:cursor-pointer" onClick={() => {
+                                                    handleProgression(lecon.id);
+                                                    Router.push(`/lecons/${lecon.id}`)
+                                                }}>
+                                                    <FaPlay className="h-5 w-5 text-[#0E6073]" />
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>)
                             })}
                         </div>
 
@@ -135,7 +202,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                     </div>
                 </div>
                 <Header selected={2} />
-            </main>
+            </main >
         </>
     );
 };

@@ -42,67 +42,44 @@ model Etape {
 }
 
 model Lecon {
-    id               String             @id @default(cuid())
-    title            String
-    idf              String
-    description      String
-    updatedAt        DateTime           @updatedAt
-    hidden           Boolean            @default(false)
-    etapes           Etape[]
-    formation        Formation          @relation(fields: [idf], references: [id], onDelete: Cascade)
-    Progression      ProgressionLecon[]
-    ProgressionEtape ProgressionEtape[]
+    id          String        @id @default(cuid())
+    title       String
+    idf         String
+    description String
+    updatedAt   DateTime      @updatedAt
+    hidden      Boolean       @default(false)
+    etapes      Etape[]
+    formation   Formation     @relation(fields: [idf], references: [id], onDelete: Cascade)
+    Progression Progression[]
 }
 
 model Formation {
-    id          String                 @id @default(cuid())
+    id          String        @id @default(cuid())
     title       String
     description String
     prof        String?
     difficulte  Int
-    createdAt   DateTime               @default(now())
-    updatedAt   DateTime               @updatedAt
-    hidden      Boolean                @default(true)
+    createdAt   DateTime      @default(now())
+    updatedAt   DateTime      @updatedAt
+    hidden      Boolean       @default(true)
     techs       Technologie[]
     lecons      Lecon[]
-    Progression ProgressionFormation[]
-    Prerequis   Formation[]            @relation("Prerequis")
-    PrerequisBy Formation[]            @relation("Prerequis")
+    Progression Progression[]
+    Prerequis   Formation[]   @relation("Prerequis")
+    PrerequisBy Formation[]   @relation("Prerequis")
 }
 
-model ProgressionFormation {
-    idU         String
-    user        User      @relation(fields: [idU], references: [id], onDelete: Cascade)
-    idF         String
-    formation   Formation @relation(fields: [idF], references: [id], onDelete: Cascade)
-    started     Boolean
-    finish      Boolean
-    pourcentage Decimal
+model Progression {
+    idU       String
+    user      User      @relation(fields: [idU], references: [id], onDelete: Cascade)
+    idL       String
+    lecon     Lecon     @relation(fields: [idL], references: [id], onDelete: Cascade)
+    idF       String
+    formation Formation @relation(fields: [idF], references: [id], onDelete: Cascade)
+    started   Boolean
+    finish    Boolean
 
-    @@unique([idU, idF])
-}
-
-model ProgressionLecon {
-    idU         String
-    user        User    @relation(fields: [idU], references: [id], onDelete: Cascade)
-    idL         String
-    lecon       Lecon   @relation(fields: [idL], references: [id], onDelete: Cascade)
-    started     Boolean
-    finish      Boolean
-    pourcentage Decimal
-
-    @@unique([idU, idL])
-}
-
-model ProgressionEtape {
-    idU         String
-    user        User    @relation(fields: [idU], references: [id], onDelete: Cascade)
-    idL         String
-    lecon       Lecon   @relation(fields: [idL], references: [id], onDelete: Cascade)
-    started     Boolean
-    finish      Boolean
-
-    @@unique([idU, idL])
+    @@unique([idU, idL, idF])
 }
 
 // Necessary for Next auth
@@ -133,17 +110,15 @@ model Session {
 }
 
 model User {
-    id                   String                 @id @default(cuid())
-    name                 String?
-    email                String?                @unique
-    emailVerified        DateTime?
-    image                String?
-    admin                Boolean                @default(false)
-    accounts             Account[]
-    sessions             Session[]
-    ProgressionFormation ProgressionFormation[]
-    ProgressionLecon     ProgressionLecon[]
-    ProgressionEtape     ProgressionEtape[]
+    id            String        @id @default(cuid())
+    name          String?
+    email         String?       @unique
+    emailVerified DateTime?
+    image         String?
+    admin         Boolean       @default(false)
+    accounts      Account[]
+    sessions      Session[]
+    Progression   Progression[]
 }
 
 model VerificationToken {
