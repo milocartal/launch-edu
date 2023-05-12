@@ -12,7 +12,7 @@ function Header (props:{selected: number}) {
     return (
         <>
             <div className="fixed w-full bg-transparent top-0 h-[4rem]" />
-            {props.selected === 404 ? <div className="fixed w-full pr-40 border-b-4 border-[#fff] bg-transparent top-0 right-0 left-28 h-[4rem]" /> : <div className="fixed w-full pr-40 border-b-4 border-[#63aeab] bg-white top-0 right-0 left-28 h-[4rem]" />}
+            {props.selected === 404 ? <div className="fixed w-full pr-40 border-b-4 border-[#fff] bg-transparent top-0 right-0 left-28 h-[4rem]" /> : <div className="fixed w-full pr-40 border-b-4 border-[#63aeab] bg-white dark:bg-[#041F25] top-0 right-0 left-28 h-[4rem]" />}
 
             <div className="flex justify-between gap-12 fixed w-full pr-40 top-0 right-0 left-28 h-[4rem] text-[#63aeab]">
                 <div className="flex justify-evenly">

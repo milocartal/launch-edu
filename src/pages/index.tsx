@@ -52,7 +52,7 @@ const Home: NextPage = () => {
 
       <Image src={theme == "dark" ? "/homescreen-darkmode-wave.svg" : "/homescreen-wave.svg"} width="0" height="1500" className="w-screen z-0 absolute" alt="" />
 
-      <main className="flex min-h-screen flex-col items-center justify-center bg-white z-10 dark:bg-[#041F25]">
+      <main className="flex min-h-screen flex-col items-center justify-center bg-white dark:bg-[#041F25] z-10 dark:bg-[#041F25]">
         <div className="flex flex-row items-start justify-between w-full px-16 z-10 mt-10">
           <Link href={"/"}><Image src="/okto.png" alt="Logo Oktopod" width="64" height="64" /></Link>
           <div className="flex flex-row justify-around items-center gap-1">
