@@ -1,18 +1,22 @@
 import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { HiMagnifyingGlass } from "react-icons/hi2";
+import { useTheme } from "next-themes";
 import { BiUserCircle } from "react-icons/bi"
 
 import { api } from "~/utils/api";
+import { FaMoon, FaSun } from "react-icons/fa";
 
 function Header (props:{selected: number}) {
+    const { systemTheme, theme, setTheme } = useTheme();
+    const currentTheme = theme === 'system' ? systemTheme : theme;
     const { data: sessionData } = useSession();
     const admin = sessionData?.user.admin
 
     return (
         <>
             <div className="fixed w-full bg-transparent top-0 h-[4rem]" />
-            {props.selected === 404 ? <div className="fixed w-full pr-40 border-b-4 border-[#fff] bg-transparent top-0 right-0 left-28 h-[4rem]" /> : <div className="fixed w-full pr-40 border-b-4 border-[#63aeab] bg-white top-0 right-0 left-28 h-[4rem]" />}
+            {props.selected === 404 ? <div className="fixed w-full pr-40 border-b-4 border-[#fff] bg-transparent top-0 right-0 left-28 h-[4rem]" /> : <div className="fixed w-full pr-40 border-b-4 border-[#63aeab] bg-white dark:bg-[#082F38] top-0 right-0 left-28 h-[4rem]" />}
 
             <div className="flex justify-between gap-12 fixed w-full pr-40 top-0 right-0 left-28 h-[4rem] text-[#63aeab]">
                 <div className="flex justify-evenly">
@@ -36,18 +40,23 @@ function Header (props:{selected: number}) {
                     }
                 </div>
                 <div className="flex justify-center items-center gap-5 mb-1">
-                    <div className="bg-white flex flex-row justify-start items-center width w-96 h-12 px-8 rounded-full shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)]">
-                        <HiMagnifyingGlass className="h-8 w-8 text-[#989898]" />
-                        <input className="h-10 shadow-none w-full bg-transparent text-black" type="text" />
+                    <div className="bg-white dark:bg-[#041F25] flex flex-row justify-start items-center width w-96 h-12 px-8 rounded-full shadow-[inset_4px_5px_12px_4px_rgba(0,0,0,0.25)]">
+                        <HiMagnifyingGlass className="h-8 w-8 text-[#989898] dark:text-[#63AEAB]" />
+                        <input className="h-10 shadow-none w-full bg-transparent text-black dark:text-[#63AEAB] ml-1" type="text" />
                     </div>
-                    {sessionData && sessionData.user?.image && props.selected === 4 ? <Link href={`/users/${sessionData.user.id}`} className="block h-[3rem] w-[3rem]"><img src={sessionData.user.image} className="w-full h-full rounded-full border-4 border-[#0E6073] object-cover"></img></Link>:
+                    {sessionData && sessionData.user?.image && props.selected === 4 ? <Link href={`/users/${sessionData.user.id}`} className="block h-[3rem] w-[3rem]"><img src={sessionData.user.image} className="w-full h-full rounded-full border-4 border-[#0E6073] dark:border-[#63AEAB] object-cover"></img></Link>:
                     sessionData && sessionData.user?.image && <Link href={`/users/${sessionData.user.id}`} className="block h-[3rem] w-[3rem]"><img src={sessionData.user.image} className="w-full h-full rounded-full object-cover"></img></Link>}
                 </div>
             </div>
 
             <div className="flex flex-col items-center justify-between gap-2 min-h-screen top-0 left-0 bg-[#0E6073] fixed m-w-xs p-2">
                 <Link href="/"><img src="/okto.png" className="max-w-[3rem]"></img></Link>
-                <AuthShowcase />
+                <div className="flex flex-col items-center justify-between">
+                    <button onClick={() => theme === "dark" ? setTheme('light') : setTheme("dark")} className="flex flex-row justify-center items-center rounded-full bg-white/10 w-10 h-10 shadow-md">
+                    {theme == "dark" ? <FaSun className="w-2/5 text-[#fff]" /> : <FaMoon className="w-2/5 text-[#fff]" />}
+                    </button>
+                    <AuthShowcase />
+                </div>
             </div>
         </>
     );

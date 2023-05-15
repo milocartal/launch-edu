@@ -52,7 +52,7 @@ const Home: NextPage = () => {
 
       <Image src={theme == "dark" ? "/homescreen-darkmode-wave.svg" : "/homescreen-wave.svg"} width="0" height="1500" className="w-screen z-0 absolute" alt="" />
 
-      <main className="flex min-h-screen flex-col items-center justify-center bg-white z-10 dark:bg-[#041F25]">
+      <main className="flex min-h-screen flex-col items-center justify-center bg-white dark:bg-[#082F38] z-10">
         <div className="flex flex-row items-start justify-between w-full px-16 z-10 mt-10">
           <Link href={"/"}><Image src="/okto.png" alt="Logo Oktopod" width="64" height="64" /></Link>
           <div className="flex flex-row justify-around items-center gap-1">
@@ -89,15 +89,15 @@ const Home: NextPage = () => {
             {last4 as Formation[] && last4 && last4.length > 0 && last4.map((forma) => {
               if (!forma.hidden || (forma.hidden && admin)) {
                 return (
-                  <Link href={`/formations/${forma.id}`} className="flex flex-col items-center justify-between bg-white/20 rounded-3xl shadow-lg w-full h-96 mx-2 relative transition hover:scale-[1.05]" key={forma.id}>
+                  <Link href={`/formations/${forma.id}`} className="flex flex-col items-center justify-between bg-white/20 dark:bg-[#041F25] rounded-3xl shadow-lg w-full h-96 mx-2 relative transition hover:scale-[1.05]" key={forma.id}>
                     
                     <div className="absolute -top-20 flex items-end justify-center items-end w-[170px] h-[150px]">
                       {forma.techs[0] && forma.techs[0].logo && <img src={forma.techs[0].logo} alt="" className="max-h-full"/>}
                     </div>
 
                     <div className="w-full px-4 flex flex-col items-center mt-20">
-                      <h3 className="text-3xl mb-3 text-cyan-700 text-[#0E6073] dark:text-[#63AEAB]">{forma.title}</h3>
-                      <div className="text-sm font-Inter dark:text-[#2EA3A5]" dangerouslySetInnerHTML={{ __html: forma.description }} />
+                      <h3 className="text-3xl mb-3 text-cyan-700 text-[#0E6073] dark:text-[#2EA3A5]">{forma.title}</h3>
+                      <div className="text-sm font-Inter text-[#0E6073] dark:text-[#2EA3A5] max-h-36 overflow-hidden" dangerouslySetInnerHTML={{ __html: forma.description }} />
                     </div>
 
                     <div className="flex flex-row items-center justify-around mt-5 w-full px-5 pb-4">
@@ -117,9 +117,9 @@ const Home: NextPage = () => {
           </div>
 
           <h1 className="text-4xl self-start mb-11 mt-12 text-[#0E6073] dark:text-white">Trouvez le bon cours pour vous</h1>
-          <div className="bg-white width mb-14 w-8/12 h-16 flex flex-row items-center px-8 rounded-full shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)]">
-            <HiMagnifyingGlass className="h-9 w-9 text-[#989898]" />
-            <input className=" h-16 w-40 shadow-none w-full bg-transparent dark:text-[#041f25]" type="text" name="searchValue" id="searchValue" onChange={handleSearchTerm} />
+          <div className="bg-white dark:bg-[#041F25] width mb-14 w-8/12 h-16 flex flex-row items-center px-8 rounded-full shadow-[inset_4px_5px_12px_6px_rgba(0,0,0,0.25)]">
+            <HiMagnifyingGlass className="h-9 w-9 text-[#989898] dark:text-[#0E6073]" />
+            <input className=" h-16 w-40 shadow-none w-full bg-transparent dark:text-[#2EA3A5]" type="text" name="searchValue" id="searchValue" onChange={handleSearchTerm} />
           </div>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-5 w-full items-center gap-y-14 mt-10">
@@ -136,7 +136,7 @@ const Home: NextPage = () => {
           {/* <img src="https://media.discordapp.net/attachments/688793736620146689/915869475423813662/20210709_215217.gif" className="max-w-[12em]"></img> */}
 
         </div>
-        <div className="w-full bg-[#0e6370] h-36 bottom-0 mt-12 flex flex-row px-48 justify-between items-center">
+        <div className="w-full bg-[#0e6370] dark:bg-[#041F25] h-36 bottom-0 mt-12 flex flex-row px-48 justify-between items-center">
           <div className="flex flex-row justify-between items-center">
             <Link target="_blank" href={"https://www.oktopod.io/"}><Image src="/Oktopod-carré-blanc.png" width="100" height="30" className="h-20 mr-4" alt="Logo Oktopod" /></Link>
             <p className="text-sm font-Inter text-white mx-4">© 2023 Oktopod</p>
