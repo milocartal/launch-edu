@@ -111,7 +111,7 @@ const Admin: NextPage = () => {
                         <fieldset className="flex flex-col max-h-[60%] w-[40%]">
                             
                             <p className="mb-3 mt-3">Choisir une thématique:</p>
-                            <input type='text' name="lecon tag" placeholder='Rechercher un tag' className="p-[1rem] rounded-t-lg bg-none shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)] w-full" autoComplete="off" onChange={handleSearchTag} />
+                            <input type='text' name="lecon tag" placeholder='Rechercher un tag' className="p-[1rem] rounded-t-lg bg-none dark:bg-[#041F25] shadow-[inset_4px_5px_12px_6px_rgba(0,0,0,0.25)] w-full" autoComplete="off" onChange={handleSearchTag} />
                             <fieldset className="flex flex-col justify-between w-full shadow-xl shadow-black/30 rounded-b-lg">
                                 <fieldset className="flex flex-col h-80 w-full rounded-t-lg" id="listTech">
                                     {techList as Technologie[] && techList && techList.length > 0 && techList.filter((techno) => { return techno.name.toLowerCase().includes(SearchTag.toLowerCase()) }).map((techno) => {
@@ -130,9 +130,9 @@ const Admin: NextPage = () => {
                         </fieldset>
 
                         <fieldset className="flex flex-col gap-6 justify-center item-center w-[60%] h-full">
-                            <input name="formTitle" id="formTitle" type="text" placeholder="Titre de la formation" required className="p-[1rem] rounded-lg bg-none shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)] w-full" autoComplete="off" />
+                            <input name="formTitle" id="formTitle" type="text" placeholder="Titre de la formation" required className="p-[1rem] rounded-lg bg-none dark:bg-[#041F25] shadow-[inset_4px_5px_12px_6px_rgba(0,0,0,0.25)] w-full" autoComplete="off" />
 
-                            <QuillNoSSRWrapper theme="snow" onChange={setContent} placeholder="Description" className="h-[40%] shadow-xl pb-11" />
+                            <QuillNoSSRWrapper theme="snow" onChange={setContent} placeholder="Description" className="h-[40%] shadow-xl pb-11 dark:bg-[#041F25] dark:text-white" />
                             <fieldset className="mt-3 flex gap-5 w-full justify-center">
                                 <legend>Difficulté:</legend>
                                 <div className="flex flex-col items-center gap-2">

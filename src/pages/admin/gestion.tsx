@@ -120,7 +120,7 @@ const Gestionnaire: NextPage = () => {
                                                         setLogo(techno.logo)
                                                     }}
                                                     className="rounded-full font-semibold text-red-600 no-underline hover:cursor-pointer">
-                                                    <BiEdit className="text-[1.5rem] text-black hover:text-green-500" />
+                                                    <BiEdit className="text-[1.5rem] text-black dark:text-white hover:text-green-500 dark:hover:text-green-500" />
                                                 </div>
                                                 <div
                                                     onClick={() => {
@@ -128,7 +128,7 @@ const Gestionnaire: NextPage = () => {
                                                         window.location.reload()
                                                     }}
                                                     className="rounded-full font-semibold text-red-600 no-underline hover:cursor-pointer">
-                                                    <HiXMark className="text-[1.5rem] text-black hover:text-red-500" />
+                                                    <HiXMark className="text-[1.5rem] text-black dark:text-white hover:text-red-500 dark:hover:text-red-500" />
                                                 </div>
                                             </div>
                                         </label>
@@ -157,7 +157,7 @@ const Gestionnaire: NextPage = () => {
                                                             setType(type)
                                                     }}
                                                     className="rounded-full font-semibold text-red-600 no-underline hover:cursor-pointer">
-                                                    <BiEdit className="text-[1.5rem] text-black hover:text-green-500" />
+                                                    <BiEdit className="text-[1.5rem] text-black dark:text-white hover:text-green-500 dark:hover:text-green-500" />
                                                 </div>
                                                 <div
                                                     onClick={() => {
@@ -165,7 +165,7 @@ const Gestionnaire: NextPage = () => {
                                                         window.location.reload()
                                                     }}
                                                     className="rounded-full font-semibold text-red-600 no-underline hover:cursor-pointer">
-                                                    <HiXMark className="text-[1.5rem] text-black hover:text-red-500" />
+                                                    <HiXMark className="text-[1.5rem] text-black dark:text-white hover:text-red-500 dark:hover:text-red-500" />
                                                 </div>
                                             </div>
 

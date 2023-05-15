@@ -135,7 +135,7 @@ const Admin: NextPage = () => {
                                     hide = "Publiée"
                                 return (
                                     <Link
-                                        className="flex flex-row justify-between items-center mb-1 w-full bg-white shadow-[4px_5px_12px_6px_rgba(0,0,0,0.25)] py-2 pl-16 pr-6 justify-between hover:bg-[#ebebeb]/20 h-[5rem]"
+                                        className="flex flex-row justify-between items-center mb-1 w-full bg-white dark:bg-[#041F25] shadow-[4px_5px_12px_6px_rgba(0,0,0,0.25)] py-2 pl-16 pr-6 justify-between hover:bg-[#ebebeb]/20 dark:hover:bg-[#083039] h-[5rem]"
                                         href={`/admin/formations/${encodeURIComponent(forma.id)}`}
                                         key={forma.id}
                                     >
