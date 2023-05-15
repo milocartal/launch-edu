@@ -8,10 +8,10 @@ function Techno(props:{ data: Technologie  }) {
             href={`/technologies/${encodeURIComponent(props.data.id)}`}
             key={props.data.id}
         >
-            <div className="absolute -top-11 flex items-end justify-center w-[100px] h-[100px]">
-                {props.data.logo && <img src={props.data.logo} alt="" className="max-h-24" />}
+            <div className="absolute -top-11 flex items-center justify-center w-[100px] h-[100px]">
+                {props.data.logo && <img src={props.data.logo} alt="" className="max-h-24"/>}
             </div>
-            <h3 className="text-md font-bold mt-12 text-center">{props.data.name}</h3>
+            <h3 className="text-base font-bold mt-12 text-center">{props.data.name}</h3>
 
 
         </Link>
