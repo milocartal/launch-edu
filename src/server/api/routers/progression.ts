@@ -13,7 +13,7 @@ export const progressionRouter = createTRPCRouter({
         return prisma.progression.findMany();
     }),
 
-    getProgFormaUser: protectedProcedure.input(z.object({ idf: z.string(), idu: z.string() })).query(({ input }) => {
+    getProgFormaUser: protectedProcedure.input(z.object({ idf: z.string(), idu: z.string() })).mutation(({ input }) => {
         return prisma.progression.findMany({
             where: {
                 idF: input.idf,

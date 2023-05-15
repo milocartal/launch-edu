@@ -33,6 +33,7 @@ export const getServerSideProps: GetServerSideProps<{
 }> = async function (context) {
 
     const session = await getSession(context)
+    
 
     if (session) {
         const progression = await prisma.progression.findMany({
@@ -83,7 +84,14 @@ const Dashboard: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>
     const prog = progression
 
     const [selected, setSelected] = useState("")
-    const { data: formations } = api.formation.getAll.useQuery()
+
+    function getTest (idF: string){
+        console.log("here", session)
+        if(session){
+            let c = api.progression.getProgFormaUser.useMutation().mutate({idf: idF, idu: session.user.id})
+            console.log(c)
+        }
+    }
 
     return (
         <>
@@ -147,19 +155,16 @@ const Dashboard: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>
                 <div className="w-3/12 bg-[#0E6073] fixed right-0 flex flex-col items-start justify-start h-full pt-24 px-10">
                     <h3 className="font-bold text-white mb-8 w-full">Cours terminés</h3>
                     {prog && prog.map((forma) => {
-                        let test = nb?.find((item => {
-                            if (item.idF === forma.idF)
-                                return item._count
-                        }))
-                        if (test?._count === forma.formation.lecons.length)
-                            return (
-                                <div className="bg-white w-full h-14 rounded-xl flex flex-row justify-between items-center pr-5 mb-3" key={forma.formation.id}>
-                                    <div className="flex flex-row justify-start items-center relative">
-                                        {forma.formation.techs && forma.formation.techs[0] && <img src={forma.formation.techs[0].logo} width="60" height="60" className="top-0" alt="" />}
-                                        <h3 className="font-bold text-[#0E6073]">{forma.formation.title}</h3>
-                                    </div>
-                                    <Difficulty level={forma.formation.difficulte} />
+                        let test = getTest(forma.formation.id)
+
+                        return (
+                            <div className="bg-white w-full h-14 rounded-xl flex flex-row justify-between items-center pr-5 mb-3" key={forma.formation.id}>
+                                <div className="flex flex-row justify-start items-center relative">
+                                    {forma.formation.techs && forma.formation.techs[0] && <img src={forma.formation.techs[0].logo} width="60" height="60" className="top-0" alt="" />}
+                                    <h3 className="font-bold text-[#0E6073]">{forma.formation.title}</h3>
                                 </div>
+                                <Difficulty level={forma.formation.difficulte} />
+                            </div>
                             )
                     })}
 
