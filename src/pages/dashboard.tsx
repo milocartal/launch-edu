@@ -25,12 +25,10 @@ type ProgressionWithFormation = Prisma.ProgressionGetPayload<{
 }>
 
 export const getServerSideProps: GetServerSideProps<{
-    session: Session | null
     progression: ProgressionWithFormation[] | null
 }> = async function (context) {
 
     const session = await getSession(context)
-    console.log(session)
 
     if (session) {
         const progression = await prisma.progression.findMany({
@@ -51,7 +49,6 @@ export const getServerSideProps: GetServerSideProps<{
         if (progression) {
             return {
                 props: {
-                    session: JSON.parse(JSON.stringify(session)) as Session,
                     progression: JSON.parse(JSON.stringify(progression)) as ProgressionWithFormation[],
                     
                 }
@@ -60,10 +57,7 @@ export const getServerSideProps: GetServerSideProps<{
         else {
             return {
                 props: {
-                    session: JSON.parse(JSON.stringify(session)) as Session,
                     progression: null,
-                    
-
                 }
             }
         }
@@ -71,9 +65,7 @@ export const getServerSideProps: GetServerSideProps<{
     else {
         return {
             props: {
-                session: null,
                 progression: null,
-                nb: null
             }
         };
     }
@@ -86,6 +78,10 @@ const Dashboard: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>
 
     const [selected, setSelected] = useState("")
 
+    const douze = (idforma: string, idu: string)=>{
+        return test.mutate({idf: idforma, idu: idu})
+    }
+
     return (
         <>
             <Head>
@@ -95,7 +91,7 @@ const Dashboard: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>
 
             <main className="flex min-h-screen bg-white flex flex-col justify-between pb-20">
                 <div className="flex flex-col items-start justify-start pl-28 pt-20 pr-6 w-9/12">
-                    <Title title={'Reprendre où vous en étiez'} link={''} />
+                    <Title title={`Reprendre où vous en étiez, ${session.data?.user.name}`} link={''} />
 
                     {progression && progression.map((item) =>
                         selected === item.idF ?
@@ -147,6 +143,8 @@ const Dashboard: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>
                 <div className="w-3/12 bg-[#0E6073] fixed right-0 flex flex-col items-start justify-start h-full pt-24 px-10">
                     <h3 className="font-bold text-white mb-8 w-full">Cours terminés</h3>
                     {progression && progression.map((forma) => {
+                        const one = douze(forma.formation.id, session.data!.user.id)
+                        console.log(one)
                         return (
                             <div className="bg-white w-full h-14 rounded-xl flex flex-row justify-between items-center pr-5 mb-3" key={forma.formation.id}>
                                 <div className="flex flex-row justify-start items-center relative">
