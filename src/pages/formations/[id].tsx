@@ -23,12 +23,12 @@ type LeconWithEtapes = Prisma.LeconGetPayload<{
 }>
 
 export const getServerSideProps: GetServerSideProps<{
-    session: SessionAuth | undefined
+    session: SessionAuth | null
     formation: (Formation & {
         techs: Technologie[];
         lecons: LeconWithEtapes[];
     });
-    progression: Progression[] | undefined
+    progression: Progression[] | null
 }> = async function (context) {
 
 
@@ -77,12 +77,12 @@ export const getServerSideProps: GetServerSideProps<{
     else {
         return {
             props: {
-                session: undefined,
+                session: null,
                 formation: JSON.parse(JSON.stringify(formation)) as (Formation & {
                     techs: Technologie[];
                     lecons: LeconWithEtapes[];
                 }),
-                progression: undefined
+                progression: null
             }
         };
     }

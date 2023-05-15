@@ -49,17 +49,17 @@ const Admin: NextPage = () => {
     const [filterType, setFilterType] = useState("")
 
     formations as Formation[] && formations && formations.length > 0 && filterType == "theme" ? formations?.sort(function (a, b) {
-    if (a.techs[0]?.name < b.techs[0]?.name) {
-        return -1;
-    }
-    if (a.techs > b.techs) {
-        return 1;
-    }
-    return 0;
+        if (a.techs[0]!.name < b.techs[0]!.name) {
+            return -1;
+        }
+        if (a.techs > b.techs) {
+            return 1;
+        }
+        return 0;
     }) : formations as Formation[] && formations && formations.length > 0 && filterType == "sanslecon" ? formations?.sort(function (a, b) {
-    return a.lecons.length - b.lecons.length;
+        return a.lecons.length - b.lecons.length;
     }) : formations as Formation[] && formations && formations.length > 0 && filterType == "private" && formations?.sort(function (a, b) {
-    return b.hidden - a.hidden;
+        return b.hidden - a.hidden;
     })
 
     function changeFilterType(type: string) {
@@ -107,23 +107,23 @@ const Admin: NextPage = () => {
                                 {filterType === "theme" ? <button className="px-4 py-1 bg-[#0E6073] rounded-full mx-1" onClick={() => changeFilterType("theme")}>
                                     <p className="text-[#fff]">Thématique</p>
                                 </button> :
-                                <button className="px-4 py-1 bg-[#D9D9D9] rounded-full mx-1" onClick={() => changeFilterType("theme")}>
-                                    <p className="text-[#0E6073]">Thématique</p>
-                                </button>
+                                    <button className="px-4 py-1 bg-[#D9D9D9] rounded-full mx-1" onClick={() => changeFilterType("theme")}>
+                                        <p className="text-[#0E6073]">Thématique</p>
+                                    </button>
                                 }
                                 {filterType === "sanslecon" ? <button className="px-4 py-1 bg-[#0E6073] rounded-full mx-1" onClick={() => changeFilterType("sanslecon")}>
                                     <p className="text-[#fff]">Sans leçons</p>
                                 </button> :
-                                <button className="px-4 py-1 bg-[#D9D9D9] rounded-full mx-1" onClick={() => changeFilterType("sanslecon")}>
-                                    <p className="text-[#0E6073]">Sans leçons</p>
-                                </button>
+                                    <button className="px-4 py-1 bg-[#D9D9D9] rounded-full mx-1" onClick={() => changeFilterType("sanslecon")}>
+                                        <p className="text-[#0E6073]">Sans leçons</p>
+                                    </button>
                                 }
                                 {filterType === "private" ? <button className="px-4 py-1 bg-[#0E6073] rounded-full mx-1" onClick={() => changeFilterType("private")}>
                                     <p className="text-[#fff]">Privées</p>
                                 </button> :
-                                <button className="px-4 py-1 bg-[#D9D9D9] rounded-full mx-1" onClick={() => changeFilterType("private")}>
-                                <p className="text-[#0E6073]">Privées</p>
-                                </button>}
+                                    <button className="px-4 py-1 bg-[#D9D9D9] rounded-full mx-1" onClick={() => changeFilterType("private")}>
+                                        <p className="text-[#0E6073]">Privées</p>
+                                    </button>}
                             </div>
                         </div>
                         <div className="flex flex-col w-full">

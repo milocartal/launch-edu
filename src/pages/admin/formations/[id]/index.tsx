@@ -230,7 +230,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                     </Link>)
                             })}
                         </div>
-                        <Link href={`/admin/formations/${formation.id}/addLesson`} className="flex items-center justify-center h-[8rem] w-full bg-[#2ea3a5] text-white hover:cursor-pointer transition hover:bg-[#0e6073] rounded-b-lg">
+                        <Link href={`/admin/formations/${formation.id}/addLesson`} className="flex items-center justify-center h-[5rem] w-full bg-[#2ea3a5] text-white hover:cursor-pointer transition hover:bg-[#0e6073] rounded-b-lg">
                             + Ajouter une leçon
                         </Link>
                     </div>

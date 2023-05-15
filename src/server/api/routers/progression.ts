@@ -97,4 +97,14 @@ export const progressionRouter = createTRPCRouter({
             }
         })
     }),
+
+    test: protectedProcedure.input(z.object({ idf: z.string(), idu: z.string() })).mutation(({ input }) => {
+        return prisma.progression.count({
+            where: {
+                idF: input.idf,
+                idU: input.idu,
+                finish: true
+            },
+        })
+    }),
 });
