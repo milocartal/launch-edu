@@ -8,7 +8,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 
 import { api } from "~/utils/api";
 import { prisma } from '~/server/db';
-import { Formation, Technologie } from '@prisma/client';
+import { Formation, Prisma, Technologie } from '@prisma/client';
 import { useState } from 'react';
 import Header from '../components/header';
 import Lesson from '../components/lesson';

@@ -145,8 +145,8 @@ const Admin: NextPage = () => {
                                         <span className="flex flex-row items-center justify-between w-5/12">
                                             <DifficultyText level={forma.difficulte} />
                                             <span className="flex flex-row items-center">
-                                                <FaPenAlt className="h-6 w-6 text-[#989898]" />
-                                                <p className="ml-2 text-sm font-Inter text-[#989898]">{forma.lecons.length} leçon(s)</p>
+                                                <FaPenAlt className="h-6 w-6 text-[#989898] dark:text-[#2EA3A5]" />
+                                                <p className="ml-2 text-sm font-Inter text-[#989898] dark:text-[#2EA3A5]">{forma.lecons.length} leçon(s)</p>
                                             </span>
                                             <div className="w-[5rem] h-[5rem] flex flex-row justify-center items-center">
                                                 {forma.techs && forma.techs[0] && forma.techs[0].logo && <img src={forma.techs[0].logo} alt="" className="max-h-[4rem] max-w-[4rem]" />}
