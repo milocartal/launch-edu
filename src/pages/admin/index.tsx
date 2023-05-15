@@ -75,7 +75,7 @@ const Admin: NextPage = () => {
             </Head>
             {admin ?
 
-                <main className="flex min-h-screen bg-white justify-between dark:bg-[#041F25] pb-12">
+                <main className="flex min-h-screen bg-white justify-between dark:bg-[#082F38] pb-12">
                     <div className="w-3/12 bg-[#0E6073] fixed right-0 flex flex-col items-center justify-between h-full pt-36 pb-14 px-5">
                         <div>
                             <div className="flex flex-row justify-center items-center">
@@ -105,23 +105,23 @@ const Admin: NextPage = () => {
                                 {filterType === "theme" ? <button className="px-4 py-1 bg-[#0E6073] rounded-full mx-1" onClick={() => changeFilterType("theme")}>
                                     <p className="text-[#fff]">Thématique</p>
                                 </button> :
-                                    <button className="px-4 py-1 bg-[#D9D9D9] rounded-full mx-1" onClick={() => changeFilterType("theme")}>
-                                        <p className="text-[#0E6073]">Thématique</p>
-                                    </button>
+                                <button className="px-4 py-1 bg-[#D9D9D9] dark:bg-[#041F25] rounded-full mx-1" onClick={() => changeFilterType("theme")}>
+                                    <p className="text-[#0E6073] dark:text-[#0E6073]">Thématique</p>
+                                </button>
                                 }
                                 {filterType === "sanslecon" ? <button className="px-4 py-1 bg-[#0E6073] rounded-full mx-1" onClick={() => changeFilterType("sanslecon")}>
                                     <p className="text-[#fff]">Sans leçons</p>
                                 </button> :
-                                    <button className="px-4 py-1 bg-[#D9D9D9] rounded-full mx-1" onClick={() => changeFilterType("sanslecon")}>
-                                        <p className="text-[#0E6073]">Sans leçons</p>
-                                    </button>
+                                <button className="px-4 py-1 bg-[#D9D9D9] dark:bg-[#041F25] rounded-full mx-1" onClick={() => changeFilterType("sanslecon")}>
+                                    <p className="text-[#0E6073] dark:text-[#0E6073]">Sans leçons</p>
+                                </button>
                                 }
                                 {filterType === "private" ? <button className="px-4 py-1 bg-[#0E6073] rounded-full mx-1" onClick={() => changeFilterType("private")}>
                                     <p className="text-[#fff]">Privées</p>
                                 </button> :
-                                    <button className="px-4 py-1 bg-[#D9D9D9] rounded-full mx-1" onClick={() => changeFilterType("private")}>
-                                        <p className="text-[#0E6073]">Privées</p>
-                                    </button>}
+                                <button className="px-4 py-1 bg-[#D9D9D9] dark:bg-[#041F25] rounded-full mx-1" onClick={() => changeFilterType("private")}>
+                                <p className="text-[#0E6073] dark:text-[#0E6073]">Privées</p>
+                                </button>}
                             </div>
                         </div>
                         <div className="flex flex-col w-full">
@@ -133,7 +133,7 @@ const Admin: NextPage = () => {
                                     hide = "Publiée"
                                 return (
                                     <Link
-                                        className="flex flex-row justify-between items-center mb-1 w-full bg-white shadow-[4px_5px_12px_6px_rgba(0,0,0,0.25)] py-2 pl-16 pr-6 justify-between hover:bg-[#ebebeb]/20 h-[5rem]"
+                                        className="flex flex-row justify-between items-center mb-1 w-full bg-white dark:bg-[#041F25] shadow-[4px_5px_12px_6px_rgba(0,0,0,0.25)] py-2 pl-16 pr-6 justify-between hover:bg-[#ebebeb]/20 dark:hover:bg-[#083039] h-[5rem]"
                                         href={`/admin/formations/${encodeURIComponent(forma.id)}`}
                                         key={forma.id}
                                     >

@@ -13,6 +13,13 @@
     }
 }
 
+@media screen and (prefers-color-scheme: dark) {
+  .quill > .ql-container > .ql-editor.ql-blank::before{
+    color: #63AEAB;
+    background-color: #041F25;
+  }
+}
+
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
