@@ -10,7 +10,7 @@ import { api } from '~/utils/api';
 import { Formation, Technologie, Progression, Prisma } from '@prisma/client';
 import { getSession, useSession } from 'next-auth/react';
 import { prisma } from '~/server/db';
-import { Session, type Session as SessionAuth } from 'next-auth';
+import { Session } from 'next-auth';
 
 type ProgressionWithFormation = Prisma.ProgressionGetPayload<{
     include: {
@@ -29,7 +29,6 @@ export const getServerSideProps: GetServerSideProps<{
 }> = async function (context) {
 
     const session = await getSession(context)
-
     if (session) {
         const progression = await prisma.progression.findMany({
             where: {
@@ -43,14 +42,24 @@ export const getServerSideProps: GetServerSideProps<{
                     }
                 },
             },
-            distinct: ['idF'],
+        })
+
+        const groupedProgress = progression.reduce((previous: any, current) => {
+            if (!previous[current.formation.id]) previous[current.formation.id] = [];
+            previous[current.formation.id].push(current);
+            return previous;
+        }, {})
+
+        const result = Object.entries(groupedProgress).map((item: any) => {
+            const refValue = item[1][0];
+            refValue.finish = item[1].every((element: any) => element.finish)
+            return refValue;
         })
 
         if (progression) {
             return {
                 props: {
-                    progression: JSON.parse(JSON.stringify(progression)) as ProgressionWithFormation[],
-                    
+                    progression: JSON.parse(JSON.stringify(result)) as ProgressionWithFormation[],
                 }
             }
         }
@@ -72,16 +81,11 @@ export const getServerSideProps: GetServerSideProps<{
 };
 
 const Dashboard: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ progression }) => {
-    const session = useSession()
-
-    const test = api.progression.test.useMutation()
+    const session2 = useSession()
 
     const [selected, setSelected] = useState("")
 
-    const douze = (idforma: string, idu: string)=>{
-        return test.mutate({idf: idforma, idu: idu})
-    }
-
+    console.log(progression)
     return (
         <>
             <Head>
@@ -91,7 +95,7 @@ const Dashboard: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>
 
             <main className="flex min-h-screen bg-white flex flex-col justify-between pb-20">
                 <div className="flex flex-col items-start justify-start pl-28 pt-20 pr-6 w-9/12">
-                    <Title title={`Reprendre où vous en étiez, ${session.data?.user.name}`} link={''} />
+                    <Title title={`Reprendre où vous en étiez, ${session2.data?.user.name}`} link={''} />
 
                     {progression && progression.map((item) =>
                         selected === item.idF ?
@@ -143,18 +147,17 @@ const Dashboard: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>
                 <div className="w-3/12 bg-[#0E6073] fixed right-0 flex flex-col items-start justify-start h-full pt-24 px-10">
                     <h3 className="font-bold text-white mb-8 w-full">Cours terminés</h3>
                     {progression && progression.map((forma) => {
-                        const one = douze(forma.formation.id, session.data!.user.id)
-                        console.log(one)
-                        return (
-                            <div className="bg-white w-full h-14 rounded-xl flex flex-row justify-between items-center pr-5 mb-3" key={forma.formation.id}>
-                                <div className="flex flex-row justify-start items-center relative">
-                                    {forma.formation.techs && forma.formation.techs[0] && <img src={forma.formation.techs[0].logo} width="60" height="60" className="top-0" alt="" />}
-                                    <h3 className="font-bold text-[#0E6073]">{forma.formation.title}</h3>
+                        if(forma.finish)
+                            return (
+                                <div className="bg-white w-full h-14 rounded-xl flex flex-row justify-between items-center pr-5 mb-3" key={forma.formation.id}>
+                                    <div className="flex flex-row justify-start items-center relative">
+                                        {forma.formation.techs && forma.formation.techs[0] && <img src={forma.formation.techs[0].logo} width="60" height="60" className="top-0" alt="" />}
+                                        <h3 className="font-bold text-[#0E6073]">{forma.formation.title}</h3>
+                                    </div>
+                                    <Difficulty level={forma.formation.difficulte} />
                                 </div>
-                                <Difficulty level={forma.formation.difficulte} />
-                            </div>
-                        )
-                    })}
+                            )
+                        })}
 
                 </div>
                 <Header selected={1} />
