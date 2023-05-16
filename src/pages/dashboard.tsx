@@ -149,7 +149,7 @@ const Dashboard: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>
                     {progression && progression.map((forma) => {
                         if(forma.finish)
                             return (
-                                <div className="bg-white dark:bg-[#1A808C] w-full h-14 rounded-xl flex flex-row justify-between items-center pr-5 mb-3" key={forma.formation.id}>
+                                <div className="bg-white dark:bg-[#2EA3A5] w-full h-14 rounded-xl flex flex-row justify-between items-center pr-5 mb-3" key={forma.formation.id}>
                                     <div className="flex flex-row justify-start items-center relative">
                                         {forma.formation.techs && forma.formation.techs[0] && <img src={forma.formation.techs[0].logo} width="60" height="60" className="top-0" alt="" />}
                                         <h3 className="font-bold text-[#0E6073] dark:text-white">{forma.formation.title}</h3>
