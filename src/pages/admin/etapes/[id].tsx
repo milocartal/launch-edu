@@ -53,7 +53,7 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                 <title>Test d'etape</title>
             </Head>
 
-            <main className="flex flex-col bg-white dark:bg-[#082F38] w-full gap-14 items-center py-14">
+            {etape && <main className="flex flex-col bg-white dark:bg-[#082F38] w-full gap-14 items-center py-14">
                 <p className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
                     <span className="text-[hsl(280,100%,70%)]">{etape.lecon.title}</span> {etape.name}
                 </p>
@@ -75,7 +75,7 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                 {/*<iframe src="https://stackblitz.com/github/milocartal/launch-edu?file=src/pages/index.tsx&embed=1&view=editor&hideExplorer=1" />*/}
                 <iframe src={x} />
 
-            </main>
+            </main>}
         </>
     );
 };
