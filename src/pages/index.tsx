@@ -134,7 +134,7 @@ const Home: NextPage = () => {
             <p className="text-sm font-Inter text-white mx-4">© 2023 Oktopod</p>
           </div>
           <div className="flex flex-row justify-between items-center">
-            <p className="text-sm font-Inter text-white mx-4 hover:text-[#63AEAB]">Mentions légales</p>
+            <Link className="text-sm font-Inter text-white mx-4 hover:text-[#63AEAB]" href={'/mentionslegales'}>Mentions légales</Link>
             <button onClick={sessionData ? () => void signOut() : () => void signIn()} className="text-sm font-Inter text-white pl-4 border-l-2 hover:text-[#63AEAB]">{sessionData ? "Déconnexion" : "Connexion"}</button>
           </div>
         </div>
