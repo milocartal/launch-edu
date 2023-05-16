@@ -20,6 +20,30 @@
   }
 }
 
+.parent .child{
+  visibility: hidden;
+}
+
+.parent:hover .child{
+  visibility: visible;
+}
+
+.parent .child1{
+  visibility: visible;
+}
+
+.parent .child2{
+  visibility: hidden;
+}
+
+.parent:hover .child1{
+  visibility: hidden;
+}
+
+.parent:hover .child2{
+  visibility: visible;
+}
+
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }

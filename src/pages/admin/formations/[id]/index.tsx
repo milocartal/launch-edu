@@ -12,14 +12,14 @@ import { api } from "~/utils/api";
 import { prisma } from '~/server/db';
 import { Technologie, Formation, Lecon, Etape, Prisma } from '@prisma/client';
 
-import { HiXMark } from 'react-icons/hi2';
+import { HiXMark, HiMinus } from 'react-icons/hi2';
 import { RiAddFill } from 'react-icons/ri'
 import { FaPenAlt } from "react-icons/fa";
 
 import Header from "../../../components/header";
 import Lesson from '~/pages/components/lesson';
 import Title from '~/pages/components/title';
-import { DifficultyText } from '../../../components/difficulties';
+import { Difficulty, DifficultyText } from '../../../components/difficulties';
 
 type FormationWithAll = Prisma.FormationGetPayload<{
     include: {
@@ -145,7 +145,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
         setSearchForma(value);
     };
 
-    async function handleProg(e: React.SyntheticEvent){
+    async function handleProg(e: React.SyntheticEvent) {
         e.preventDefault()
     }
 
@@ -186,15 +186,19 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                 <div className="w-11/12 grid grid-cols-1 gap-4 sm:grid-cols-4 w-full max-h-[7rem] pt-2 scrollbar-hide">
                                     {formation.techs as Technologie[] && formation.techs.length > 0 && formation.techs.map((tech) => {
                                         return (
-                                            <button
-                                                className="w-full flex justify-center py-5 shadow-md mt-1 bg-[#2ea3a5] text-white font-bold tracking-tight rounded-lg hover:bg-[#0e6073]"
-                                                onClick={() => {
-                                                    delTag.mutateAsync({ id: formation.id, idT: tech.id });
-                                                    window.location.reload()
-                                                }}
+                                            <div
+                                                className="parent relative w-full flex justify-center py-5 shadow-md mt-1 bg-[#2ea3a5] text-white font-bold tracking-tight rounded-lg hover:bg-[#0e6073]"
                                                 key={tech.id}>
-                                                {tech.name}
-                                            </button>)
+                                                <p className='child1'>{tech.name}</p>
+                                                <button
+                                                    onClick={() => {
+                                                        delTag.mutateAsync({ id: formation.id, idT: tech.id });
+                                                        window.location.reload()
+                                                    }}
+                                                    className="child2 h-8 w-8 text-[#0E6073] absolute flex items-center justify-center top-4">
+                                                    <HiXMark className="text-[3rem] text-black dark:text-white hover:text-red-500 dark:hover:text-red-500" />
+                                                </button>
+                                            </div>)
                                     })}
                                 </div>
                             </div>
@@ -207,7 +211,27 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                 <div className="w-11/12 grid grid-cols-1 gap-10 sm:grid-cols-2 w-full max-h-[12rem] pt-7">
                                     {formation.Prerequis as FormationWithAll[] && formation.Prerequis.length > 0 && formation.Prerequis.map((requis) => {
                                         return (
-                                            <Lesson data={requis as FormationWithAll} key={requis.id}/>)
+                                            <div
+                                                className="parent flex flex-col items-center min-w-[200px] max-w-2xl gap-4 rounded-xl bg-white dark:bg-[#041F25] p-4 hover:bg-[#d6d4d4]/20 dark:hover:bg-[#083039] relative mt-6 shadow-[0px_10px_30px_0px_rgba(0,0,0,0.25)]"
+                                                key={requis.id}
+                                            >
+                                                <div className="absolute -top-11 flex items-end justify-center w-[100px] h-[100px]">
+                                                    {requis.techs && requis.techs[0] && requis.techs[0].logo && <img src={requis.techs[0].logo} className="max-h-24" alt="" />}
+                                                </div>
+                                                <h3 className="text-base font-bold mt-12 text-center">{requis.title}</h3>
+                                                <span className="absolute right-5">
+                                                    <Difficulty level={requis.difficulte} />
+                                                </span>
+                                                <button
+                                                    onClick={() => {
+                                                        delPre.mutateAsync({ id:formation.id, idP: requis.id });
+                                                        window.location.reload()
+                                                    }}
+                                                    className="child h-7 w-7 text-[#0E6073] absolute left-5">
+                                                    <HiMinus className="text-[1.5rem] text-black dark:text-white hover:text-red-500 dark:hover:text-red-500" />
+                                                </button>
+                                            </div>
+                                        )
                                     })}
                                 </div>
                             </div>
@@ -225,17 +249,10 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                         <div className="flex flex-col w-full rounded-t-lg max-h-[50rem] overflow-y-scroll" id="listTech">
                             {formation.lecons as LeconWithEtapes[] && formation.lecons.length > 0 && formation.lecons.map((lecon) => {
                                 return (
-                                    <Link href={`/admin/lecons/${lecon.id}`} className="w-full flex flex-row justify-between px-24 py-6 bg-white dark:bg-[#041F25] shadow-md mt-1 transition hover:bg-[#0E6070]/20" key={lecon.id}>
+                                    <Link href={`/admin/lecons/${lecon.id}`} className="w-full flex flex-row justify-between px-16 py-6 bg-white dark:bg-[#041F25] shadow-md mt-1 transition hover:bg-[#0E6070]/20" key={lecon.id}>
                                         <p className="text-base font-bold tracking-tight text-[#0E6073] self-start">{lecon.title}</p>
                                         <p className="ml-2 text-sm font-Inter text-[#989898]">{lecon.etapes.length} étape(s)</p>
-                                        <button
-                                            onClick={() => {
-                                                delLecon.mutateAsync({ id: lecon.id });
-                                                window.location.reload()
-                                            }}
-                                            className="rounded-full font-semibold text-red-600 no-underline">
-                                            <HiXMark className="text-[1.5rem] text-black dark:text-white hover:text-red-500 dark:hover:text-red-500" />
-                                        </button>
+
                                     </Link>)
                             })}
                         </div>
