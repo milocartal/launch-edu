@@ -233,3 +233,7 @@ input[type="radio"]:checked::before {
 .chk:checked + .slider:after {
   transform: rotateZ(90deg) rotateY(180deg) translateY(0.45em) translateX(-1.4em);
 }
+
+.quill > .ql-container > .ql-editor.ql-blank::before{
+  background: none;
+}
