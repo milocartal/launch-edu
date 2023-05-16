@@ -51,7 +51,7 @@ const Home: NextPage = () => {
           <div className="flex flex-row justify-around items-center gap-1">
             {admin && <Link href="/admin" className="text-white hover:cursor-pointer"><RiAdminLine className="text-white text-[2rem]" /></Link>}
 
-            {user && <Link href={"/dashboard"} className=" px-3 py-3 text-white font-semibold font-Inter rounded-full hover:bg-white/10">MON ESPACE</Link>}
+            {user && <Link href={"/login"} className=" px-3 py-3 text-white font-semibold font-Inter rounded-full hover:bg-white/10">MON ESPACE</Link>}
             <button
               className="rounded-full px-3 py-3 font-semibold  no-underline transition hover:bg-white/10"
               onClick={sessionData ? () => void signOut() : () => void signIn()}
