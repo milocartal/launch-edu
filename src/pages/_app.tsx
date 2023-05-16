@@ -19,6 +19,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
       <ThemeProvider attribute="class">
         <Head>
           <link rel="icon" href="/favicon.ico" />
+          <title>OktoBidule</title>
           <style>
             @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
           </style>
