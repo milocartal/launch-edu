@@ -29,7 +29,8 @@ type FormationWithAll = Prisma.FormationGetPayload<{
         },
         Prerequis: {
             include: {
-                techs: true
+                techs: true,
+                Progression: true
             }
         },
         Progression: true
@@ -69,7 +70,8 @@ export const getServerSideProps: GetServerSideProps<{
             },
             Prerequis: {
                 include: {
-                    techs: true
+                    techs: true,
+                    Progression: true,
                 }
             },
             Progression: true
