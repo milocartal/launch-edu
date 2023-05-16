@@ -69,6 +69,15 @@ export const formationRouter = createTRPCRouter({
                         id: input.id
                     }
                 }
+            },
+            include: {
+                techs: true,
+                lecons: true,
+                Prerequis:{
+                    include:{
+                        techs: true
+                    }
+                }
             }
         });
     }),

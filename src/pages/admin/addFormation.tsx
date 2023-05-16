@@ -111,7 +111,13 @@ const Admin: NextPage = () => {
                         <fieldset className="flex flex-col max-h-[60%] w-[40%]">
                             
                             <p className="mb-3 mt-3">Choisir une thématique:</p>
-                            <input type='text' name="lecon tag" placeholder='Rechercher un tag' className="p-[1rem] rounded-t-lg bg-none dark:bg-[#041F25] shadow-[inset_4px_5px_12px_6px_rgba(0,0,0,0.25)] w-full" autoComplete="off" onChange={handleSearchTag} />
+                            <div className="p-2 flex flex-row justify-center rounded-t-lg bg-[#0E6073] dark:bg-[#05262E] w-full">
+                                <div className="bg-white dark:bg-[#041F25] flex flex-row justify-start items-center width w-96 h-12 px-8 rounded-full shadow-[inset_4px_5px_12px_4px_rgba(0,0,0,0.25)]">
+                                    <HiMagnifyingGlass className="h-8 w-8 text-[#989898] dark:text-[#63AEAB]" />
+                                    <input type='text' name="lecon tag" placeholder='Rechercher un tag' className="h-10 shadow-none w-full bg-transparent text-black dark:text-white ml-1" autoComplete="off" onChange={handleSearchTag}/>
+                                </div>
+                            </div>
+                            {/* <input type='text' name="lecon tag" placeholder='Rechercher un tag' className="p-[1rem] rounded-t-lg bg-none dark:bg-[#041F25] shadow-[inset_4px_5px_12px_6px_rgba(0,0,0,0.25)] w-full" autoComplete="off" onChange={handleSearchTag} /> */}
                             <fieldset className="flex flex-col justify-between w-full shadow-xl shadow-black/30 rounded-b-lg">
                                 <fieldset className="flex flex-col h-80 w-full rounded-t-lg" id="listTech">
                                     {techList as Technologie[] && techList && techList.length > 0 && techList.filter((techno) => { return techno.name.toLowerCase().includes(SearchTag.toLowerCase()) }).map((techno) => {
@@ -176,13 +182,13 @@ const Admin: NextPage = () => {
 
                 {tab === "tech" &&
                     <div className="fixed w-full h-full bg-[#0E6073]/90 top-0 right-0 left-0 bottom-0 flex justify-center items-center">
-                        <form onSubmit={handlerAddTech} className="relative flex flex-col gap-5 justify-center items-center bg-white rounded-xl p-16 w-[30%]" method="POST">
+                        <form onSubmit={handlerAddTech} className="relative flex flex-col gap-5 justify-center items-center bg-white dark:bg-[#082F38] rounded-xl p-16 w-[30%]" method="POST">
                             <div onClick={() => { setTab("normal"); setLogo("") }} className="absolute top-3 right-4 rounded-full font-semibold  no-underline transition hover:text-red-500 hover:cursor-pointer">
                                 <HiXMark className="text-[2rem] text-[#0e6073] hover:text-red-500" />
                             </div>
-                            <h1 className="text-xl font-extrabold tracking-tight text-[#0e6073] w-full"><label htmlFor="techName">Nouvelle thématique</label></h1>
-                            <input name="techName" id="techName" type="text" placeholder="Nom de la technologie" required className="inputAddForm w-full" autoComplete="off"></input>
-                            <input name="logoTech" id="logoTech" type="url" placeholder="URL du Logo" required className="inputAddForm w-full" autoComplete="off" onChange={(e) => setLogo(e.target.value)}></input>
+                            <h1 className="text-xl font-extrabold tracking-tight text-[#0e6073] dark:text-[#1A808C] w-full"><label htmlFor="techName">Nouvelle thématique</label></h1>
+                            <input name="techName" id="techName" type="text" placeholder="Nom de la technologie" required className="inputAddForm w-full dark:bg-[#041F25] shadow-[inset_4px_5px_12px_6px_rgba(0,0,0,0.25)]" autoComplete="off"></input>
+                            <input name="logoTech" id="logoTech" type="url" placeholder="URL du Logo" required className="inputAddForm w-full dark:bg-[#041F25] shadow-[inset_4px_5px_12px_6px_rgba(0,0,0,0.25)]" autoComplete="off" onChange={(e) => setLogo(e.target.value)}></input>
                             {urlLogo !== "" && urlLogo.length > 8 ? <img src={urlLogo} className="max-w-[6rem] max-h-[6rem] min-x-[0px] min-h-[0px]" /> : <></>}
                             <button className="rounded-full bg-[#0E6073] text-white px-10 py-3 font-semibold w-full no-underline transition hover:bg-[#0E6073]/20" type="submit">Ajouter</button>
 

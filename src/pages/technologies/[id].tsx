@@ -8,7 +8,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 
 import { api } from "~/utils/api";
 import { prisma } from '~/server/db';
-import { Formation, Technologie } from '@prisma/client';
+import { Formation, Prisma, Technologie } from '@prisma/client';
 import { useState } from 'react';
 import Header from '../components/header';
 import Lesson from '../components/lesson';
@@ -86,14 +86,14 @@ const Technologies: NextPage<InferGetServerSidePropsType<typeof getServerSidePro
                         <p className="text-[#fff]">Progression</p>
                     </button> :
                     <button className="px-4 py-1 bg-[#D9D9D9] dark:bg-[#041F25] rounded-full mx-1" onClick={() => changeFilterType("progress")}>
-                        <p className="text-[#0E6073] dark:text-[#0E6073]">Progression</p>
+                        <p className="text-[#0E6073] dark:text-[#63AEAB]">Progression</p>
                     </button>
                     }
                     {filterType === "diff" ? <button className="px-4 py-1 bg-[#0E6073] rounded-full mx-1" onClick={() => changeFilterType("diff")}>
                         <p className="text-[#fff]">Niveau</p>
                     </button> :
                     <button className="px-4 py-1 bg-[#D9D9D9] dark:bg-[#041F25] rounded-full mx-1" onClick={() => changeFilterType("diff")}>
-                    <p className="text-[#0E6073] dark:text-[#0E6073]">Niveau</p>
+                    <p className="text-[#0E6073] dark:text-[#63AEAB]">Niveau</p>
                     </button>}
                     </div>
                 </div>
