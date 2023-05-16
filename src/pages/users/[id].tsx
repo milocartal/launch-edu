@@ -8,6 +8,7 @@ import { getSession, useSession } from "next-auth/react";
 import { prisma } from '~/server/db';
 import { type User } from '@prisma/client';
 import Header from '../components/header';
+import Link from 'next/link';
 
 export const getServerSideProps: GetServerSideProps<{
     user: User;
@@ -82,9 +83,9 @@ const user: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                                 {sessionData && sessionData.user?.image &&<p className="text-base tracking-tight text-[#989898] dark:text-[#63AEAB]">{sessionData.user.email}</p>}
                             </div>
                         </div>
-                        <button className="w-8/12 bg-[#0E6073] h-14 rounded-full my-3 mt-5 hover:bg-[#0a4654]" type="submit" value="submit">
+                        <Link className="w-8/12 bg-[#0E6073] h-14 rounded-full my-3 mt-5 hover:bg-[#0a4654] flex flex-row justify-center items-center" href={'/mentionslegales'} >
                             <p className="text-white">Mentions légales</p>
-                        </button>
+                        </Link>
                         <button>
                             <p className="text-[#D00000]">Supprimer mon compte</p>
                         </button>
