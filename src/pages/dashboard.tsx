@@ -85,7 +85,6 @@ const Dashboard: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>
 
     const [selected, setSelected] = useState("")
 
-    console.log(progression)
     return (
         <>
             <Head>

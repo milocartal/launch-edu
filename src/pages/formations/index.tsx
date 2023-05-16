@@ -1,22 +1,76 @@
-import { type NextPage } from "next";
+import { GetServerSideProps, InferGetServerSidePropsType, type NextPage } from "next";
 import React, { useState } from 'react';
 import Head from "next/head";
 import Header from "../components/header";
 import Link from "next/link";
 import Image from 'next/image'
-import { signIn, signOut, useSession } from "next-auth/react";
+import { getSession, signIn, signOut, useSession } from "next-auth/react";
 import { IoCheckmarkCircle } from "react-icons/io5";
 
 import { api } from "~/utils/api";
 import { Difficulty } from "~/pages/components/difficulties";
-import { Formation, Technologie } from "@prisma/client";
+import { Formation, Prisma, Technologie } from "@prisma/client";
 import Lesson from "../components/lesson";
 import Title from "../components/title";
 import Techno from "../components/techno";
+import { prisma } from "~/server/db";
 
-const Home: NextPage = () => {
+type FormationWithAll = Prisma.FormationGetPayload<{
+  include: {
+    techs: true,
+    lecons: {
+      include: {
+        etapes: true,
+        Progression: true
+      }
+    },
+    Prerequis: {
+      include: {
+        techs: true
+      }
+    },
+    Progression: true
+  }
+}>
+
+export const getServerSideProps: GetServerSideProps<{
+  formation2: FormationWithAll[];
+}> = async function (context) {
+  const session = await getSession(context)
+
+  const formation = await prisma.formation.findMany({
+    include: {
+      techs: true,
+      lecons: {
+        include: {
+          etapes: true,
+          Progression: true
+        }
+      },
+      Prerequis: {
+        include: {
+          techs: true
+        }
+      },
+      Progression: {
+        where: {
+          idU: session?.user.id
+        }
+      }
+    }
+  });
+
+  return {
+    props: {
+      formation2: JSON.parse(JSON.stringify(formation)) as FormationWithAll[]
+    }
+  };
+};
+
+const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ formation2 }) => {
   const { data: sessionData } = useSession();
   const { data: formations } = api.formation.getAll.useQuery()
+
   const { data: technologies } = api.technologie.getAll.useQuery()
   const admin = sessionData?.user.admin
   const [filterType, setFilterType] = useState("alphabetique")
@@ -33,7 +87,7 @@ const Home: NextPage = () => {
       return 1;
     }
     return 0;
-  }) : formations as Formation[] && formations && formations.length > 0 && filterType == "diff" && formations.sort(function (a, b) {
+  }) : formation2 as FormationWithAll[] && formation2 && formation2.length > 0 && filterType == "diff" && formation2.sort(function (a, b) {
     return a.difficulte - b.difficulte;
   })
 
@@ -51,46 +105,46 @@ const Home: NextPage = () => {
             <Title title={"Trouvez le cours parfait"} link={""} />
             <div className="flex flex-row items-center justify-evenly">
               <p className="mr-2">Trier par : </p>
-              
+
               {filterType === "alphabetique" ? <button className="px-4 py-1 bg-[#0E6073] rounded-full mx-1" onClick={() => changeFilterType("alphabetique")}>
                 <p className="text-[#fff]">Thématique</p>
               </button> :
-              <button className="px-4 py-1 bg-[#D9D9D9] dark:bg-[#041F25] rounded-full mx-1" onClick={() => changeFilterType("alphabetique")}>
-                <p className="text-[#0E6073] dark:text-[#0E6073]">Thématique</p>
-              </button>
+                <button className="px-4 py-1 bg-[#D9D9D9] dark:bg-[#041F25] rounded-full mx-1" onClick={() => changeFilterType("alphabetique")}>
+                  <p className="text-[#0E6073] dark:text-[#0E6073]">Thématique</p>
+                </button>
               }
               {filterType === "progress" ? <button className="px-4 py-1 bg-[#0E6073] rounded-full mx-1" onClick={() => changeFilterType("progress")}>
                 <p className="text-[#fff]">Progression</p>
               </button> :
-              <button className="px-4 py-1 bg-[#D9D9D9] dark:bg-[#041F25] rounded-full mx-1" onClick={() => changeFilterType("progress")}>
-                <p className="text-[#0E6073] dark:text-[#0E6073]">Progression</p>
-              </button>
+                <button className="px-4 py-1 bg-[#D9D9D9] dark:bg-[#041F25] rounded-full mx-1" onClick={() => changeFilterType("progress")}>
+                  <p className="text-[#0E6073] dark:text-[#0E6073]">Progression</p>
+                </button>
               }
               {filterType === "diff" ? <button className="px-4 py-1 bg-[#0E6073] rounded-full mx-1" onClick={() => changeFilterType("diff")}>
                 <p className="text-[#fff]">Niveau</p>
               </button> :
-              <button className="px-4 py-1 bg-[#D9D9D9] dark:bg-[#041F25] rounded-full mx-1" onClick={() => changeFilterType("diff")}>
-              <p className="text-[#0E6073] dark:text-[#0E6073]">Niveau</p>
-            </button>}
+                <button className="px-4 py-1 bg-[#D9D9D9] dark:bg-[#041F25] rounded-full mx-1" onClick={() => changeFilterType("diff")}>
+                  <p className="text-[#0E6073] dark:text-[#0E6073]">Niveau</p>
+                </button>}
             </div>
           </div>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-5 md:gap-8 w-full">
-            {filterType === "alphabetique" ? 
+            {filterType === "alphabetique" ?
               technologies as Technologie[] && technologies && technologies.length > 0 && technologies.map((techno) => {
                 return (
                   <Techno data={techno} key={techno.id} />
                 )
-              }) : formations as Formation[] && formations && formations.length > 0 && formations.map((forma) => {
+              }) : formation2 as Formation[] && formation2 && formation2.length > 0 && formation2.map((forma) => {
                 if (!forma.hidden || forma.hidden && admin)
                   return (
-                    <Lesson data={forma} />
+                    <Lesson data={forma} key={forma.id}/>
                   )
               })
             }
           </div>
         </div>
-        <Header selected={2}/>
+        <Header selected={2} />
       </main>
     </>
   );

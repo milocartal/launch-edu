@@ -67,7 +67,14 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
 
     //UseState
     const [tab, setTab] = useState("normal") //Pop up
-    const [type, setType] = useState("texte") //Type de lecon (video ou texte)
+    const [type, setType] = useState(() => {
+        let typy;
+        if(lecon.etapes[0]!.video.length > 0)
+            typy = "video"
+        else
+            typy = "texte"
+        return typy
+    }) //Type de lecon (video ou texte)
     const [haveExo, setHave] = useState(false) //boolean qui regarde si on vaut faire un exercice
     const [haveVid, setHaveVid] = useState(false) //boolean qui regarde si on vaut faire un exercice
 
@@ -148,20 +155,20 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
 
                                 <QuillNoSSRWrapper placeholder='Description' className='h-64 w-full mb-10' onChange={setDesc} defaultValue={lecon.description} />
 
-                                {/*<fieldset className="flex gap-5 w-full justify-center text-[#0E6073]">
+                                <fieldset className="flex gap-5 w-full justify-center text-[#0E6073]">
                                     <div className="flex flex-col items-center gap-2">
                                         <label htmlFor="1" className="mt-8">Vidéo</label>
-                                        <input type="radio" name="type" id="video" value="video" required className="shadow-none" onClick={(e) => { setType("video"); setScript('') }} />
+                                        <input type="radio" name="type" id="video" value="video" required className="shadow-none" onClick={(e) => { setType("video") }} defaultChecked={type === "video"}/>
                                     </div>
 
                                     <div className="flex flex-col items-center gap-2">
                                         <label htmlFor="2" className="mt-8">Texte</label>
-                                        <input type="radio" name="type" id="texte" value="texte" required className="shadow-none" onClick={(e) => { setType("texte"); setScript('') }} defaultChecked />
+                                        <input type="radio" name="type" id="texte" value="texte" required className="shadow-none" onClick={(e) => { setType("texte"); setVC("") }} defaultChecked={type === "texte"} />
                                     </div>
 
-                                </fieldset>*/}
+                                </fieldset>
 
-                                <input
+                               {type==="video" && <input
                                     type='url'
                                     name='urlVideoCour'
                                     placeholder='Url de la vidéo du cours'
@@ -169,7 +176,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                     onChange={(e) => setVC(e.target.value)}
                                     autoComplete="off"
                                     defaultValue={vC}>
-                                </input>
+                                </input>}
 
                                 <input
                                     type='url'

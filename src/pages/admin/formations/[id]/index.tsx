@@ -23,19 +23,21 @@ type FormationWithAll = Prisma.FormationGetPayload<{
         techs: true,
         lecons: {
             include: {
-                etapes: true
+                etapes: true,
+                Progression: true
             }
         },
         Prerequis: {
             include: {
                 techs: true
             }
-        }
+        },
+        Progression: true
     }
 }>
 
 type LeconWithEtapes = Prisma.LeconGetPayload<{
-    include: { etapes: true }
+    include: { etapes: true, Progression: true }
 }>
 
 export const getServerSideProps: GetServerSideProps<{
@@ -61,14 +63,16 @@ export const getServerSideProps: GetServerSideProps<{
             techs: true,
             lecons: {
                 include: {
-                    etapes: true
+                    etapes: true,
+                    Progression: true
                 }
             },
             Prerequis: {
                 include: {
                     techs: true
                 }
-            }
+            },
+            Progression: true
         }
     });
     if (!formation) {

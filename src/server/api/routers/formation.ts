@@ -1,3 +1,4 @@
+import { useSession } from "next-auth/react";
 import { z } from "zod";
 
 import {
@@ -8,7 +9,7 @@ import {
 import { prisma } from "~/server/db";
 
 export const formationRouter = createTRPCRouter({
-
+    
     getAll: publicProcedure.query(() => {
         return prisma.formation.findMany({
             include: {
@@ -18,7 +19,8 @@ export const formationRouter = createTRPCRouter({
                     include:{
                         techs: true
                     }
-                }
+                },
+                Progression: true
             }
         })
     }),
@@ -37,6 +39,25 @@ export const formationRouter = createTRPCRouter({
             },
             take: 4
 
+        })
+    }),
+
+    getAllUser: publicProcedure.input(z.object({idu: z.string()})).query(({input}) => {
+        return prisma.formation.findMany({
+            include: {
+                techs: true,
+                lecons: true,
+                Prerequis:{
+                    include:{
+                        techs: true
+                    }
+                },
+                Progression:{
+                    where:{
+                        idU: input.idu
+                    }
+                }
+            }
         })
     }),
 

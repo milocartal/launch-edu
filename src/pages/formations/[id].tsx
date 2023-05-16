@@ -17,35 +17,57 @@ import Openable from '../components/openable';
 import { type Session as SessionAuth } from 'next-auth';
 import { useState } from 'react';
 import Router from 'next/router';
+import { IoCheckmarkCircle } from 'react-icons/io5';
 
 type LeconWithEtapes = Prisma.LeconGetPayload<{
-    include: { etapes: true }
+    include: { etapes: true, Progression: true }
 }>
 
 export const getServerSideProps: GetServerSideProps<{
-    session: SessionAuth | null
     formation: (Formation & {
         techs: Technologie[];
         lecons: LeconWithEtapes[];
     });
-    progression: Progression[] | null
 }> = async function (context) {
+    const session = await getSession(context)
+    let formation;
 
-
-    const formation = await prisma.formation.findUnique({
-        where: {
-            id: context.query.id as string
-        },
-        include: {
-            techs: true,
-            lecons: {
-                include: {
-                    etapes: true
+    if (session) {
+        formation = await prisma.formation.findUnique({
+            where: {
+                id: context.query.id as string
+            },
+            include: {
+                techs: true,
+                lecons: {
+                    include: {
+                        etapes: true,
+                        Progression: {
+                            where: {
+                                idU: session!.user.id
+                            }
+                        }
+                    }
                 }
             }
-        }
-    });
-    if (!formation) {
+        });
+    }
+    else {
+        formation = await prisma.formation.findUnique({
+            where: {
+                id: context.query.id as string
+            },
+            include: {
+                techs: true,
+                lecons: {
+                    include: {
+                        etapes: true,
+                    }
+                }
+            }
+        });
+    }
+    if (formation===null) {
         return {
             redirect: {
                 destination: '/formations',
@@ -53,43 +75,18 @@ export const getServerSideProps: GetServerSideProps<{
             },
         }
     }
-
-    const session = await getSession(context)
-
-    if (session) {
-        const progression = await prisma.progression.findMany({
-            where: {
-                idF: formation.id,
-                idU: session.user.id
-            }
-        })
-        return {
-            props: {
-                session: JSON.parse(JSON.stringify(session)) as SessionAuth,
-                formation: JSON.parse(JSON.stringify(formation)) as (Formation & {
-                    techs: Technologie[];
-                    lecons: LeconWithEtapes[];
-                }),
-                progression: JSON.parse(JSON.stringify(progression)) as Progression[]
-            }
+    return {
+        props: {
+            formation: JSON.parse(JSON.stringify(formation)) as (Formation & {
+                techs: Technologie[];
+                lecons: LeconWithEtapes[];
+            }),
         }
-    }
-    else {
-        return {
-            props: {
-                session: null,
-                formation: JSON.parse(JSON.stringify(formation)) as (Formation & {
-                    techs: Technologie[];
-                    lecons: LeconWithEtapes[];
-                }),
-                progression: null
-            }
-        };
-    }
+    };
 };
 
-const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ formation, progression }) => {
-    const{data: session}= useSession()
+const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ formation }) => {
+    const { data: session } = useSession()
     const admin = session?.user.admin
 
     const addProgression = api.progression.create.useMutation()
@@ -103,8 +100,8 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
 
     async function handleProgression(idl: string) {
         if (formation && session) {
-            const test = await one.mutateAsync({idu: session.user.id, idL: idl, idF: formation.id})
-            if(!test){
+            const test = await one.mutateAsync({ idu: session.user.id, idL: idl, idF: formation.id })
+            if (!test) {
                 await addProgression.mutateAsync({ idu: session.user.id, idL: idl, idF: formation.id })
             }
         }
@@ -143,7 +140,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                         <h1 className="text-xl font-bold tracking-tight text-[#0E6073] self-start mb-3 dark:text-[#1A808C]">Vue d'ensemble</h1>
 
                         <div className="w-10/12 shadow-lg">
-                            {formation.lecons as Lecon[] && formation.lecons.length > 0 && formation.lecons.map((lecon) => {
+                            {formation.lecons as LeconWithEtapes[] && formation.lecons.length > 0 && formation.lecons.map((lecon) => {
                                 return (
                                     <div className="bg-white dark:bg-[#041F25] w-full mt-1 h-fit flex flex-col justify-start shadow-[4px_10px_20px_1px_rgba(0,0,0,0.25)]" key={lecon.id}>
                                         {select === lecon.id ?
@@ -155,7 +152,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                                             handleProgression(lecon.id);
                                                             Router.push(`/lecons/${lecon.id}`)
                                                         }}>
-                                                            <FaPlay className="h-5 w-5 text-[#0E6073] dark:text-[#1A808C]" />
+                                                            {lecon.Progression.every((item) => item.finish) ? <IoCheckmarkCircle className="h-7 w-7 text-[#0E6073] dark:text-[#1A808C]" /> : <FaPlay className="h-5 w-5 text-[#0E6073] dark:text-[#1A808C]" />}
                                                         </div>
                                                     </div>
                                                     {lecon.description && select && <div className="text-sm font-Inter text-[#989898] text-left w-full" dangerouslySetInnerHTML={{ __html: lecon.description }} />}
@@ -174,7 +171,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                                     handleProgression(lecon.id);
                                                     Router.push(`/lecons/${lecon.id}`)
                                                 }}>
-                                                    <FaPlay className="h-5 w-5 text-[#0E6073] dark:text-[#1A808C]" />
+                                                    {lecon.Progression.every((item) => item.finish) ? <IoCheckmarkCircle className="h-7 w-7 text-[#0E6073] dark:text-[#1A808C]" /> : <FaPlay className="h-5 w-5 text-[#0E6073] dark:text-[#1A808C]" />}
                                                 </div>
                                             </div>
                                         }
