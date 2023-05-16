@@ -67,7 +67,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
     const [tab, setTab] = useState("normal") //Pop up
     const [type, setType] = useState(() => {
         let typy;
-        if(lecon.etapes[0]!.video.length > 0)
+        if (lecon.etapes[0]!.video.length > 0)
             typy = "video"
         else
             typy = "texte"
@@ -116,6 +116,12 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                 await updateEtape.mutateAsync({ id: lecon.etapes[1].id, code: cE, video: vE, transcript: txtExo })
                 await updateEtape.mutateAsync({ id: lecon.etapes[2].id, code: cS, video: vS, transcript: txtSoluce })
             }
+            else if (lecon.etapes[1] && !lecon.etapes[2]) {
+                if (Exercice && Soluce) {
+                    await updateEtape.mutateAsync({ id: lecon.etapes[1].id, code: cE, video: vE, transcript: txtExo })
+                    await addEtape.mutateAsync({ name: "Solution", idt: Soluce.id, code: cS, video: vS, transcript: txtSoluce, idl: lecon.id })
+                }
+            }
             else if ((txtExo && txtSoluce && cE && cS) !== "" && haveExo) {
                 if (Exercice && Soluce) {
                     await addEtape.mutateAsync({ name: "Exercice", idt: Exercice.id, code: cE, video: vE, transcript: txtExo, idl: lecon.id })
@@ -153,7 +159,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                 <fieldset className="flex gap-5 w-full justify-center text-[#0E6073]">
                                     <div className="flex flex-col items-center gap-2">
                                         <label htmlFor="1" className="mt-8">Vidéo</label>
-                                        <input type="radio" name="type" id="video" value="video" required className="shadow-none" onClick={(e) => { setType("video") }} defaultChecked={type === "video"}/>
+                                        <input type="radio" name="type" id="video" value="video" required className="shadow-none" onClick={(e) => { setType("video") }} defaultChecked={type === "video"} />
                                     </div>
 
                                     <div className="flex flex-col items-center gap-2">
@@ -163,7 +169,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
 
                                 </fieldset>
 
-                               {type==="video" && <input
+                                {type === "video" && <input
                                     type='url'
                                     name='urlVideoCour'
                                     placeholder='Url de la vidéo du cours'
@@ -208,7 +214,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                         <form className="relative flex flex-col gap-5 item-center justify-start bg-white rounded-xl p-16 w-8/12 text-[#041f25]">
 
                             <button
-                                onClick={(e) => 
+                                onClick={(e) =>
                                     setTab('normal')
                                 }
                                 className="absolute top-3 right-4 rounded-full font-semibold  no-underline transition hover:text-red-500">

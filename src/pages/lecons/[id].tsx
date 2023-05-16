@@ -12,14 +12,18 @@ import { useEffect, useState } from 'react';
 import Router from 'next/router';
 
 type LeconWithEtapes = Prisma.LeconGetPayload<{
-    include: { etapes: true }
+    include: { etapes: {include:{type: true}} }
 }>
 
 type FormationWithLecon = Prisma.FormationGetPayload<{
     include: {
         lecons: {
             include: {
-                etapes: true
+                etapes:{
+                    include:{
+                        type: true
+                    }
+                }
             }
         }
     }
@@ -48,7 +52,11 @@ export const getServerSideProps: GetServerSideProps<{
             id: context.query.id as string
         },
         include: {
-            etapes: true
+            etapes: {
+                include:{
+                    type: true
+                }
+            }
         }
     });
 
@@ -157,6 +165,7 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                             <div className="flex flex-col items-start w-full mt-5">
                                 {lecon.etapes[currentEtape]?.video && <h3 className="text-xl font-bold tracking-tight text-[#0E6073]">Transcript</h3>}
                                 {lecon.etapes && lecon.etapes[currentEtape] ? <div className="text-sm font-Inter text-[#222222] self-start mt-3" dangerouslySetInnerHTML={{ __html: lecon.etapes[currentEtape]!.transcript }} /> : <p className="text-sm font-Inter text-[#222222] self-start mt-3">Pas de transcript disponible</p>}
+                                {lecon.etapes && lecon.etapes[currentEtape] && lecon.etapes[currentEtape]?.type.name === "Exercice" && <iframe src={lecon.etapes[currentEtape]?.code.replace('https://github.com','https://stackblitz.com/github').replace('/blob/main/','?file=')+ "&embed=1&view=editor&hideExplorer=1"}/>}
                             </div>
                         </div>
                     </div>
