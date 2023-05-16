@@ -1,20 +1,17 @@
 import { GetServerSideProps, type NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
-import { getSession, signIn, signOut, useSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import { type Session as SessionAuth } from 'next-auth'
 
 import { api } from "../../utils/api";
-import { EtapeType, Session, Technologie, User, Formation } from '@prisma/client';
+import { Technologie } from '@prisma/client';
 
 import dynamic from "next/dynamic";
-import { MouseEventHandler, useState } from "react";
+import { useState } from "react";
 
-import { IconContext } from "react-icons";
-import { HiArrowSmLeft } from "react-icons/hi";
 import { HiXMark } from "react-icons/hi2"
 import { HiMagnifyingGlass } from "react-icons/hi2";
-import { BiUserCircle } from "react-icons/bi"
+
 
 import Header from "../components/header"
 import Title from "../components/title";

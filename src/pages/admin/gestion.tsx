@@ -1,18 +1,12 @@
 import { type NextPage } from 'next';
 import Head from "next/head";
-import { FaArrowLeft, FaPenAlt, FaPlay } from "react-icons/fa";
-
 import { api } from "~/utils/api";
 import Header from "../components/header";
-import { prisma } from '~/server/db';
-import { Technologie, Formation, Lecon, Etape, Prisma, EtapeType } from '@prisma/client';
-import { SyntheticEvent, useState } from 'react';
+import { Technologie, EtapeType } from '@prisma/client';
+import { useState } from 'react';
 import { HiMagnifyingGlass, HiXMark } from 'react-icons/hi2';
-
 import Title from '~/pages/components/title';
-
 import { BiEdit } from 'react-icons/bi'
-
 
 const Gestionnaire: NextPage = () => {
 

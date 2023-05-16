@@ -1,15 +1,11 @@
 import { type NextPage } from 'next';
 import { GetServerSideProps } from 'next'
 import { InferGetServerSidePropsType } from 'next'
-import { getServerSession } from "next-auth";
 import Head from "next/head";
-import Link from "next/link";
-import { getSession, signIn, signOut, useSession } from "next-auth/react";
-
+import { getSession, useSession } from "next-auth/react";
 import { api } from "~/utils/api";
 import { prisma } from '~/server/db';
-import { FaArrowLeft, FaGithub, FaVideo } from "react-icons/fa";
-import { Etape, EtapeType, Lecon, Formation, Prisma, Progression } from '@prisma/client';
+import { Lecon, Prisma, Progression } from '@prisma/client';
 import Header from '../components/header';
 import Title from '../components/title';
 import { useEffect, useState } from 'react';

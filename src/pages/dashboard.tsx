@@ -1,16 +1,15 @@
 import { GetServerSideProps, InferGetServerSidePropsType, type NextPage } from 'next';
 import Head from "next/head";
 import { Difficulty, DifficultyText } from "~/pages/components/difficulties"
-import { FaPenAlt, FaCheck, FaPlay } from "react-icons/fa";
+import { FaPenAlt, FaPlay } from "react-icons/fa";
 
 import Header from './components/header';
 import { useState } from 'react';
 import Title from './components/title';
-import { api } from '~/utils/api';
-import { Formation, Technologie, Progression, Prisma } from '@prisma/client';
+
+import { Prisma } from '@prisma/client';
 import { getSession, useSession } from 'next-auth/react';
 import { prisma } from '~/server/db';
-import { Session } from 'next-auth';
 import Link from 'next/link';
 
 type ProgressionWithFormation = Prisma.ProgressionGetPayload<{

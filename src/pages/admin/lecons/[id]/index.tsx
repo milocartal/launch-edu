@@ -1,17 +1,14 @@
 import { type NextPage } from 'next';
 import { GetServerSideProps } from 'next'
 import { InferGetServerSidePropsType } from 'next'
-import { getServerSession } from "next-auth";
 import Head from "next/head";
 import Link from "next/link";
-import { getSession, signIn, signOut, useSession } from "next-auth/react";
-import { FaArrowLeft, FaVideo, FaGithub, FaPenAlt } from "react-icons/fa";
-
+import { getSession} from "next-auth/react";
+import { FaVideo, FaGithub, FaPenAlt } from "react-icons/fa";
 import { api } from "~/utils/api";
 import { prisma } from '~/server/db';
 import { Etape, EtapeType, Lecon, Formation, Prisma } from '@prisma/client';
 import Header from '~/pages/components/header';
-import etapes from '../../../etapes/[id]';
 import Title from '~/pages/components/title';
 
 type LeconWithEtapes = Prisma.LeconGetPayload<{
@@ -77,10 +74,6 @@ export const getServerSideProps: GetServerSideProps<{
 
 const Lecons: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ lecon, formation }) => {
 
-    const idL = lecon.id
-    const idf = lecon.idf
-    const addEtape = api.etape.create.useMutation()
-    const { data: etapes } = api.etape.getAll.useQuery({ id: idL })
     const delLecon = api.lecon.delete.useMutation()
 
     return (

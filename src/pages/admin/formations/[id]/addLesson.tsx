@@ -1,24 +1,22 @@
 import { type NextPage } from 'next';
 import { type GetServerSideProps } from 'next'
 import { type InferGetServerSidePropsType } from 'next'
-import Head from "next/head";
-import Link from "next/link";
-import Image from 'next/image'
-import { getSession, signIn, signOut, useSession } from "next-auth/react";
-import { FaArrowLeft, FaPenAlt, FaPlay } from "react-icons/fa";
 
-import { api } from "~/utils/api";
-import Header from "../../../components/header";
+import { Technologie, Formation, Prisma } from '@prisma/client';
 import { prisma } from '~/server/db';
-import { Technologie, type Formation, Lecon, Etape, Prisma } from '@prisma/client';
-import { DifficultyText } from '../../../components/difficulties';
-import etapes from '../../../etapes/[id]';
+import { api } from "~/utils/api";
+
+import { getSession } from "next-auth/react";
 import { useState } from 'react';
 import { HiXMark } from 'react-icons/hi2';
-import dynamic from 'next/dynamic';
-import DiscordProvider from 'next-auth/providers/discord';
-import Title from '~/pages/components/title';
+
+import Head from "next/head";
 import Router from 'next/router';
+import dynamic from 'next/dynamic';
+
+import Header from "../../../components/header";
+import Title from '~/pages/components/title';
+
 
 const QuillNoSSRWrapper = dynamic(import('react-quill'), {
     ssr: false,
@@ -164,7 +162,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                         name='urlVideoCour'
                                         placeholder='Url de la vidéo du cours'
                                         className="p-[1rem] rounded-lg bg-none dark:bg-[#041F25] shadow-[inset_4px_5px_12px_6px_rgba(0,0,0,0.25)] w-full"
-                                        onChange={(e) => setVC(e.target.value.replace("https://www.youtube.com/watch?v=","https://www.youtube.com/embed/"))}
+                                        onChange={(e) => setVC(e.target.value.replace("https://www.youtube.com/watch?v=", "https://www.youtube.com/embed/"))}
                                         autoComplete="off" >
                                     </input>}
 
@@ -231,7 +229,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                         name="urlVideoExo"
                                         placeholder="Url de la vidéo de l'exercice"
                                         className="p-[1rem] rounded-lg bg-none dark:bg-[#041F25] shadow-[inset_4px_5px_12px_6px_rgba(0,0,0,0.25)] w-full"
-                                        onChange={(e) => setVE(e.target.value.replace("https://www.youtube.com/watch?v=","https://www.youtube.com/embed/"))}
+                                        onChange={(e) => setVE(e.target.value.replace("https://www.youtube.com/watch?v=", "https://www.youtube.com/embed/"))}
                                         autoComplete="off"
                                         defaultValue={vE} />
 
@@ -260,7 +258,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                         name="urlVideoSoluce"
                                         placeholder='Url de la vidéo de la solution'
                                         className="p-[1rem] rounded-lg bg-none dark:bg-[#041F25] shadow-[inset_4px_5px_12px_6px_rgba(0,0,0,0.25)] w-full"
-                                        onChange={(e) => setVS(e.target.value.replace("https://www.youtube.com/watch?v=","https://www.youtube.com/embed/"))}
+                                        onChange={(e) => setVS(e.target.value.replace("https://www.youtube.com/watch?v=", "https://www.youtube.com/embed/"))}
                                         autoComplete="off"
                                         defaultValue={vS} />
 

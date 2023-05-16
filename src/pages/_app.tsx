@@ -18,7 +18,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <SessionProvider session={session}>
       <ThemeProvider attribute="class">
         <Head>
-          <link rel="icon" href="/okto.png" />
+          <link rel="icon" href="/favicon.ico" />
           <style>
             @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
           </style>

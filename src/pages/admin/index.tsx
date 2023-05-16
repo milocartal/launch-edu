@@ -1,20 +1,13 @@
 import { GetServerSideProps, type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import { getSession, signIn, signOut, useSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import { type Session as SessionAuth } from 'next-auth'
-
 import { api } from "~/utils/api";
-import { EtapeType, Formation, Session, Technologie, User } from "@prisma/client";
+import { Formation } from "@prisma/client";
 import { DifficultyText } from "~/pages/components/difficulties"
 import Header from "../components/header"
-
-import dynamic from "next/dynamic";
-import { MouseEventHandler, useEffect, useState } from "react";
-
-import { HiXMark } from "react-icons/hi2"
-import { HiMagnifyingGlass } from "react-icons/hi2";
-import { BiUserCircle } from "react-icons/bi"
+import { useState } from "react";
 import { FaLock, FaLockOpen, FaPenAlt } from "react-icons/fa";
 import Title from "../components/title";
 

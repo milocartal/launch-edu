@@ -1,22 +1,25 @@
 import { type NextPage } from 'next';
 import { type GetServerSideProps } from 'next'
 import { type InferGetServerSidePropsType } from 'next'
+
+import { getSession } from "next-auth/react";
+import { useState } from 'react';
+
 import Head from "next/head";
 import Link from "next/link";
-import Image from 'next/image'
-import { getSession, signIn, signOut, useSession } from "next-auth/react";
-import { FaArrowLeft, FaPenAlt, FaPlay } from "react-icons/fa";
 
 import { api } from "~/utils/api";
-import Header from "../../../components/header";
 import { prisma } from '~/server/db';
 import { Technologie, Formation, Lecon, Etape, Prisma } from '@prisma/client';
-import { DifficultyText } from '../../../components/difficulties';
-import { SyntheticEvent, useState } from 'react';
+
 import { HiXMark } from 'react-icons/hi2';
 import { RiAddFill } from 'react-icons/ri'
+import { FaPenAlt } from "react-icons/fa";
+
+import Header from "../../../components/header";
 import Lesson from '~/pages/components/lesson';
 import Title from '~/pages/components/title';
+import { DifficultyText } from '../../../components/difficulties';
 
 type FormationWithAll = Prisma.FormationGetPayload<{
     include: {

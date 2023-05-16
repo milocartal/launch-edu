@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Formation, Prisma, Technologie, Progression } from '@prisma/client';
+import { Prisma} from '@prisma/client';
 import { Difficulty } from "./difficulties";
 import { IoCheckmarkCircle } from "react-icons/io5";
 import { useSession } from "next-auth/react";

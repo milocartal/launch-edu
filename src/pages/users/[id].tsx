@@ -5,7 +5,6 @@ import { type InferGetServerSidePropsType } from 'next'
 import { FaPenAlt, FaEye, FaEyeSlash } from "react-icons/fa";
 import Head from "next/head";
 import { getSession, useSession } from "next-auth/react";
-
 import { prisma } from '~/server/db';
 import { type User } from '@prisma/client';
 import Header from '../components/header';
@@ -46,8 +45,6 @@ function updateProfile() {
 
 const user: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ user }) => {
     const { data: sessionData } = useSession();
-    const admin = sessionData?.user.admin
-
     
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")

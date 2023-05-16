@@ -50,7 +50,7 @@ function Header (props:{selected: number}) {
             </div>
 
             <div className="flex flex-col items-center justify-between gap-2 min-h-screen top-0 left-0 bg-[#0E6073] fixed m-w-xs p-2">
-                <Link href="/"><img src="/okto.png" className="max-w-[3rem]"></img></Link>
+                <Link href="/"><img src="/logo-carre.png" className="max-w-[3rem]"></img></Link>
                 <div className="flex flex-col items-center justify-between">
                     <button onClick={() => theme === "dark" ? setTheme('light') : setTheme("dark")} className="flex flex-row justify-center items-center rounded-full bg-white/10 w-10 h-10 shadow-md">
                     {theme == "dark" ? <FaSun className="w-2/5 text-[#fff]" /> : <FaMoon className="w-2/5 text-[#fff]" />}

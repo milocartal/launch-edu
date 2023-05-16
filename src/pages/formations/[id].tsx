@@ -3,18 +3,14 @@ import { type GetServerSideProps } from 'next'
 import { type InferGetServerSidePropsType } from 'next'
 import Head from "next/head";
 import Link from "next/link";
-import Image from 'next/image'
-import { getSession, signIn, signOut, useSession } from "next-auth/react";
-import { FaArrowLeft, FaPenAlt, FaPlay } from "react-icons/fa";
-
+import { getSession, useSession } from "next-auth/react";
+import { FaPenAlt, FaPlay } from "react-icons/fa";
 import { api } from "~/utils/api";
 import Header from "../components/header";
 import { prisma } from '~/server/db';
-import { Technologie, type Formation, Lecon, Prisma, Progression, Session, Etape } from '@prisma/client';
+import { Technologie, Formation, Prisma, Etape } from '@prisma/client';
 import { DifficultyText } from '../components/difficulties';
 import Title from '../components/title';
-import Openable from '../components/openable';
-import { type Session as SessionAuth } from 'next-auth';
 import { useState } from 'react';
 import Router from 'next/router';
 import { IoCheckmarkCircle } from 'react-icons/io5';

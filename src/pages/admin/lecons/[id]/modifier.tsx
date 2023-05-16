@@ -2,15 +2,12 @@ import { type NextPage } from 'next';
 import { type GetServerSideProps } from 'next'
 import { type InferGetServerSidePropsType } from 'next'
 import Head from "next/head";
-import Link from "next/link";
-import Image from 'next/image'
-import { getSession, signIn, signOut, useSession } from "next-auth/react";
-import { FaArrowLeft, FaPenAlt, FaPlay } from "react-icons/fa";
+import { getSession } from "next-auth/react";
 
 import { api } from "~/utils/api";
 import Header from "../../../components/header";
 import { prisma } from '~/server/db';
-import { Technologie, type Formation, Lecon, Etape, Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { useState } from 'react';
 import { HiXMark } from 'react-icons/hi2';
 import dynamic from 'next/dynamic';
