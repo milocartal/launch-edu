@@ -99,12 +99,12 @@ const Dashboard: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>
 
                     {progression && progression.map((item) =>
                         selected === item.idF ?
-                            <div className="flex flex-row items-start justify-between w-full gap-3 rounded-xl bg-white py-7 pr-10 mt-6 shadow-[0px_10px_30px_0px_rgba(0,0,0,0.25)] relative" onClick={() => setSelected(item.idF)} key={item.idF}>
+                            <div className="flex flex-row items-start justify-between w-full gap-3 rounded-xl bg-white dark:bg-[#041F25] py-7 pr-10 mt-6 shadow-[0px_10px_30px_0px_rgba(0,0,0,0.25)] relative" onClick={() => setSelected(item.idF)} key={item.idF}>
                                 <div className="flex flex-col justify-end max-w-20 max-h-20 -top-4 -left-5 absolute">
                                     {item.formation.techs && item.formation.techs[0] && <img src={item.formation.techs[0].logo} width="80" height="80" alt="" />}
                                 </div>
                                 <div className="ml-20 flex flex-col justify-start items-start w-11/12">
-                                    <h3 className="font-bold text-[#0E6073] mb-3 text-lg">{item.formation.title}</h3>
+                                    <h3 className="font-bold text-[#0E6073] dark:text-[#2EA3A5] mb-3 text-lg">{item.formation.title}</h3>
 
                                     <div className="text-sm font-Inter text-[#989898] text-left" dangerouslySetInnerHTML={{ __html: item.formation.description }} />
                                     {item.formation.lecons?.map((lesson) =>
@@ -113,7 +113,7 @@ const Dashboard: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>
                                                 <h3 className="font-bold text-[#0E6073] text-sm">{lesson.title}</h3>
                                                 <Link href={`/lecons/${lesson.id}`}>{/*lesson.status === "finished" ? <FaCheck className="h-6 w-6 text-[#0E6073]" /> :*/ <FaPlay className="h-6 w-6 text-[#0E6073]"/>}</Link>
                                             </div>
-                                            <div className="w-11/12 h-0.5 bg-[#989898] self-center"></div>
+                                            <div className="w-11/12 h-0.5 bg-[#989898] dark:bg-[#0E6073] self-center"></div>
                                         </div>
                                     )}
                                 </div>
@@ -125,12 +125,12 @@ const Dashboard: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>
                                     </div>
                                 </div>
                             </div> :
-                            <div className="flex flex-row items-start justify-between w-full gap-3 rounded-xl bg-white py-7 pr-10 mt-6 shadow-[0px_10px_30px_0px_rgba(0,0,0,0.25)] relative" onClick={() => setSelected(item.idF)} key={item.idF}>
+                            <div className="flex flex-row items-start justify-between w-full gap-3 rounded-xl bg-white dark:bg-[#041F25] py-7 pr-10 mt-6 shadow-[0px_10px_30px_0px_rgba(0,0,0,0.25)] relative" onClick={() => setSelected(item.idF)} key={item.idF}>
                             <div className="flex flex-col justify-end max-w-20 max-h-20 -top-4 -left-5 absolute">
                                 {item.formation.techs && item.formation.techs[0] && <img src={item.formation.techs[0].logo} width="80" height="80" alt="" />}
                             </div>
                             <div className="ml-20 flex flex-col justify-start items-start w-11/12">
-                                <h3 className="font-bold text-[#0E6073] mb-3 text-lg">{item.formation.title}</h3>
+                                <h3 className="font-bold text-[#0E6073] dark:text-[#2EA3A5] mb-3 text-lg">{item.formation.title}</h3>
                                 <div className="text-sm font-Inter text-[#989898] text-left" dangerouslySetInnerHTML={{ __html: item.formation.description }} />
                             </div>
                             <div className="flex flex-col justify-start items-start h-full w-2/12">
@@ -149,10 +149,10 @@ const Dashboard: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>
                     {progression && progression.map((forma) => {
                         if(forma.finish)
                             return (
-                                <div className="bg-white w-full h-14 rounded-xl flex flex-row justify-between items-center pr-5 mb-3" key={forma.formation.id}>
+                                <div className="bg-white dark:bg-[#1A808C] w-full h-14 rounded-xl flex flex-row justify-between items-center pr-5 mb-3" key={forma.formation.id}>
                                     <div className="flex flex-row justify-start items-center relative">
                                         {forma.formation.techs && forma.formation.techs[0] && <img src={forma.formation.techs[0].logo} width="60" height="60" className="top-0" alt="" />}
-                                        <h3 className="font-bold text-[#0E6073]">{forma.formation.title}</h3>
+                                        <h3 className="font-bold text-[#0E6073] dark:text-white">{forma.formation.title}</h3>
                                     </div>
                                     <Difficulty level={forma.formation.difficulte} />
                                 </div>
