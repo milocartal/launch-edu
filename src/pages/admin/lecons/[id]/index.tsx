@@ -119,7 +119,7 @@ const Lecons: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                 </div>
                 <div className="w-5/12 fixed right-0 flex flex-col items-center justify-between h-5/6 pt-10 mr-5">
 
-                    <div className="bg-white dark:bg-[#041F25] mt-24 w-4/6 h-52 flex flex-col justify-start shadow-[4px_10px_20px_1px_rgba(0,0,0,0.25)]">
+                    <div className="bg-white dark:bg-[#041F25] mt-24 w-4/6 h-64 flex flex-col justify-start shadow-[4px_10px_20px_1px_rgba(0,0,0,0.25)] pb-5">
                         <div className="bg-white dark:bg-[#05262E] w-full h-2/6 mb-4 flex flex-row items-center justify-start px-16 shadow-[4px_10px_20px_1px_rgba(0,0,0,0.25)]">
                             <p className="font-semibold text-[#0E6073] dark:text-[#1A808C]">{lecon.title}</p>
                         </div>
@@ -128,6 +128,9 @@ const Lecons: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                                 <Link href={`/lecons/${lecon.id}`} className="px-20 mt-2 font-semibold text-[#0E6073]">{etape.name}</Link>
                             )
                         })}
+                        {lecon.etapes.length === 0 &&
+                            <p className="px-10 mt-2 font-semibold text-[#0E6073]">Aucune leçon dans cette formation</p>
+                        }
                     </div>
                     <div className='flex flex-col gap-4 w-4/6'>
                         <Link href={`/admin/lecons/${lecon.id}/modifier`} className="flex justify-center items-center text-white w-full bg-[#0E6073] h-14 rounded-full hover:bg-[#0a4654]">

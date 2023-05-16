@@ -211,7 +211,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
 
                 {tab === "exo" &&
                     <div className="fixed w-full h-full bg-[#0E6073]/90 top-0 right-0 left-0 bottom-0 flex justify-center items-center">
-                        <form className="relative flex flex-col gap-5 item-center justify-start bg-white rounded-xl p-16 w-8/12 text-[#041f25]">
+                        <form className="relative flex flex-col gap-5 item-center justify-start bg-white dark:bg-[#082F38] rounded-xl p-16 w-8/12 text-[#041f25]">
 
                             <button
                                 onClick={(e) =>
@@ -221,15 +221,15 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                 <HiXMark className="text-[2rem] text-[#0e6073] hover:text-red-500" />
                             </button>
 
-                            <div className='flex w-full gap-5 justify-center mb-10'>
+                            <div className='flex w-full gap-5 justify-center mb-5'>
                                 <fieldset className='flex flex-col gap-3 w-[45%] max-w-[45%]'>
-                                    <legend className="text-xl font-bold tracking-tight text-[#0E6073] mb-2">Exercice</legend>
+                                    <legend className="text-xl font-bold tracking-tight text-[#0E6073] mb-2 dark:text-[#1A808C]">Exercice</legend>
 
                                     <input
                                         type='url'
                                         name="urlVideoExo"
                                         placeholder="Url de la vidéo de l'exercice"
-                                        className="p-[1rem] rounded-lg bg-none shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)] w-full"
+                                        className="p-[1rem] rounded-lg bg-none dark:bg-[#041F25] shadow-[inset_4px_5px_12px_6px_rgba(0,0,0,0.25)] dark:text-white w-full"
                                         onChange={(e) => setVE(e.target.value)}
                                         autoComplete="off"
                                         defaultValue={vE} />
@@ -238,27 +238,27 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                         type='url'
                                         name="urlCodeExo"
                                         placeholder="Url du code de l'exercice"
-                                        className="p-[1rem] rounded-lg bg-none shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)] w-full"
+                                        className="p-[1rem] rounded-lg bg-none dark:bg-[#041F25] shadow-[inset_4px_5px_12px_6px_rgba(0,0,0,0.25)] dark:text-white w-full"
                                         onChange={(e) => setCE(e.target.value)}
                                         autoComplete="off"
                                         defaultValue={cE}
                                         required />
 
                                     <QuillNoSSRWrapper
-                                        className='h-[150px]'
+                                        className='h-48 w-full pb-10 dark:bg-[#041F25] dark:text-white'
                                         placeholder="Transcript de la vidéo de l'exercice"
                                         onChange={setTxtExo}
                                         defaultValue={txtExo} />
                                 </fieldset>
 
                                 <fieldset className='flex flex-col gap-3 w-[45%] max-w-[45%]'>
-                                    <legend className="text-xl font-bold tracking-tight text-[#0E6073] mb-2">Solution</legend>
+                                    <legend className="text-xl font-bold tracking-tight text-[#0E6073] mb-2 dark:text-[#1A808C]">Solution</legend>
 
                                     <input
                                         type='url'
                                         name="urlVideoSoluce"
                                         placeholder='Url de la vidéo de la solution'
-                                        className="p-[1rem] rounded-lg bg-none shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)] w-full"
+                                        className="p-[1rem] rounded-lg bg-none dark:bg-[#041F25] shadow-[inset_4px_5px_12px_6px_rgba(0,0,0,0.25)] dark:text-white w-full"
                                         onChange={(e) => setVS(e.target.value)}
                                         autoComplete="off"
                                         defaultValue={vS} />
@@ -267,14 +267,14 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                         type='url'
                                         name="urlCodeSoluce"
                                         placeholder='Url du code de la solution'
-                                        className="p-[1rem] rounded-lg bg-none shadow-[inset_4px_4px_12px_4px_rgba(0,0,0,0.25)] w-full"
+                                        className="p-[1rem] rounded-lg bg-none dark:bg-[#041F25] shadow-[inset_4px_5px_12px_6px_rgba(0,0,0,0.25)] dark:text-white w-full"
                                         onChange={(e) => setCS(e.target.value)}
                                         autoComplete="off"
                                         defaultValue={cS}
                                         required />
 
                                     <QuillNoSSRWrapper
-                                        className='h-[150px]'
+                                        className='h-48 w-full pb-10 dark:bg-[#041F25] dark:text-white'
                                         placeholder="Transcript de la vidéo de la solution"
                                         onChange={setTxtSoluce}
                                         defaultValue={txtSoluce} />
