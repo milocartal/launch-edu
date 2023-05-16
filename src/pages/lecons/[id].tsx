@@ -159,13 +159,14 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                     <div className="flex flex-col w-full items-start">
                         <Title title={lecon.title} link={`formations/${encodeURIComponent(lecon.idf)}`} />
 
-                        {lecon.etapes[currentEtape]?.video && <iframe className="w-11/12 h-[9/16] mt-5" width="560" height="315" src={lecon.etapes[currentEtape]?.video} title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>}
+                        {lecon.etapes[currentEtape]?.video && <iframe className="w-11/12 h-[9/16] mt-5" width="560" height="315" src={lecon.etapes[currentEtape]?.video.replace("https://www.youtube.com/watch?v=", "https://www.youtube.com/embed/")} title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>}
+                        {lecon.etapes && lecon.etapes[currentEtape] && lecon.etapes[currentEtape]?.type.name === "Exercice" && <iframe src={lecon.etapes[currentEtape]?.code.replace('https://github.com','https://stackblitz.com/github').replace('/blob/main/','?file=')+ "&embed=1&view=editor&hideExplorer=1"} className='mt-2'/>}
 
                         <div className="flex flex-col items-center pr-10 w-10/12">
                             <div className="flex flex-col items-start w-full mt-5">
                                 {lecon.etapes[currentEtape]?.video && <h3 className="text-xl font-bold tracking-tight text-[#0E6073]">Transcript</h3>}
                                 {lecon.etapes && lecon.etapes[currentEtape] ? <div className="text-sm font-Inter text-[#222222] self-start mt-3" dangerouslySetInnerHTML={{ __html: lecon.etapes[currentEtape]!.transcript }} /> : <p className="text-sm font-Inter text-[#222222] self-start mt-3">Pas de transcript disponible</p>}
-                                {lecon.etapes && lecon.etapes[currentEtape] && lecon.etapes[currentEtape]?.type.name === "Exercice" && <iframe src={lecon.etapes[currentEtape]?.code.replace('https://github.com','https://stackblitz.com/github').replace('/blob/main/','?file=')+ "&embed=1&view=editor&hideExplorer=1"}/>}
+                                
                             </div>
                         </div>
                     </div>
@@ -202,7 +203,7 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                                     className="w-full py-3 flex flex-row items-center px-8"
                                     key={lecon.id}>
                                     <p className="text-sm font-Inter text-[#63AEAB] mr-3">{index + 1}</p>
-                                    <p className="text-sm font-Inter text-white">{lecon.title}</p>
+                                    <p className="text-sm font-Inter text-white text-start">{lecon.title}</p>
                                 </button>
                         )
                     })}

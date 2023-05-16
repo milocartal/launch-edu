@@ -21,18 +21,18 @@ export const getServerSideProps: GetServerSideProps<{
     const admin = session?.user.admin
 
     if (!session || !admin) {
-      return {
-        redirect: {
-          destination: '/',
-          permanent: false,
-        },
-      }
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        }
     }
     const etape = await prisma.etape.findUnique({
         where: {
             id: context.query.id as string
         },
-        include:{
+        include: {
             lecon: true
         }
     });
@@ -45,41 +45,36 @@ export const getServerSideProps: GetServerSideProps<{
 
 const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ etape }) => {
     let x = "https://github.com/milocartal/launch-edu/blob/main/src/pages/index.tsx"
-    x=x.replace('https://github.com','https://stackblitz.com/github').replace('/blob/main/','?file=')+ "&embed=1&view=editor&hideExplorer=1"
+    x = x.replace('https://github.com', 'https://stackblitz.com/github').replace('/blob/main/', '?file=') + "&embed=1&view=editor&hideExplorer=1"
     console.log(x)
     return (
         <>
             <Head>
-                <title>Create T3 App</title>
+                <title>Test d'etape</title>
             </Head>
 
-            <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-                {etape &&
-                    <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-                        <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-                            <span className="text-[hsl(280,100%,70%)]">{etape.lecon.title}</span> {etape.name}
-                        </h1>
+            <main className="flex flex-col bg-white dark:bg-[#082F38] w-full gap-14 items-center py-14">
+                <p className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
+                    <span className="text-[hsl(280,100%,70%)]">{etape.lecon.title}</span> {etape.name}
+                </p>
 
-                        <div className="text-lg">
-                            {etape.transcript}
-                        </div>
+                <p>Ceci est une page de dev</p>
 
-                        <div>
-                            {etape.video}
-                        </div>
+                <div className="text-lg">
+                    {etape.transcript}
+                </div>
 
-                        <div className="text-lg">
-                            {etape.code}
-                        </div>
-                        
+                <div>
+                    {etape.video}
+                </div>
 
-                        {/*<iframe src="https://stackblitz.com/github/milocartal/launch-edu?file=src/pages/index.tsx&embed=1&view=editor&hideExplorer=1" />*/}
-                        <iframe src={x}/>
-                        
+                <div className="text-lg">
+                    {etape.code}
+                </div>
 
+                {/*<iframe src="https://stackblitz.com/github/milocartal/launch-edu?file=src/pages/index.tsx&embed=1&view=editor&hideExplorer=1" />*/}
+                <iframe src={x} />
 
-                    </div>
-                }
             </main>
         </>
     );
