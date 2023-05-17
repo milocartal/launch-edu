@@ -69,7 +69,8 @@ const Home: NextPage = () => {
               <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem] mb-12">
                 Des cours sur mesure
               </h1>
-              <p className="text-white text-xl font-Inter w-10/12">Insérer une citation drôle parce qu'on est pas sérieux.</p>
+              {/*<p className="text-white text-xl font-Inter">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nulla nisl, placerat sed mauris vitae, vestibulum sollicitudin libero.</p>*/}
+              <p className="text-white text-xl font-Inter w-10/12">Vendre c'est faire acheter. - Kristen, expert marketing</p>
             </div>
             <img src="/gigaKristen.png" className="h-[600px]" alt="" />
           </div>
