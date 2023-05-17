@@ -83,8 +83,22 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
       return 1;
     }
     return 0;
-  }) : formations as FormationWithAll[] && formations && formations.length > 0 && filterType == "diff" && formations.sort(function (a, b) {
+  }) : formations && formations && formations.length > 0 && filterType == "diff" ? formations.sort(function (a, b) {
     return a.difficulte - b.difficulte;
+  }) : formations && formations && formations.length > 0 && filterType == "progress" && formations.sort(function (a, b) {
+    return a.Progression.every((item) => {
+      if (item.finish === true)
+        console.log(2)
+      if (item.finish === false)
+        console.log(0)
+      else console.log(1)
+    }) - b.Progression.every((item) => {
+      if (item.finish === true)
+        console.log(2)
+      if (item.finish === false)
+        console.log(0)
+      else console.log(1)
+});
   })
 
   return (

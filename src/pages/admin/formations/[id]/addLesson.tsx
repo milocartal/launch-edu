@@ -143,7 +143,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                         <fieldset className='w-5/12 flex flex-col justify-between items-center'>
                             <fieldset className='w-full flex flex-col items-center w-full gap-5'>
                                 <input type='text' name="leconTitle" placeholder='Titre de la leçon' className="p-[1rem] rounded-lg bg-none dark:bg-[#041F25] shadow-[inset_4px_5px_12px_6px_rgba(0,0,0,0.25)] w-full" autoComplete="off" />
-                                <QuillNoSSRWrapper placeholder='Description' className='h-64 w-full pb-10 dark:bg-[#041F25] dark:text-white' onChange={setDesc} />
+                                <QuillNoSSRWrapper placeholder='Description' className='h-64 w-full pb-10 dark:bg-[#041F25] dark:text-white text-black' onChange={setDesc} />
                                 <fieldset className="flex gap-5 w-full justify-center text-[#0E6073]">
                                     <div className="flex flex-col items-center gap-2 dark:text-[#63AEAB]">
                                         <label htmlFor="1" className="mt-8">Vidéo</label>

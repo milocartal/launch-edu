@@ -49,8 +49,10 @@ const Admin: NextPage = () => {
             return 1;
         }
         return 0;
-    }) : formations as Formation[] && formations && formations.length > 0 && filterType == "sanslecon" && formations?.sort(function (a, b) {
+    }) : formations as Formation[] && formations && formations.length > 0 && filterType == "sanslecon" ? formations?.sort(function (a, b) {
         return a.lecons.length - b.lecons.length;
+    }) : formations as Formation[] && formations && formations.length > 0 && filterType == "private" && formations?.sort(function (a, b) {
+        return b.hidden - a.hidden;
     })
 
     function changeFilterType(type: string) {
