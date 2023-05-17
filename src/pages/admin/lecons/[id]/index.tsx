@@ -102,7 +102,7 @@ const Lecons: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                                 </div>}
 
                         </div>
-                        <div className="text-sm font-Inter text-[#222222] self-start mt-3" dangerouslySetInnerHTML={{ __html: lecon.description }} />
+                        <div className="text-sm font-Inter text-[#222222] dark:text-[#989898] self-start mt-3" dangerouslySetInnerHTML={{ __html: lecon.description }} />
                         <div className="self-end flex flex-row items-center justify-end w-8/12">
                             {lecon.etapes && lecon.etapes.length > 0 && lecon.etapes[0] && lecon.etapes[0].video !== "" ? <Link href={`${lecon.etapes[0].video.replace("embed/", "watch?v=")}`} target="_blank" className="text-white flex items-center justify-center w-8/12 bg-[#0E6073] h-14 rounded-full my-3 self-end ml-2 hover:bg-[#0a4654]">
                                 Voir la vidéo du cours
@@ -113,7 +113,7 @@ const Lecons: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                         </div>
                         <div className="flex flex-col items-start w-full mt-5">
                             <h3 className="text-xl font-bold tracking-tight text-[#0E6073] dark:text-[#1A808C]">Transcript</h3>
-                            {lecon.etapes && lecon.etapes[0] ? <div className="text-sm font-Inter text-[#222222] self-start mt-3" dangerouslySetInnerHTML={{ __html: lecon.etapes[0].transcript }} /> : <p className="text-sm font-Inter text-[#222222] self-start mt-3">Pas de Transcript</p>}
+                            {lecon.etapes && lecon.etapes[0] ? <div className="text-sm font-Inter text-[#222222] dark:text-[#989898] self-start mt-3" dangerouslySetInnerHTML={{ __html: lecon.etapes[0].transcript }} /> : <p className="text-sm font-Inter text-[#222222] self-start mt-3">Pas de Transcript</p>}
                         </div>
                     </div>
                 </div>

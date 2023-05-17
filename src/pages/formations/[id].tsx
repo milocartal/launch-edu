@@ -128,7 +128,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                 </div>
                             </div>
                         </div>
-                        <div className="text-sm font-Inter text-[#222222] dark:text-[#2EA3A5] self-start mt-3 mb-6" dangerouslySetInnerHTML={{ __html: formation.description }} />
+                        <div className="text-sm font-Inter text-[#222222] dark:text-[#989898] self-start mt-3 mb-6" dangerouslySetInnerHTML={{ __html: formation.description }} />
                         {formation.lecons.length !== 0 ? <Link href={`/lecons/${formation.lecons[0]?.id}`} className="text-white w-3/12 bg-[#0E6073] h-14 rounded-full my-3 self-end mt-3 hover:bg-[#0a4654] flex flex-row justify-center items-center">Commencer</Link> : <></>}
 
                         <h1 className="text-xl font-bold tracking-tight text-[#0E6073] self-start mb-3 dark:text-[#1A808C]">Vue d'ensemble</h1>

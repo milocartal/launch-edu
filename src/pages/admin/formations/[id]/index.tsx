@@ -175,7 +175,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                 </div>
                             </div>
 
-                            <div className="text-sm font-Inter text-[#222222] dark:text-[#2EA3A5] self-start mt-6" dangerouslySetInnerHTML={{ __html: formation.description }} />
+                            <div className="text-sm font-Inter text-[#222222] dark:text-[#989898] self-start mt-6" dangerouslySetInnerHTML={{ __html: formation.description }} />
 
                             <div className="flex flex-col w-full my-10">
                                 <div className='w-full flex justify-between'>
