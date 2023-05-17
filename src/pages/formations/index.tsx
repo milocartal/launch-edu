@@ -4,7 +4,7 @@ import Head from "next/head";
 import Header from "../components/header";
 import { getSession, signIn, signOut, useSession } from "next-auth/react";
 import { api } from "~/utils/api";
-import { Formation, Prisma, Technologie } from "@prisma/client";
+import { Formation, Prisma, Progression, Technologie } from "@prisma/client";
 import Lesson from "../components/lesson";
 import Title from "../components/title";
 import Techno from "../components/techno";
@@ -85,14 +85,14 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
     return 0;
   }) : formations && formations && formations.length > 0 && filterType == "diff" ? formations.sort(function (a, b) {
     return a.difficulte - b.difficulte;
-  }) : formations && formations && formations.length > 0 && filterType == "progress" && formations.sort(function (a, b) {
-    return a.Progression.every((item) => {
+  }) : formations && formations && formations.length > 0 && filterType == "progress" && formations.sort(function (a: any, b: any) {
+    return a.Progression.every((item: Progression) => {
       if (item.finish === true)
         console.log(2)
       if (item.finish === false)
         console.log(0)
       else console.log(1)
-    }) - b.Progression.every((item) => {
+    }) - b.Progression.every((item: Progression) => {
       if (item.finish === true)
         console.log(2)
       if (item.finish === false)
@@ -118,23 +118,23 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
               {filterType === "alphabetique" ? <button className="px-4 py-1 bg-[#0E6073] rounded-full mx-1" onClick={() => changeFilterType("alphabetique")}>
                 <p className="text-[#fff]">Thématique</p>
               </button> :
-              <button className="px-4 py-1 bg-[#D9D9D9] dark:bg-[#041F25] rounded-full mx-1" onClick={() => changeFilterType("alphabetique")}>
-                <p className="text-[#0E6073] dark:text-[#63AEAB]">Thématique</p>
-              </button>
+                <button className="px-4 py-1 bg-[#D9D9D9] dark:bg-[#041F25] rounded-full mx-1" onClick={() => changeFilterType("alphabetique")}>
+                  <p className="text-[#0E6073] dark:text-[#63AEAB]">Thématique</p>
+                </button>
               }
               {filterType === "progress" ? <button className="px-4 py-1 bg-[#0E6073] rounded-full mx-1" onClick={() => changeFilterType("progress")}>
                 <p className="text-[#fff]">Progression</p>
               </button> :
-              <button className="px-4 py-1 bg-[#D9D9D9] dark:bg-[#041F25] rounded-full mx-1" onClick={() => changeFilterType("progress")}>
-                <p className="text-[#0E6073] dark:text-[#63AEAB]">Progression</p>
-              </button>
+                <button className="px-4 py-1 bg-[#D9D9D9] dark:bg-[#041F25] rounded-full mx-1" onClick={() => changeFilterType("progress")}>
+                  <p className="text-[#0E6073] dark:text-[#63AEAB]">Progression</p>
+                </button>
               }
               {filterType === "diff" ? <button className="px-4 py-1 bg-[#0E6073] rounded-full mx-1" onClick={() => changeFilterType("diff")}>
                 <p className="text-[#fff]">Niveau</p>
               </button> :
-              <button className="px-4 py-1 bg-[#D9D9D9] dark:bg-[#041F25] rounded-full mx-1" onClick={() => changeFilterType("diff")}>
-              <p className="text-[#0E6073] dark:text-[#63AEAB]">Niveau</p>
-            </button>}
+                <button className="px-4 py-1 bg-[#D9D9D9] dark:bg-[#041F25] rounded-full mx-1" onClick={() => changeFilterType("diff")}>
+                  <p className="text-[#0E6073] dark:text-[#63AEAB]">Niveau</p>
+                </button>}
             </div>
           </div>
 
@@ -147,7 +147,7 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
               }) : formations as Formation[] && formations && formations.length > 0 && formations.map((forma) => {
                 if (!forma.hidden || forma.hidden && admin)
                   return (
-                    <Lesson data={forma} key={forma.id}/>
+                    <Lesson data={forma} key={forma.id} />
                   )
               })
             }
