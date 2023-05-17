@@ -101,10 +101,7 @@ export const getServerSideProps: GetServerSideProps<{
     }
     return {
         props: {
-            formation: JSON.parse(JSON.stringify(formation)) as (Formation & {
-                techs: Technologie[];
-                lecons: LeconWithEtapes[]
-            }),
+            formation: JSON.parse(JSON.stringify(formation)) as FormationWithAll,
         }
     };
 };
