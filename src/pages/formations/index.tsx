@@ -4,7 +4,7 @@ import Head from "next/head";
 import Header from "../components/header";
 import { getSession, signIn, signOut, useSession } from "next-auth/react";
 import { api } from "~/utils/api";
-import { Formation, Prisma, Technologie } from "@prisma/client";
+import { Formation, Prisma, Progression, Technologie } from "@prisma/client";
 import Lesson from "../components/lesson";
 import Title from "../components/title";
 import Techno from "../components/techno";
@@ -85,14 +85,14 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
     return 0;
   }) : formations && formations && formations.length > 0 && filterType == "diff" ? formations.sort(function (a, b) {
     return a.difficulte - b.difficulte;
-  }) : formations && formations && formations.length > 0 && filterType == "progress" && formations.sort(function (a, b) {
-    return a.Progression.every((item) => {
+  }) : formations && formations && formations.length > 0 && filterType == "progress" && formations.sort(function (a: any, b: any) {
+    return a.Progression.every((item: Progression) => {
       if (item.finish === true)
         console.log(2)
       if (item.finish === false)
         console.log(0)
       else console.log(1)
-    }) - b.Progression.every((item) => {
+    }) - b.Progression.every((item: Progression) => {
       if (item.finish === true)
         console.log(2)
       if (item.finish === false)
