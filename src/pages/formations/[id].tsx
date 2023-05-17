@@ -9,7 +9,7 @@ import { api } from "~/utils/api";
 import Header from "../components/header";
 import { prisma } from '~/server/db';
 import { Technologie, Formation, Prisma, Etape } from '@prisma/client';
-import { DifficultyText } from '../components/difficulties';
+import { Difficulty, DifficultyText } from '../components/difficulties';
 import Title from '../components/title';
 import { useState } from 'react';
 import Router from 'next/router';
@@ -19,11 +19,27 @@ type LeconWithEtapes = Prisma.LeconGetPayload<{
     include: { etapes: true, Progression: true }
 }>
 
+type FormationWithAll = Prisma.FormationGetPayload<{
+    include: {
+        techs: true,
+        lecons: {
+            include: {
+                etapes: true,
+                Progression: true
+            }
+        },
+        Prerequis: {
+            include: {
+                techs: true,
+                Progression: true
+            }
+        },
+        Progression: true
+    }
+}>
+
 export const getServerSideProps: GetServerSideProps<{
-    formation: (Formation & {
-        techs: Technologie[];
-        lecons: LeconWithEtapes[];
-    });
+    formation: FormationWithAll
 }> = async function (context) {
     const session = await getSession(context)
     let formation;
@@ -44,8 +60,14 @@ export const getServerSideProps: GetServerSideProps<{
                             }
                         }
                     }
+                },
+                Prerequis: {
+                    include: {
+                        techs: true,
+                        Progression: true
+                    }
                 }
-            }
+            },
         });
     }
     else {
@@ -59,8 +81,14 @@ export const getServerSideProps: GetServerSideProps<{
                     include: {
                         etapes: true,
                     }
+                },
+                Prerequis: {
+                    include: {
+                        techs: true,
+                        Progression: true
+                    }
                 }
-            }
+            },
         });
     }
     if (formation===null) {
@@ -75,7 +103,7 @@ export const getServerSideProps: GetServerSideProps<{
         props: {
             formation: JSON.parse(JSON.stringify(formation)) as (Formation & {
                 techs: Technologie[];
-                lecons: LeconWithEtapes[];
+                lecons: LeconWithEtapes[]
             }),
         }
     };
@@ -177,6 +205,17 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
 
                     <div className="w-3/12 absolute right-0 flex flex-col items-center justify-between h-5/6 pt-10 mr-5">
                         {formation.techs[0] && formation.techs[0].logo && <img src={formation.techs[0].logo} width="100" height="100" className="w-7/12" alt="" />}
+                        <h1 className="text-xl font-bold tracking-tight text-[#0E6073] dark:text-[#1A808C] self-start">Prérequis</h1>
+                        {formation.Prerequis as FormationWithAll[] && formation.Prerequis.length > 0 && formation.Prerequis.map((requis) => {
+                            return (
+                            <Link href={`/formations/${requis.id}`} className="bg-white dark:bg-[#041F25] w-full h-14 rounded-xl flex flex-row justify-between items-center pr-5 mb-3" key={requis.id}>
+                                <div className="flex flex-row justify-start items-center relative">
+                                    {requis.techs && requis.techs[0] && <img src={requis.techs[0].logo} width="60" height="60" className="top-0" alt="" />}
+                                    <h3 className="font-bold text-[#0E6073] dark:text-white">{requis.title}</h3>
+                                </div>
+                                <Difficulty level={requis.difficulte} />
+                            </Link>)
+                        })}
                         {admin &&
                             <div>
                                 <Link href={`/admin/formations/${formation.id}`}>
