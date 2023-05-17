@@ -183,7 +183,7 @@ const Formations: NextPage<InferGetServerSidePropsType<typeof getServerSideProps
                                     <RiAddFill className='text-[#0E6073] text-2xl hover:cursor-pointer hover:text-green-600' onClick={() => setTab("tag")} />
                                 </div>
 
-                                <div className="w-11/12 grid grid-cols-1 gap-4 sm:grid-cols-4 w-full max-h-[7rem] pt-2 scrollbar-hide">
+                                <div className="grid grid-cols-1 gap-4 sm:grid-cols-4 w-full max-h-[7rem] pt-2 scrollbar-hide">
                                     {formation.techs as Technologie[] && formation.techs.length > 0 && formation.techs.map((tech) => {
                                         return (
                                             <div

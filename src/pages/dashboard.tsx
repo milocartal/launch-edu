@@ -119,7 +119,6 @@ const Dashboard: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>
 
                                     <div className="text-sm font-Inter text-[#989898] text-left" dangerouslySetInnerHTML={{ __html: item.formation.description }} />
                                     {item.formation.lecons?.map((lesson) =>{
-                                        console.log("lesson prog",lesson)
                                         return(
                                         <div key={lesson.id} className="w-full flex flex-col items-center justify-center">
                                             <div className="flex flex-row justify-between items-center py-6 w-11/12">

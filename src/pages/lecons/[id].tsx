@@ -166,7 +166,6 @@ const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                             <div className="flex flex-col items-start w-full mt-5">
                                 {lecon.etapes[currentEtape]?.video && <h3 className="text-xl font-bold tracking-tight text-[#0E6073]">Transcript</h3>}
                                 {lecon.etapes && lecon.etapes[currentEtape] ? <div className="text-sm font-Inter text-[#222222] text-[#989898] self-start mt-3" dangerouslySetInnerHTML={{ __html: lecon.etapes[currentEtape]!.transcript }} /> : <p className="text-sm font-Inter text-[#222222] self-start mt-3">Pas de transcript disponible</p>}
-                                
                             </div>
                         </div>
                     </div>

@@ -46,7 +46,6 @@ export const getServerSideProps: GetServerSideProps<{
 const etapes: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ etape }) => {
     let x = "https://github.com/milocartal/launch-edu/blob/main/src/pages/index.tsx"
     x = x.replace('https://github.com', 'https://stackblitz.com/github').replace('/blob/main/', '?file=') + "&embed=1&view=editor&hideExplorer=1"
-    console.log(x)
     return (
         <>
             <Head>
