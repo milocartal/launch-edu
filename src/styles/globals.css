@@ -16,19 +16,15 @@
 h2 {
   font-size: 30px;
   font-family: Planc, system-ui, sans-serif;
-  color: white
 }
 
 p {
   font-size: 12;
-  color: white
 }
 
-@media screen and (prefers-color-scheme: dark) {
-  .quill > .ql-container > .ql-editor.ql-blank::before{
-    color: #63AEAB;
-    background-color: #041F25;
-  }
+.quill > .ql-container > .ql-editor.ql-blank::before{
+  background: none;
+  color: gray
 }
 
 .parent .child{
@@ -234,6 +230,3 @@ input[type="radio"]:checked::before {
   transform: rotateZ(90deg) rotateY(180deg) translateY(0.45em) translateX(-1.4em);
 }
 
-.quill > .ql-container > .ql-editor.ql-blank::before{
-  background: none;
-}

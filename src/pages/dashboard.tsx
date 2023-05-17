@@ -1,7 +1,7 @@
 import { GetServerSideProps, InferGetServerSidePropsType, type NextPage } from 'next';
 import Head from "next/head";
 import { Difficulty, DifficultyText } from "~/pages/components/difficulties"
-import { FaPenAlt, FaPlay } from "react-icons/fa";
+import { FaCheck, FaPenAlt, FaPlay } from "react-icons/fa";
 
 import Header from './components/header';
 import { useState } from 'react';
@@ -16,7 +16,11 @@ type ProgressionWithFormation = Prisma.ProgressionGetPayload<{
     include: {
         formation: {
             include: {
-                lecons: true,
+                lecons: {
+                    include:{
+                        Progression: true
+                    }
+                },
                 techs: true
             }
         },
@@ -37,7 +41,15 @@ export const getServerSideProps: GetServerSideProps<{
             include: {
                 formation: {
                     include: {
-                        lecons: true,
+                        lecons: {
+                           include: {
+                            Progression: {
+                                where: {
+                                    idU: session.user.id
+                                }
+                            }
+                           }
+                        },
                         techs: true
                     }
                 },
@@ -96,7 +108,7 @@ const Dashboard: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>
                 <div className="flex flex-col items-start justify-start pl-28 pt-20 pr-6 w-9/12">
                     <Title title={`Reprendre où vous en étiez, ${session2.data?.user.name}`} link={''} />
 
-                    {progression && progression.map((item) =>
+                    {progression && progression.map((item) =>{if(!item.finish) return(
                         selected === item.idF ?
                             <div className="flex flex-row items-start justify-between w-full gap-3 rounded-xl bg-white dark:bg-[#041F25] py-7 pr-10 mt-6 shadow-[0px_10px_30px_0px_rgba(0,0,0,0.25)] relative" onClick={() => setSelected(item.idF)} key={item.idF}>
                                 <div className="flex flex-col justify-end max-w-20 max-h-20 -top-4 -left-5 absolute">
@@ -106,14 +118,16 @@ const Dashboard: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>
                                     <h3 className="font-bold text-[#0E6073] dark:text-[#2EA3A5] mb-3 text-lg">{item.formation.title}</h3>
 
                                     <div className="text-sm font-Inter text-[#989898] text-left" dangerouslySetInnerHTML={{ __html: item.formation.description }} />
-                                    {item.formation.lecons?.map((lesson) =>
+                                    {item.formation.lecons?.map((lesson) =>{
+                                        console.log("lesson prog",lesson)
+                                        return(
                                         <div key={lesson.id} className="w-full flex flex-col items-center justify-center">
                                             <div className="flex flex-row justify-between items-center py-6 w-11/12">
                                                 <h3 className="font-bold text-[#0E6073] text-sm">{lesson.title}</h3>
-                                                <Link href={`/lecons/${lesson.id}`}>{/*lesson.status === "finished" ? <FaCheck className="h-6 w-6 text-[#0E6073]" /> :*/ <FaPlay className="h-6 w-6 text-[#0E6073]"/>}</Link>
+                                                <Link href={`/lecons/${lesson.id}`}>{lesson.Progression && lesson.Progression[0] && lesson.Progression[0].idU === session2.data?.user.id && lesson.Progression[0].finish ? <FaCheck className="h-6 w-6 text-[#0E6073]" /> : <FaPlay className="h-6 w-6 text-[#0E6073]"/>}</Link>
                                             </div>
                                             <div className="w-11/12 h-0.5 bg-[#989898] dark:bg-[#0E6073] self-center"></div>
-                                        </div>
+                                        </div>)}
                                     )}
                                 </div>
                                 <div className="flex flex-col justify-start h-full items-start w-2/12">
@@ -139,7 +153,7 @@ const Dashboard: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>
                                     <p className="text-sm ml-3 font-Inter text-[#989898] dark:text-[#2EA3A5]">{item.formation.lecons.length} leçons</p>
                                 </div>
                             </div>
-                        </div>
+                        </div>)}
                     )}
                 </div>
 
@@ -148,13 +162,13 @@ const Dashboard: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>
                     {progression && progression.map((forma) => {
                         if(forma.finish)
                             return (
-                                <div className="bg-white dark:bg-[#041F25] w-full h-14 rounded-xl flex flex-row justify-between items-center pr-5 mb-3" key={forma.formation.id}>
+                                <Link href={`/formations/${forma.idF}`} className="bg-white dark:bg-[#041F25] w-full h-14 rounded-xl flex flex-row justify-between items-center pr-5 mb-3" key={forma.formation.id}>
                                     <div className="flex flex-row justify-start items-center relative">
                                         {forma.formation.techs && forma.formation.techs[0] && <img src={forma.formation.techs[0].logo} width="60" height="60" className="top-0" alt="" />}
                                         <h3 className="font-bold text-[#0E6073] dark:text-white">{forma.formation.title}</h3>
                                     </div>
                                     <Difficulty level={forma.formation.difficulte} />
-                                </div>
+                                </Link>
                             )
                         })}
 
