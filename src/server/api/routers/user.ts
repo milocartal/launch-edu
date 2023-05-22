@@ -15,5 +15,27 @@ export const userRouter = createTRPCRouter({
 
   getAdmin: protectedProcedure.query(() => {
     return prisma.user.findMany({ where: { admin: true } })
-  })
+  }),
+
+  setAdmin: protectedProcedure.input(z.object({ id: z.string() })).mutation(({ input }) => {
+    return prisma.user.update({
+      where: {
+        id: input.id,
+      },
+      data: {
+        admin: true,
+      }
+    })
+  }),
+
+  unSetAdmin: protectedProcedure.input(z.object({ id: z.string() })).mutation(({ input }) => {
+    return prisma.user.update({
+      where: {
+        id: input.id,
+      },
+      data: {
+        admin: false,
+      }
+    })
+  }),
 });
