@@ -41,10 +41,10 @@ const Users: NextPage = () => {
     const [filterType, setFilterType] = useState("")
 
     users as User[] && users && users.length > 0 && filterType == "alphabetique" ? users?.sort(function (a, b) {
-        if (a.name < b.name) {
+        if ((a.name as string) < (b.name as string)) {
           return -1;
         }
-        if (a.name > b.name) {
+        if ((a.name as string) > (b.name as string)) {
           return 1;
         }
         return 0;
@@ -104,7 +104,7 @@ const Users: NextPage = () => {
                                     >
                                         <span className="flex flex-row items-center justify-between">
                                             <div className="block h-[3rem] w-[3rem]">
-                                                <img src={user.image} className="w-full h-full rounded-full object-cover"></img>
+                                                {user.image && <img src={user.image} className="w-full h-full rounded-full object-cover"></img>}
                                             </div>
                                             <p className="text-base ml-3 font-bold text-[#0E6073]">{user.name}</p>
                                             <p className="text-base ml-3 text-[#0E6073]">{user.email}</p>

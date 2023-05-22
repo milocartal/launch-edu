@@ -146,7 +146,8 @@ const Dashboard: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>
             </Head>
 
             <main className="flex min-h-screen bg-white flex flex-col pb-20 dark:bg-[#082F38]">
-                <div className="flex flex-col items-start justify-start pl-28 pt-20 pr-6 w-9/12">
+                <div className="flex flex-col items-start justify-start pl-28 pt-20 pr-6 w-9/12 gap-2">
+                    <Title title={`Profil de ${user.name}`} link={'admin/users'}></Title>
                     <Title title={`Cours commencé(s)`} link={''} />
 
                     {progression && progression.map((item) => {
@@ -243,7 +244,7 @@ const Dashboard: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>
                     </div>
                     <button className="flex justify-center items-center text-white bg-[#2EA3A5] h-14 rounded-full hover:bg-[#1e818c] mb-3 px-4" type="submit" value="submit">Enregistrer les modifications</button>
                 </form>
-                <Header selected={1} />
+                <Header selected={5} />
             </main>
         </>
     );
