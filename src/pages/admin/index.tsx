@@ -52,7 +52,7 @@ const Admin: NextPage = () => {
     }) : formations as Formation[] && formations && formations.length > 0 && filterType == "sanslecon" ? formations?.sort(function (a, b) {
         return a.lecons.length - b.lecons.length;
     }) : formations as Formation[] && formations && formations.length > 0 && filterType == "private" && formations?.sort(function (a, b) {
-        return b.hidden - a.hidden;
+        return b.hidden as any - a.hidden as any;
     })
 
     function changeFilterType(type: string) {
